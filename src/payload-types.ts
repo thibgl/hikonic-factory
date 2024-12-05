@@ -15,8 +15,9 @@ export interface Config {
     media: Media;
     v2indexes: V2Index;
     v2pages: V2Page;
+    v2tokens: V2Token;
+    v2items: V2Item;
     v2blocks: V2Block;
-    v2gems: V2Gem;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -28,14 +29,21 @@ export interface Config {
     v2pages: {
       related: 'v2pages';
     };
+    v2tokens: {
+      related: 'v2tokens';
+    };
+    v2items: {
+      related: 'v2items';
+    };
   };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     v2indexes: V2IndexesSelect<false> | V2IndexesSelect<true>;
     v2pages: V2PagesSelect<false> | V2PagesSelect<true>;
+    v2tokens: V2TokensSelect<false> | V2TokensSelect<true>;
+    v2items: V2ItemsSelect<false> | V2ItemsSelect<true>;
     v2blocks: V2BlocksSelect<false> | V2BlocksSelect<true>;
-    v2gems: V2GemsSelect<false> | V2GemsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -127,6 +135,7 @@ export interface V2Index {
     docs?: (string | V2Index)[] | null;
     hasNextPage?: boolean | null;
   } | null;
+  v2tokens?: (string | V2Token)[] | null;
   layout?: {
     hero?: {
       preset?: (string | null) | V2Block;
@@ -161,6 +170,22 @@ export interface V2Index {
       section?: ('hero' | 'text') | null;
     };
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2tokens".
+ */
+export interface V2Token {
+  id: string;
+  name?: string | null;
+  products?: boolean | null;
+  meta?: (string | V2Token)[] | null;
+  related?: {
+    docs?: (string | V2Token)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -205,6 +230,7 @@ export interface V2Page {
     docs?: (string | V2Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
+  v2items?: (string | V2Item)[] | null;
   layout?: {
     hero?: {
       preset?: (string | null) | V2Block;
@@ -227,11 +253,26 @@ export interface V2Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2gems".
+ * via the `definition` "v2items".
  */
-export interface V2Gem {
+export interface V2Item {
   id: string;
   name?: string | null;
+  factory?: (string | null) | V2Token;
+  factoryData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  meta?: (string | V2Item)[] | null;
+  related?: {
+    docs?: (string | V2Item)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -259,12 +300,16 @@ export interface PayloadLockedDocument {
         value: string | V2Page;
       } | null)
     | ({
-        relationTo: 'v2blocks';
-        value: string | V2Block;
+        relationTo: 'v2tokens';
+        value: string | V2Token;
       } | null)
     | ({
-        relationTo: 'v2gems';
-        value: string | V2Gem;
+        relationTo: 'v2items';
+        value: string | V2Item;
+      } | null)
+    | ({
+        relationTo: 'v2blocks';
+        value: string | V2Block;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -352,6 +397,7 @@ export interface V2IndexesSelect<T extends boolean = true> {
   paginated?: T;
   meta?: T;
   related?: T;
+  v2tokens?: T;
   layout?:
     | T
     | {
@@ -412,6 +458,7 @@ export interface V2PagesSelect<T extends boolean = true> {
   test2?: T;
   meta?: T;
   related?: T;
+  v2items?: T;
   layout?:
     | T
     | {
@@ -440,6 +487,31 @@ export interface V2PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2tokens_select".
+ */
+export interface V2TokensSelect<T extends boolean = true> {
+  name?: T;
+  products?: T;
+  meta?: T;
+  related?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2items_select".
+ */
+export interface V2ItemsSelect<T extends boolean = true> {
+  name?: T;
+  factory?: T;
+  factoryData?: T;
+  meta?: T;
+  related?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "v2blocks_select".
  */
 export interface V2BlocksSelect<T extends boolean = true> {
@@ -455,15 +527,6 @@ export interface V2BlocksSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2gems_select".
- */
-export interface V2GemsSelect<T extends boolean = true> {
-  name?: T;
   updatedAt?: T;
   createdAt?: T;
 }

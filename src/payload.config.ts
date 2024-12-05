@@ -9,10 +9,14 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+
 import { Indexes } from './collections/Indexes'
 import { Pages } from './collections/Pages'
+
+import { Tokens } from './collections/Tokens'
+import { Items } from './collections/Items'
+
 import { Blocks } from './collections/Blocks'
-import { Gems } from './collections/Gems'
 import { Website } from './globals/Website'
 
 const filename = fileURLToPath(import.meta.url)
@@ -29,7 +33,7 @@ export default buildConfig({
     },
   },
   globals: [Website],
-  collections: [Users, Media, Indexes, Pages, Blocks, Gems],
+  collections: [Users, Media, Indexes, Pages, Tokens, Items, Blocks],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

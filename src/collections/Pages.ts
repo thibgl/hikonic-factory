@@ -6,6 +6,7 @@ import { ConditionalField } from '@/fields/Conditional'
 export const Pages: CollectionConfig = Product({
   slug: 'v2pages',
   factory: 'v2indexes',
+  relations: ['v2items'],
   fields: [
     ConditionalField({
       path: 'factoryData.title',
@@ -21,7 +22,14 @@ export const Pages: CollectionConfig = Product({
   tabs: [
     {
       label: 'Layout',
-      fields: [Layout()],
+      fields: [
+        ConditionalField({
+          path: 'factory',
+          value: false,
+          fallback: true,
+          field: Layout(),
+        }),
+      ],
     },
   ],
 })

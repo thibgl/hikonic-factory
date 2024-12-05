@@ -1,54 +1,66 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
-import { Collection } from 'payload'
+import { createContext, useContext, useState } from 'react'
 
-interface FactoryContextType {
+interface FactoryData {
   docs: any[]
   loading: boolean
   error: Error | null
-  refetch: () => Promise<void>
+}
+
+interface FactoryContextType {
+  collections: Map<string, FactoryData>
+  initCollection: (slug: string) => Promise<void>
+  refetchCollection: (slug: string) => Promise<void>
 }
 
 const FactoryContext = createContext<FactoryContextType | undefined>(undefined)
 
-export const FactoryProvider = ({
-  collection = 'v2indexes',
-  children,
-}: {
-  collection: string
-  children: React.ReactNode
-}) => {
-  const [docs, setDocs] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+export const FactoryProvider = ({ children }: { children: React.ReactNode }) => {
+  const [collections, setCollections] = useState<Map<string, FactoryData>>(new Map())
 
-  const fetchDocs = async () => {
+  const fetchCollection = async (slug: string) => {
+    setCollections((prev) =>
+      new Map(prev).set(slug, {
+        docs: prev.get(slug)?.docs || [],
+        loading: true,
+        error: null,
+      }),
+    )
+
     try {
-      setLoading(true)
-      const response = await fetch(`/api/${collection}`)
+      const response = await fetch(`/api/${slug}`)
       const data = await response.json()
-      console.log('data', data)
-      setDocs(data.docs)
-      setError(null)
+      setCollections((prev) =>
+        new Map(prev).set(slug, {
+          docs: data.docs,
+          loading: false,
+          error: null,
+        }),
+      )
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch docs'))
-    } finally {
-      setLoading(false)
+      setCollections((prev) =>
+        new Map(prev).set(slug, {
+          docs: [],
+          loading: false,
+          error: err instanceof Error ? err : new Error('Failed to fetch docs'),
+        }),
+      )
     }
   }
 
-  useEffect(() => {
-    fetchDocs()
-  }, [collection])
+  const initCollection = async (slug: string) => {
+    if (!collections.has(slug)) {
+      await fetchCollection(slug)
+    }
+  }
 
   return (
     <FactoryContext.Provider
       value={{
-        docs,
-        loading,
-        error,
-        refetch: fetchDocs,
+        collections,
+        initCollection,
+        refetchCollection: fetchCollection,
       }}
     >
       {children}
@@ -56,28 +68,35 @@ export const FactoryProvider = ({
   )
 }
 
-export const useFactory = () => {
+export const useFactory = (slug: string) => {
   const context = useContext(FactoryContext)
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useFactory must be used within a FactoryProvider')
   }
-  return context
+  return context.collections.get(slug) || { docs: [], loading: false, error: null }
 }
 
-export const useFactoryDoc = (id: string) => {
-  const { docs, loading, error } = useFactory()
-
+export const useFactoryDoc = (slug: string, id: string) => {
+  const { docs, loading, error } = useFactory(slug)
   const doc = docs.find((doc) => doc.id === id)
-
-  return {
-    doc,
-    loading,
-    error,
-    exists: !!doc,
-  }
+  return { doc, loading, error, exists: !!doc }
 }
 
-export const useFactoryRefetch = () => {
-  const { refetch } = useFactory()
-  return refetch
+export const useManageCollection = (slug: string) => {
+  const context = useContext(FactoryContext)
+  if (!context) {
+    throw new Error('useManageCollection must be used within a FactoryProvider')
+  }
+
+  const { collections, initCollection, refetchCollection } = context
+
+  const manageCollection = async () => {
+    if (!collections.has(slug)) {
+      await initCollection(slug)
+    } else {
+      await refetchCollection(slug)
+    }
+  }
+
+  return manageCollection
 }

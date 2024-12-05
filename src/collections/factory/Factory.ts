@@ -4,10 +4,21 @@ interface Factory {
   slug: string
   products: string
   fields?: Field[]
+  meta?: Field[]
+  related?: Field[]
   tabs?: Tab[]
+  relations?: string[]
 }
 
-export const Factory = ({ slug, products, fields = [], tabs = [] }: Factory): CollectionConfig => ({
+export const Factory = ({
+  slug,
+  products,
+  fields = [],
+  meta = [],
+  related = [],
+  tabs = [],
+  relations = [],
+}: Factory): CollectionConfig => ({
   slug,
   fields: [
     {
@@ -41,6 +52,14 @@ export const Factory = ({ slug, products, fields = [], tabs = [] }: Factory): Co
               }),
             },
             { name: 'related', type: 'join', collection: slug, on: 'meta' },
+            ...relations.map((relation) => ({
+              name: relation,
+              type: 'relationship',
+              relationTo: relation,
+              hasMany: true,
+            })),
+            ...meta,
+            ...related,
           ],
         },
         ...tabs,
@@ -49,5 +68,6 @@ export const Factory = ({ slug, products, fields = [], tabs = [] }: Factory): Co
   ],
   admin: {
     useAsTitle: 'name',
+    defaultColumns: ['name', 'products', ...fields.map((field) => field.name)],
   },
 })

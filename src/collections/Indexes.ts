@@ -6,6 +6,7 @@ import { ConditionalField } from '@/fields/Conditional'
 export const Indexes: CollectionConfig = Factory({
   slug: 'v2indexes',
   products: 'v2pages',
+  relations: ['v2tokens'],
   fields: [
     {
       name: 'home',
@@ -27,7 +28,7 @@ export const Indexes: CollectionConfig = Factory({
       label: 'Children Layout',
       fields: [
         ConditionalField({
-          path: 'parent',
+          path: 'products',
           value: true,
           fallback: false,
           sibling: false,

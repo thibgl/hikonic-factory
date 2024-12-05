@@ -5,10 +5,21 @@ interface Product {
   slug: string
   factory: string
   fields?: Field[]
+  meta?: Field[]
+  related?: Field[]
   tabs?: Tab[]
+  relations?: string[]
 }
 
-export const Product = ({ slug, factory, fields = [], tabs = [] }: Product): CollectionConfig => ({
+export const Product = ({
+  slug,
+  factory,
+  fields = [],
+  meta = [],
+  related = [],
+  tabs = [],
+  relations = [],
+}: Product): CollectionConfig => ({
   slug,
   fields: [
     {
@@ -37,7 +48,10 @@ export const Product = ({ slug, factory, fields = [], tabs = [] }: Product): Col
               virtual: true,
               admin: {
                 components: {
-                  Field: 'src/components/FactoryWatcher#FactoryWatcher',
+                  Field: 'src/components/FactoryOverseer#FactoryOverseer',
+                  clientProps: {
+                    factory,
+                  },
                 },
               },
             },
@@ -62,6 +76,17 @@ export const Product = ({ slug, factory, fields = [], tabs = [] }: Product): Col
               // }
             },
             { name: 'related', type: 'join', collection: slug, on: 'meta' },
+            ...relations.map((relation) => ({
+              name: relation,
+              type: 'relationship',
+              relationTo: relation,
+              hasMany: true,
+              filterOptions: ({ data }) => ({
+                factory: { in: data.factoryData.v2tokens.map((token) => token.id) },
+              }),
+            })),
+            ...meta,
+            ...related,
           ],
         },
         ...tabs,
@@ -77,7 +102,7 @@ export const Product = ({ slug, factory, fields = [], tabs = [] }: Product): Col
             id: { equals: doc.factory },
           },
         })
-        console.log('res', res)
+        // console.log('res', res)
         doc.factoryData = res.docs[0]
         return doc
       },
@@ -90,7 +115,7 @@ export const Product = ({ slug, factory, fields = [], tabs = [] }: Product): Col
             id: { equals: doc.factory },
           },
         })
-        console.log('res', res)
+        // console.log('res', res)
         doc.factoryData = res.docs[0]
         return doc
       },
@@ -98,5 +123,6 @@ export const Product = ({ slug, factory, fields = [], tabs = [] }: Product): Col
   },
   admin: {
     useAsTitle: 'name',
+    defaultColumns: ['name', 'factory', ...fields.map((field) => field.name)],
   },
 })
