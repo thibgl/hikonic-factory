@@ -62,7 +62,7 @@ export const Product = ({
           label: 'Meta',
           fields: [
             {
-              name: 'meta',
+              name: 'neighbors',
               type: 'relationship',
               relationTo: slug,
               hasMany: true,
@@ -75,7 +75,6 @@ export const Product = ({
               //   }
               // }
             },
-            { name: 'related', type: 'join', collection: slug, on: 'meta' },
             ...relations.map((relation) => ({
               name: relation,
               type: 'relationship',
@@ -86,8 +85,15 @@ export const Product = ({
               }),
             })),
             ...meta,
+          ],
+        },
+        {
+          label: 'Related',
+          fields: [
+            { name: 'related', type: 'join', collection: slug, on: 'neighbors' },
             ...related,
           ],
+          ...related,
         },
         ...tabs,
       ],

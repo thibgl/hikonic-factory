@@ -12,6 +12,7 @@ export const Pages: CollectionConfig = Product({
       path: 'factoryData.title',
       value: 'Skills',
       fallback: false,
+      nullify: false,
       field: {
         name: 'test2',
         type: 'checkbox',

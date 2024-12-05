@@ -130,12 +130,12 @@ export interface V2Index {
   products?: boolean | null;
   home?: boolean | null;
   paginated?: boolean | null;
-  meta?: (string | V2Index)[] | null;
+  neighbors?: (string | V2Index)[] | null;
+  v2tokens?: (string | V2Token)[] | null;
   related?: {
     docs?: (string | V2Index)[] | null;
     hasNextPage?: boolean | null;
   } | null;
-  v2tokens?: (string | V2Token)[] | null;
   layout?: {
     hero?: {
       preset?: (string | null) | V2Block;
@@ -181,7 +181,9 @@ export interface V2Token {
   id: string;
   name?: string | null;
   products?: boolean | null;
-  meta?: (string | V2Token)[] | null;
+  colors?: ('1' | '2' | '3') | null;
+  icon?: boolean | null;
+  neighbors?: (string | V2Token)[] | null;
   related?: {
     docs?: (string | V2Token)[] | null;
     hasNextPage?: boolean | null;
@@ -225,12 +227,12 @@ export interface V2Page {
     | boolean
     | null;
   test2?: boolean | null;
-  meta?: (string | V2Page)[] | null;
+  neighbors?: (string | V2Page)[] | null;
+  v2items?: (string | V2Item)[] | null;
   related?: {
     docs?: (string | V2Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
-  v2items?: (string | V2Item)[] | null;
   layout?: {
     hero?: {
       preset?: (string | null) | V2Block;
@@ -268,7 +270,23 @@ export interface V2Item {
     | number
     | boolean
     | null;
-  meta?: (string | V2Item)[] | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  icon?: string | null;
+  neighbors?: (string | V2Item)[] | null;
   related?: {
     docs?: (string | V2Item)[] | null;
     hasNextPage?: boolean | null;
@@ -395,9 +413,9 @@ export interface V2IndexesSelect<T extends boolean = true> {
   products?: T;
   home?: T;
   paginated?: T;
-  meta?: T;
-  related?: T;
+  neighbors?: T;
   v2tokens?: T;
+  related?: T;
   layout?:
     | T
     | {
@@ -456,9 +474,9 @@ export interface V2PagesSelect<T extends boolean = true> {
   factory?: T;
   factoryData?: T;
   test2?: T;
-  meta?: T;
-  related?: T;
+  neighbors?: T;
   v2items?: T;
+  related?: T;
   layout?:
     | T
     | {
@@ -492,7 +510,9 @@ export interface V2PagesSelect<T extends boolean = true> {
 export interface V2TokensSelect<T extends boolean = true> {
   name?: T;
   products?: T;
-  meta?: T;
+  colors?: T;
+  icon?: T;
+  neighbors?: T;
   related?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -505,7 +525,9 @@ export interface V2ItemsSelect<T extends boolean = true> {
   name?: T;
   factory?: T;
   factoryData?: T;
-  meta?: T;
+  description?: T;
+  icon?: T;
+  neighbors?: T;
   related?: T;
   updatedAt?: T;
   createdAt?: T;

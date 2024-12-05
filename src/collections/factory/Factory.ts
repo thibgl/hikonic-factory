@@ -43,7 +43,7 @@ export const Factory = ({
           label: 'Meta',
           fields: [
             {
-              name: 'meta',
+              name: 'neighbors',
               type: 'relationship',
               relationTo: slug,
               hasMany: true,
@@ -51,7 +51,6 @@ export const Factory = ({
                 id: { not_equals: id },
               }),
             },
-            { name: 'related', type: 'join', collection: slug, on: 'meta' },
             ...relations.map((relation) => ({
               name: relation,
               type: 'relationship',
@@ -59,6 +58,12 @@ export const Factory = ({
               hasMany: true,
             })),
             ...meta,
+          ],
+        },
+        {
+          label: 'Related',
+          fields: [
+            { name: 'related', type: 'join', collection: slug, on: 'neighbors' },
             ...related,
           ],
         },
