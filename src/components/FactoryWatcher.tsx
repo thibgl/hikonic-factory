@@ -4,18 +4,22 @@ import { useFormFields, useField, useForm, useDocumentEvents } from '@payloadcms
 import { useEffect, useRef } from 'react'
 import { useFactoryDoc, useFactoryRefetch } from '../context/FactoryContext'
 
-export const ParentWatcher: React.FC<{ path: string }> = (props) => {
+export const FactoryWatcher: React.FC<{ path: string }> = (props) => {
   const { path } = props
-  const parentId = useFormFields(([fields]) => fields?.parent?.value)
+  const factoryId = useFormFields(([fields]) => fields?.factory?.value)
   const { value, setValue } = useField({ path })
-  const { doc } = useFactoryDoc(parentId || '')
+  const { doc } = useFactoryDoc(factoryId || '')
   const refetch = useFactoryRefetch()
   const prevUpdateRef = useRef<string | null>(null)
 
   const { mostRecentUpdate } = useDocumentEvents()
 
   useEffect(() => {
-    if (mostRecentUpdate !== prevUpdateRef.current) {
+    if (
+      mostRecentUpdate?.entitySlug &&
+      mostRecentUpdate?.entitySlug === 'v2indexes' &&
+      mostRecentUpdate !== prevUpdateRef.current
+    ) {
       prevUpdateRef.current = mostRecentUpdate
       if (mostRecentUpdate) {
         refetch()
@@ -24,10 +28,10 @@ export const ParentWatcher: React.FC<{ path: string }> = (props) => {
   }, [mostRecentUpdate, refetch])
 
   useEffect(() => {
-    if (parentId && value && parentId !== value.id && doc) {
+    if (factoryId && value && factoryId !== value.id && doc) {
       setValue(doc)
     }
-  }, [parentId, value, setValue, doc])
+  }, [factoryId, value, setValue, doc])
 
   return null
 }

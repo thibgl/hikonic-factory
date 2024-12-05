@@ -26,7 +26,7 @@ export interface Config {
       related: 'v2indexes';
     };
     v2pages: {
-      related: 'v2indexes';
+      related: 'v2pages';
     };
   };
   collectionsSelect: {
@@ -118,9 +118,9 @@ export interface Media {
  */
 export interface V2Index {
   id: string;
-  title?: string | null;
+  name?: string | null;
+  products?: boolean | null;
   home?: boolean | null;
-  parent?: boolean | null;
   paginated?: boolean | null;
   meta?: (string | V2Index)[] | null;
   related?: {
@@ -161,7 +161,6 @@ export interface V2Index {
       section?: ('hero' | 'text') | null;
     };
   };
-  testGroup?: {};
   updatedAt: string;
   createdAt: string;
 }
@@ -189,9 +188,9 @@ export interface V2Block {
  */
 export interface V2Page {
   id: string;
-  title?: string | null;
-  parent?: (string | null) | V2Index;
-  test?:
+  name?: string | null;
+  factory?: (string | null) | V2Index;
+  factoryData?:
     | {
         [k: string]: unknown;
       }
@@ -200,11 +199,10 @@ export interface V2Page {
     | number
     | boolean
     | null;
-  testTitle?: string | null;
   test2?: boolean | null;
-  meta?: (string | V2Index)[] | null;
+  meta?: (string | V2Page)[] | null;
   related?: {
-    docs?: (string | V2Index)[] | null;
+    docs?: (string | V2Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   layout?: {
@@ -224,7 +222,6 @@ export interface V2Page {
       section?: ('hero' | 'text') | null;
     };
   };
-  testGroup?: {};
   updatedAt: string;
   createdAt: string;
 }
@@ -349,9 +346,9 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "v2indexes_select".
  */
 export interface V2IndexesSelect<T extends boolean = true> {
-  title?: T;
+  name?: T;
+  products?: T;
   home?: T;
-  parent?: T;
   paginated?: T;
   meta?: T;
   related?: T;
@@ -401,7 +398,6 @@ export interface V2IndexesSelect<T extends boolean = true> {
               section?: T;
             };
       };
-  testGroup?: T | {};
   updatedAt?: T;
   createdAt?: T;
 }
@@ -410,10 +406,9 @@ export interface V2IndexesSelect<T extends boolean = true> {
  * via the `definition` "v2pages_select".
  */
 export interface V2PagesSelect<T extends boolean = true> {
-  title?: T;
-  parent?: T;
-  test?: T;
-  testTitle?: T;
+  name?: T;
+  factory?: T;
+  factoryData?: T;
   test2?: T;
   meta?: T;
   related?: T;
@@ -440,7 +435,6 @@ export interface V2PagesSelect<T extends boolean = true> {
               section?: T;
             };
       };
-  testGroup?: T | {};
   updatedAt?: T;
   createdAt?: T;
 }
