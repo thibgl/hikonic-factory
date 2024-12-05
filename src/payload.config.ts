@@ -9,6 +9,11 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { Indexes } from './collections/Indexes'
+import { Pages } from './collections/Pages'
+import { Blocks } from './collections/Blocks'
+import { Gems } from './collections/Gems'
+import { Website } from './globals/Website'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,8 +24,12 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      providers: ['/context/FactoryContext#FactoryProvider'],
+    },
   },
-  collections: [Users, Media],
+  globals: [Website],
+  collections: [Users, Media, Indexes, Pages, Blocks, Gems],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

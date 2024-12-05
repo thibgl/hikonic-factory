@@ -13,16 +13,49 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    v2indexes: V2Index;
+    v2pages: V2Page;
+    v2blocks: V2Block;
+    v2gems: V2Gem;
+    'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
+  };
+  collectionsJoins: {
+    v2indexes: {
+      related: 'v2indexes';
+    };
+    v2pages: {
+      related: 'v2indexes';
+    };
+  };
+  collectionsSelect: {
+    users: UsersSelect<false> | UsersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    v2indexes: V2IndexesSelect<false> | V2IndexesSelect<true>;
+    v2pages: V2PagesSelect<false> | V2PagesSelect<true>;
+    v2blocks: V2BlocksSelect<false> | V2BlocksSelect<true>;
+    v2gems: V2GemsSelect<false> | V2GemsSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
     defaultIDType: string;
   };
-  globals: {};
+  globals: {
+    v2website: V2Website;
+  };
+  globalsSelect: {
+    v2website: V2WebsiteSelect<false> | V2WebsiteSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
+  };
+  jobs: {
+    tasks: unknown;
+    workflows: unknown;
   };
 }
 export interface UserAuthOperations {
@@ -81,6 +114,171 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2indexes".
+ */
+export interface V2Index {
+  id: string;
+  title?: string | null;
+  home?: boolean | null;
+  parent?: boolean | null;
+  paginated?: boolean | null;
+  meta?: (string | V2Index)[] | null;
+  related?: {
+    docs?: (string | V2Index)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  layout?: {
+    hero?: {
+      preset?: (string | null) | V2Block;
+      section?: ('hero' | 'text') | null;
+    };
+    main?:
+      | {
+          preset?: (string | null) | V2Block;
+          section?: ('hero' | 'text') | null;
+          id?: string | null;
+        }[]
+      | null;
+    footer?: {
+      preset?: (string | null) | V2Block;
+      section?: ('hero' | 'text') | null;
+    };
+  };
+  childrenLayout?: {
+    hero?: {
+      preset?: (string | null) | V2Block;
+      section?: ('hero' | 'text') | null;
+    };
+    main?:
+      | {
+          preset?: (string | null) | V2Block;
+          section?: ('hero' | 'text') | null;
+          id?: string | null;
+        }[]
+      | null;
+    footer?: {
+      preset?: (string | null) | V2Block;
+      section?: ('hero' | 'text') | null;
+    };
+  };
+  testGroup?: {};
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2blocks".
+ */
+export interface V2Block {
+  id: string;
+  title?: string | null;
+  block?:
+    | {
+        text?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'text';
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2pages".
+ */
+export interface V2Page {
+  id: string;
+  title?: string | null;
+  parent?: (string | null) | V2Index;
+  test?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  testTitle?: string | null;
+  test2?: boolean | null;
+  meta?: (string | V2Index)[] | null;
+  related?: {
+    docs?: (string | V2Index)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  layout?: {
+    hero?: {
+      preset?: (string | null) | V2Block;
+      section?: ('hero' | 'text') | null;
+    };
+    main?:
+      | {
+          preset?: (string | null) | V2Block;
+          section?: ('hero' | 'text') | null;
+          id?: string | null;
+        }[]
+      | null;
+    footer?: {
+      preset?: (string | null) | V2Block;
+      section?: ('hero' | 'text') | null;
+    };
+  };
+  testGroup?: {};
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2gems".
+ */
+export interface V2Gem {
+  id: string;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents".
+ */
+export interface PayloadLockedDocument {
+  id: string;
+  document?:
+    | ({
+        relationTo: 'users';
+        value: string | User;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'v2indexes';
+        value: string | V2Index;
+      } | null)
+    | ({
+        relationTo: 'v2pages';
+        value: string | V2Page;
+      } | null)
+    | ({
+        relationTo: 'v2blocks';
+        value: string | V2Block;
+      } | null)
+    | ({
+        relationTo: 'v2gems';
+        value: string | V2Gem;
+      } | null);
+  globalSlug?: string | null;
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
@@ -112,6 +310,222 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2indexes_select".
+ */
+export interface V2IndexesSelect<T extends boolean = true> {
+  title?: T;
+  home?: T;
+  parent?: T;
+  paginated?: T;
+  meta?: T;
+  related?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+            };
+        main?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+              id?: T;
+            };
+        footer?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+            };
+      };
+  childrenLayout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+            };
+        main?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+              id?: T;
+            };
+        footer?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+            };
+      };
+  testGroup?: T | {};
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2pages_select".
+ */
+export interface V2PagesSelect<T extends boolean = true> {
+  title?: T;
+  parent?: T;
+  test?: T;
+  testTitle?: T;
+  test2?: T;
+  meta?: T;
+  related?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+            };
+        main?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+              id?: T;
+            };
+        footer?:
+          | T
+          | {
+              preset?: T;
+              section?: T;
+            };
+      };
+  testGroup?: T | {};
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2blocks_select".
+ */
+export interface V2BlocksSelect<T extends boolean = true> {
+  title?: T;
+  block?:
+    | T
+    | {
+        text?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2gems_select".
+ */
+export interface V2GemsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents_select".
+ */
+export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-preferences_select".
+ */
+export interface PayloadPreferencesSelect<T extends boolean = true> {
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-migrations_select".
+ */
+export interface PayloadMigrationsSelect<T extends boolean = true> {
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2website".
+ */
+export interface V2Website {
+  id: string;
+  title?: string | null;
+  hero?: (string | null) | V2Block;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "v2website_select".
+ */
+export interface V2WebsiteSelect<T extends boolean = true> {
+  title?: T;
+  hero?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
