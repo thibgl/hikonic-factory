@@ -1,30 +1,23 @@
 'use client'
 
 import { useFormFields, useField, useDocumentEvents } from '@payloadcms/ui'
-import { useEffect, useRef, useCallback, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFactoryDoc, useManageCollection } from '../context/FactoryContext'
 import { Field } from 'payload'
 
 export const FactoryOverseer: React.FC<{ path: string; field: Field }> = ({ path, field }) => {
   const factorySlug = field.admin?.components?.clientProps?.factory
-  const factoryId = useFormFields(
-    ([fields]) => fields?.factory?.value?.value || fields?.factory?.value,
-  )
+  const [factoryId, dispatch] = useFormFields(([fields, dispatch]) => {
+    return [fields?.factory?.value?.value || fields?.factory?.value, dispatch]
+  })
   const { value, setValue } = useField({ path })
   const { doc } = useFactoryDoc(factorySlug, factoryId || '')
   const manageCollection = useManageCollection(factorySlug)
   const prevUpdateRef = useRef<any>({ updatedAt: '' })
-  const [isDocUpdated, setIsDocUpdated] = useState(false)
-
-  const handleManageCollection = useCallback(async () => {
-    if (factorySlug) {
-      await manageCollection()
-      setIsDocUpdated(true)
-    }
-  }, [manageCollection, factorySlug])
-
+  const [updated, setUpdated] = useState(false)
+  console.log(doc)
   useEffect(() => {
-    handleManageCollection()
+    manageCollection()
   }, [])
 
   const { mostRecentUpdate } = useDocumentEvents()
@@ -37,26 +30,23 @@ export const FactoryOverseer: React.FC<{ path: string; field: Field }> = ({ path
         mostRecentUpdate.updatedAt !== prevUpdateRef.current.updatedAt
       ) {
         prevUpdateRef.current = mostRecentUpdate
-        await handleManageCollection()
+        await manageCollection()
+        dispatch({ type: 'UPDATE', path: 'factory', value: factoryId })
+        setUpdated(true)
       }
     }
 
     updateDoc()
-  }, [mostRecentUpdate, handleManageCollection, factorySlug])
+  }, [mostRecentUpdate, manageCollection, factorySlug])
 
   useEffect(() => {
-    if (isDocUpdated) {
-      // console.log('Updated doc:', doc)
-      setIsDocUpdated(false)
+    if (factoryId && doc && (factoryId !== value?.id || !value)) {
       setValue(doc)
-    }
-  }, [isDocUpdated, doc])
-
-  useEffect(() => {
-    if (factoryId && value && factoryId !== value.id && doc) {
+    } else if (updated) {
       setValue(doc)
+      setUpdated(false)
     }
-  }, [factoryId, value, setValue, doc])
+  }, [factoryId, value, setValue, doc, updated, setUpdated])
 
   return null
 }

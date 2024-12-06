@@ -5,11 +5,12 @@ import { ConditionalField } from '@/fields/Conditional'
 
 export const Pages: CollectionConfig = Product({
   slug: 'v2pages',
+  versions: true,
   factory: 'v2indexes',
-  relations: ['v2items'],
+  links: ['v2items'],
   fields: [
     ConditionalField({
-      path: 'factoryData.title',
+      path: 'factoryData.name',
       value: 'Skills',
       fallback: false,
       nullify: false,

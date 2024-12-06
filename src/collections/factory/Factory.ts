@@ -1,25 +1,24 @@
-import type { CollectionConfig, Field, Tab } from 'payload'
+import type { CollectionConfig, CollectionSlug, Field, Tab } from 'payload'
 
-interface Factory {
-  slug: string
+export interface Factory extends CollectionConfig {
   products: string
-  fields?: Field[]
   meta?: Field[]
   related?: Field[]
   tabs?: Tab[]
-  relations?: string[]
+  shipsTo?: string[]
+  portsFrom?: string[]
 }
 
 export const Factory = ({
-  slug,
   products,
-  fields = [],
   meta = [],
   related = [],
   tabs = [],
-  relations = [],
+  shipsTo = [],
+  portsFrom = [],
+  ...incomingConfig
 }: Factory): CollectionConfig => ({
-  slug,
+  ...incomingConfig,
   fields: [
     {
       type: 'tabs',
@@ -30,13 +29,15 @@ export const Factory = ({
             {
               name: 'name',
               type: 'text',
+              required: true,
+              unique: true,
             },
             {
               name: 'products',
               type: 'checkbox',
               defaultValue: false,
             },
-            ...fields,
+            ...incomingConfig.fields,
           ],
         },
         {
@@ -45,26 +46,42 @@ export const Factory = ({
             {
               name: 'neighbors',
               type: 'relationship',
-              relationTo: slug,
+              relationTo: incomingConfig.slug as CollectionSlug,
               hasMany: true,
               filterOptions: ({ id }) => ({
                 id: { not_equals: id },
               }),
             },
-            ...relations.map((relation) => ({
-              name: relation,
+            ...portsFrom.map((port) => ({
+              name: port,
               type: 'relationship',
-              relationTo: relation,
+              relationTo: port as CollectionSlug,
               hasMany: true,
             })),
-            ...meta,
           ],
         },
         {
           label: 'Related',
           fields: [
-            { name: 'related', type: 'join', collection: slug, on: 'neighbors' },
-            ...related,
+            {
+              name: 'produced',
+              type: 'join',
+              collection: products as CollectionSlug,
+              on: 'factory',
+            },
+            {
+              name: 'related',
+              label: 'Neighbors',
+              type: 'join',
+              collection: incomingConfig.slug as CollectionSlug,
+              on: 'neighbors',
+            },
+            ...shipsTo.map((port) => ({
+              name: port,
+              type: 'join',
+              collection: port as CollectionSlug,
+              on: incomingConfig.slug,
+            })),
           ],
         },
         ...tabs,
@@ -73,6 +90,6 @@ export const Factory = ({
   ],
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'products', ...fields.map((field) => field.name)],
+    defaultColumns: ['name', 'products'],
   },
 })

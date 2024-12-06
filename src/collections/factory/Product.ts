@@ -1,26 +1,26 @@
-import type { CollectionConfig, Field, Tab } from 'payload'
-import { Layout } from './Layout'
+import type { CollectionConfig, CollectionSlug, Field, Tab } from 'payload'
 
-interface Product {
-  slug: string
+export interface Product extends CollectionConfig {
   factory: string
-  fields?: Field[]
   meta?: Field[]
   related?: Field[]
   tabs?: Tab[]
-  relations?: string[]
+  shipsTo?: string[]
+  portsFrom?: string[]
+  portsFromFactories?: string[]
 }
 
 export const Product = ({
-  slug,
   factory,
-  fields = [],
   meta = [],
   related = [],
   tabs = [],
-  relations = [],
+  shipsTo = [],
+  portsFrom = [],
+  portsFromFactories = [],
+  ...incomingConfig
 }: Product): CollectionConfig => ({
-  slug,
+  ...incomingConfig,
   fields: [
     {
       type: 'tabs',
@@ -31,11 +31,13 @@ export const Product = ({
             {
               name: 'name',
               type: 'text',
+              required: true,
+              unique: true,
             },
             {
               name: 'factory',
               type: 'relationship',
-              relationTo: factory,
+              relationTo: factory as CollectionSlug,
               filterOptions: () => {
                 return {
                   products: { equals: true },
@@ -45,7 +47,9 @@ export const Product = ({
             {
               name: 'factoryData',
               type: 'json',
-              virtual: true,
+              access: {
+                read: ({ req: { user } }) => Boolean(user),
+              },
               admin: {
                 components: {
                   Field: 'src/components/FactoryOverseer#FactoryOverseer',
@@ -55,7 +59,7 @@ export const Product = ({
                 },
               },
             },
-            ...fields,
+            ...incomingConfig.fields,
           ],
         },
         {
@@ -64,25 +68,33 @@ export const Product = ({
             {
               name: 'neighbors',
               type: 'relationship',
-              relationTo: slug,
+              relationTo: incomingConfig.slug as CollectionSlug,
               hasMany: true,
-              filterOptions: ({ id }) => ({
-                id: { not_equals: id },
-              }),
               // admin: {
               //   components: {
               //     Field:
               //   }
               // }
             },
-            ...relations.map((relation) => ({
-              name: relation,
+            ...portsFrom.map((port, i) => ({
+              name: port,
               type: 'relationship',
-              relationTo: relation,
+              relationTo: port as CollectionSlug,
               hasMany: true,
-              filterOptions: ({ data }) => ({
-                factory: { in: data.factoryData.v2tokens.map((token) => token.id) },
-              }),
+              filterOptions: ({ data }) => {
+                const factoryProducts = data?.factoryData?.[portsFromFactories?.[i]] || []
+                return factoryProducts.length > 0
+                  ? {
+                      factory: {
+                        in: factoryProducts.map((product) => product.id),
+                      },
+                    }
+                  : {
+                      factory: {
+                        exists: false, // This ensures no results when array is empty/undefined
+                      },
+                    }
+              },
             })),
             ...meta,
           ],
@@ -90,7 +102,19 @@ export const Product = ({
         {
           label: 'Related',
           fields: [
-            { name: 'related', type: 'join', collection: slug, on: 'neighbors' },
+            {
+              name: 'related',
+              label: 'Neighbors',
+              type: 'join',
+              collection: incomingConfig.slug as CollectionSlug,
+              on: 'neighbors',
+            },
+            ...shipsTo.map((port) => ({
+              name: port,
+              type: 'join',
+              collection: port as CollectionSlug,
+              on: incomingConfig.slug,
+            })),
             ...related,
           ],
           ...related,
@@ -99,36 +123,8 @@ export const Product = ({
       ],
     },
   ],
-  hooks: {
-    beforeRead: [
-      async ({ doc, req }) => {
-        const res = await req.payload.find({
-          collection: factory,
-          where: {
-            id: { equals: doc.factory },
-          },
-        })
-        // console.log('res', res)
-        doc.factoryData = res.docs[0]
-        return doc
-      },
-    ],
-    afterChange: [
-      async ({ doc, req }) => {
-        const res = await req.payload.find({
-          collection: factory,
-          where: {
-            id: { equals: doc.factory },
-          },
-        })
-        // console.log('res', res)
-        doc.factoryData = res.docs[0]
-        return doc
-      },
-    ],
-  },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'factory', ...fields.map((field) => field.name)],
+    defaultColumns: ['name', 'factory'],
   },
 })

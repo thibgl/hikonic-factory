@@ -5,8 +5,9 @@ import { ConditionalField } from '@/fields/Conditional'
 
 export const Indexes: CollectionConfig = Factory({
   slug: 'v2indexes',
+  versions: true,
   products: 'v2pages',
-  relations: ['v2tokens'],
+  links: ['v2tokens'],
   fields: [
     {
       name: 'home',

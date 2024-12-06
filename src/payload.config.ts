@@ -19,6 +19,8 @@ import { Items } from './collections/Items'
 import { Blocks } from './collections/Blocks'
 import { Website } from './globals/Website'
 
+import { Factories } from './collections/Factories'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -33,7 +35,7 @@ export default buildConfig({
     },
   },
   globals: [Website],
-  collections: [Users, Media, Indexes, Pages, Tokens, Items, Blocks],
+  collections: [Users, Media, Indexes, Pages, Tokens, Items, Blocks, ...Factories],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
