@@ -1,23 +1,20 @@
-import type { CollectionConfig, CollectionSlug, Field, Tab } from 'payload'
+import type { CollectionConfig, CollectionSlug, Tab } from 'payload'
+import type { FactoryIdentity } from './types'
 
 export interface Product extends CollectionConfig {
   factory: string
-  meta?: Field[]
-  related?: Field[]
   tabs?: Tab[]
-  shipsTo?: string[]
-  portsFrom?: string[]
-  portsFromFactories?: string[]
+  shipsTo?: FactoryIdentity[]
+  portsFrom?: FactoryIdentity[]
+  filterNeighbors?: boolean
 }
 
 export const Product = ({
   factory,
-  meta = [],
-  related = [],
   tabs = [],
   shipsTo = [],
   portsFrom = [],
-  portsFromFactories = [],
+  filterNeighbors = false,
   ...incomingConfig
 }: Product): CollectionConfig => ({
   ...incomingConfig,
@@ -37,10 +34,11 @@ export const Product = ({
             {
               name: 'factory',
               type: 'relationship',
+              required: true,
               relationTo: factory as CollectionSlug,
               filterOptions: () => {
                 return {
-                  products: { equals: true },
+                  producing: { equals: true },
                 }
               },
             },
@@ -70,6 +68,25 @@ export const Product = ({
               type: 'relationship',
               relationTo: incomingConfig.slug as CollectionSlug,
               hasMany: true,
+              filterOptions: ({ id }) => {
+                if (filterNeighbors) {
+                  const factoryNeighbors = data?.factoryData?.neighbors || []
+                  return factoryNeighbors.length > 0
+                    ? {
+                        neighbors: {
+                          in: factoryNeighbors.map((product) => product.id),
+                        },
+                      }
+                    : {
+                        neighbors: {
+                          exists: false, // This ensures no results when array is empty/undefined
+                        },
+                      }
+                }
+                return {
+                  id: { not_equals: id },
+                }
+              },
               // admin: {
               //   components: {
               //     Field:
@@ -77,12 +94,12 @@ export const Product = ({
               // }
             },
             ...portsFrom.map((port, i) => ({
-              name: port,
+              name: port.products,
               type: 'relationship',
-              relationTo: port as CollectionSlug,
+              relationTo: port.products as CollectionSlug,
               hasMany: true,
               filterOptions: ({ data }) => {
-                const factoryProducts = data?.factoryData?.[portsFromFactories?.[i]] || []
+                const factoryProducts = data?.factoryData?.[port.products] || []
                 return factoryProducts.length > 0
                   ? {
                       factory: {
@@ -96,7 +113,6 @@ export const Product = ({
                     }
               },
             })),
-            ...meta,
           ],
         },
         {
@@ -110,20 +126,19 @@ export const Product = ({
               on: 'neighbors',
             },
             ...shipsTo.map((port) => ({
-              name: port,
+              name: port.products,
               type: 'join',
-              collection: port as CollectionSlug,
+              collection: port.products as CollectionSlug,
               on: incomingConfig.slug,
             })),
-            ...related,
           ],
-          ...related,
         },
         ...tabs,
       ],
     },
   ],
   admin: {
+    ...incomingConfig.admin,
     useAsTitle: 'name',
     defaultColumns: ['name', 'factory'],
   },

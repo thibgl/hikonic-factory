@@ -18,44 +18,44 @@ export interface Config {
     v2tokens: V2Token;
     v2items: V2Item;
     v2blocks: V2Block;
-    pagesFactory: PagesFactory;
-    pagesProducts: PagesProduct;
-    itemsFactory: ItemsFactory;
-    itemsProducts: ItemsProduct;
+    indexes: Index;
+    pages: Page;
+    tokens: Token;
+    items: Item;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
     v2indexes: {
-      produced: 'v2pages';
+      products: 'v2pages';
       related: 'v2indexes';
     };
     v2pages: {
       related: 'v2pages';
     };
     v2tokens: {
-      produced: 'v2items';
+      products: 'v2items';
       related: 'v2tokens';
     };
     v2items: {
       related: 'v2items';
     };
-    pagesFactory: {
-      produced: 'pagesProducts';
-      related: 'pagesFactory';
+    indexes: {
+      products: 'pages';
+      related: 'indexes';
     };
-    pagesProducts: {
-      related: 'pagesProducts';
+    pages: {
+      related: 'pages';
     };
-    itemsFactory: {
-      produced: 'itemsProducts';
-      related: 'itemsFactory';
-      pagesFactory: 'pagesFactory';
+    tokens: {
+      products: 'items';
+      related: 'tokens';
+      indexes: 'indexes';
     };
-    itemsProducts: {
-      related: 'itemsProducts';
-      pagesProducts: 'pagesProducts';
+    items: {
+      related: 'items';
+      pages: 'pages';
     };
   };
   collectionsSelect: {
@@ -66,10 +66,10 @@ export interface Config {
     v2tokens: V2TokensSelect<false> | V2TokensSelect<true>;
     v2items: V2ItemsSelect<false> | V2ItemsSelect<true>;
     v2blocks: V2BlocksSelect<false> | V2BlocksSelect<true>;
-    pagesFactory: PagesFactorySelect<false> | PagesFactorySelect<true>;
-    pagesProducts: PagesProductsSelect<false> | PagesProductsSelect<true>;
-    itemsFactory: ItemsFactorySelect<false> | ItemsFactorySelect<true>;
-    itemsProducts: ItemsProductsSelect<false> | ItemsProductsSelect<true>;
+    indexes: IndexesSelect<false> | IndexesSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    tokens: TokensSelect<false> | TokensSelect<true>;
+    items: ItemsSelect<false> | ItemsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -153,11 +153,11 @@ export interface Media {
 export interface V2Index {
   id: string;
   name: string;
-  products?: boolean | null;
+  producing?: boolean | null;
   home?: boolean | null;
   paginated?: boolean | null;
   neighbors?: (string | V2Index)[] | null;
-  produced?: {
+  products?: {
     docs?: (string | V2Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
@@ -209,7 +209,7 @@ export interface V2Index {
 export interface V2Page {
   id: string;
   name: string;
-  factory?: (string | null) | V2Index;
+  factory: string | V2Index;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -270,11 +270,11 @@ export interface V2Block {
 export interface V2Token {
   id: string;
   name: string;
-  products?: boolean | null;
+  producing?: boolean | null;
   colors?: ('1' | '2' | '3') | null;
   icon?: boolean | null;
   neighbors?: (string | V2Token)[] | null;
-  produced?: {
+  products?: {
     docs?: (string | V2Item)[] | null;
     hasNextPage?: boolean | null;
   } | null;
@@ -292,7 +292,7 @@ export interface V2Token {
 export interface V2Item {
   id: string;
   name: string;
-  factory?: (string | null) | V2Token;
+  factory: string | V2Token;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -328,20 +328,20 @@ export interface V2Item {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pagesFactory".
+ * via the `definition` "indexes".
  */
-export interface PagesFactory {
+export interface Index {
   id: string;
   name: string;
-  products?: boolean | null;
-  neighbors?: (string | PagesFactory)[] | null;
-  itemsFactory?: (string | ItemsFactory)[] | null;
-  produced?: {
-    docs?: (string | PagesProduct)[] | null;
+  producing?: boolean | null;
+  neighbors?: (string | Index)[] | null;
+  tokens?: (string | Token)[] | null;
+  products?: {
+    docs?: (string | Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   related?: {
-    docs?: (string | PagesFactory)[] | null;
+    docs?: (string | Index)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   updatedAt: string;
@@ -349,23 +349,23 @@ export interface PagesFactory {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "itemsFactory".
+ * via the `definition` "tokens".
  */
-export interface ItemsFactory {
+export interface Token {
   id: string;
   name: string;
-  products?: boolean | null;
-  neighbors?: (string | ItemsFactory)[] | null;
-  produced?: {
-    docs?: (string | ItemsProduct)[] | null;
+  producing?: boolean | null;
+  neighbors?: (string | Token)[] | null;
+  products?: {
+    docs?: (string | Item)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   related?: {
-    docs?: (string | ItemsFactory)[] | null;
+    docs?: (string | Token)[] | null;
     hasNextPage?: boolean | null;
   } | null;
-  pagesFactory?: {
-    docs?: (string | PagesFactory)[] | null;
+  indexes?: {
+    docs?: (string | Index)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   updatedAt: string;
@@ -373,12 +373,12 @@ export interface ItemsFactory {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "itemsProducts".
+ * via the `definition` "items".
  */
-export interface ItemsProduct {
+export interface Item {
   id: string;
   name: string;
-  factory?: (string | null) | ItemsFactory;
+  factory: string | Token;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -388,13 +388,13 @@ export interface ItemsProduct {
     | number
     | boolean
     | null;
-  neighbors?: (string | ItemsProduct)[] | null;
+  neighbors?: (string | Item)[] | null;
   related?: {
-    docs?: (string | ItemsProduct)[] | null;
+    docs?: (string | Item)[] | null;
     hasNextPage?: boolean | null;
   } | null;
-  pagesProducts?: {
-    docs?: (string | PagesProduct)[] | null;
+  pages?: {
+    docs?: (string | Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   updatedAt: string;
@@ -402,12 +402,12 @@ export interface ItemsProduct {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pagesProducts".
+ * via the `definition` "pages".
  */
-export interface PagesProduct {
+export interface Page {
   id: string;
   name: string;
-  factory?: (string | null) | PagesFactory;
+  factory: string | Index;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -417,10 +417,10 @@ export interface PagesProduct {
     | number
     | boolean
     | null;
-  neighbors?: (string | PagesProduct)[] | null;
-  itemsProducts?: (string | ItemsProduct)[] | null;
+  neighbors?: (string | Page)[] | null;
+  items?: (string | Item)[] | null;
   related?: {
-    docs?: (string | PagesProduct)[] | null;
+    docs?: (string | Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   updatedAt: string;
@@ -462,20 +462,20 @@ export interface PayloadLockedDocument {
         value: string | V2Block;
       } | null)
     | ({
-        relationTo: 'pagesFactory';
-        value: string | PagesFactory;
+        relationTo: 'indexes';
+        value: string | Index;
       } | null)
     | ({
-        relationTo: 'pagesProducts';
-        value: string | PagesProduct;
+        relationTo: 'pages';
+        value: string | Page;
       } | null)
     | ({
-        relationTo: 'itemsFactory';
-        value: string | ItemsFactory;
+        relationTo: 'tokens';
+        value: string | Token;
       } | null)
     | ({
-        relationTo: 'itemsProducts';
-        value: string | ItemsProduct;
+        relationTo: 'items';
+        value: string | Item;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -558,11 +558,11 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface V2IndexesSelect<T extends boolean = true> {
   name?: T;
-  products?: T;
+  producing?: T;
   home?: T;
   paginated?: T;
   neighbors?: T;
-  produced?: T;
+  products?: T;
   related?: T;
   layout?:
     | T
@@ -656,11 +656,11 @@ export interface V2PagesSelect<T extends boolean = true> {
  */
 export interface V2TokensSelect<T extends boolean = true> {
   name?: T;
-  products?: T;
+  producing?: T;
   colors?: T;
   icon?: T;
   neighbors?: T;
-  produced?: T;
+  products?: T;
   related?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -702,57 +702,57 @@ export interface V2BlocksSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pagesFactory_select".
+ * via the `definition` "indexes_select".
  */
-export interface PagesFactorySelect<T extends boolean = true> {
+export interface IndexesSelect<T extends boolean = true> {
   name?: T;
-  products?: T;
+  producing?: T;
   neighbors?: T;
-  itemsFactory?: T;
-  produced?: T;
+  tokens?: T;
+  products?: T;
   related?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pagesProducts_select".
+ * via the `definition` "pages_select".
  */
-export interface PagesProductsSelect<T extends boolean = true> {
+export interface PagesSelect<T extends boolean = true> {
   name?: T;
   factory?: T;
   factoryData?: T;
   neighbors?: T;
-  itemsProducts?: T;
+  items?: T;
   related?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "itemsFactory_select".
+ * via the `definition` "tokens_select".
  */
-export interface ItemsFactorySelect<T extends boolean = true> {
+export interface TokensSelect<T extends boolean = true> {
   name?: T;
-  products?: T;
+  producing?: T;
   neighbors?: T;
-  produced?: T;
+  products?: T;
   related?: T;
-  pagesFactory?: T;
+  indexes?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "itemsProducts_select".
+ * via the `definition` "items_select".
  */
-export interface ItemsProductsSelect<T extends boolean = true> {
+export interface ItemsSelect<T extends boolean = true> {
   name?: T;
   factory?: T;
   factoryData?: T;
   neighbors?: T;
   related?: T;
-  pagesProducts?: T;
+  pages?: T;
   updatedAt?: T;
   createdAt?: T;
 }

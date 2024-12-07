@@ -1,18 +1,16 @@
-import type { CollectionConfig, CollectionSlug, Field, Tab } from 'payload'
+import type { CollectionConfig, CollectionSlug, Tab } from 'payload'
+import type { FactoryIdentity } from './types'
+import { ConditionalField } from '@/fields/Conditional'
 
 export interface Factory extends CollectionConfig {
   products: string
-  meta?: Field[]
-  related?: Field[]
   tabs?: Tab[]
-  shipsTo?: string[]
-  portsFrom?: string[]
+  shipsTo?: FactoryIdentity[]
+  portsFrom?: FactoryIdentity[]
 }
 
 export const Factory = ({
   products,
-  meta = [],
-  related = [],
   tabs = [],
   shipsTo = [],
   portsFrom = [],
@@ -33,7 +31,7 @@ export const Factory = ({
               unique: true,
             },
             {
-              name: 'products',
+              name: 'producing',
               type: 'checkbox',
               defaultValue: false,
             },
@@ -53,9 +51,9 @@ export const Factory = ({
               }),
             },
             ...portsFrom.map((port) => ({
-              name: port,
+              name: port.factory,
               type: 'relationship',
-              relationTo: port as CollectionSlug,
+              relationTo: port.factory as CollectionSlug,
               hasMany: true,
             })),
           ],
@@ -63,12 +61,17 @@ export const Factory = ({
         {
           label: 'Related',
           fields: [
-            {
-              name: 'produced',
-              type: 'join',
-              collection: products as CollectionSlug,
-              on: 'factory',
-            },
+            ConditionalField({
+              path: 'producing',
+              value: true,
+              fallback: false,
+              field: {
+                name: 'products',
+                type: 'join',
+                collection: products as CollectionSlug,
+                on: 'factory',
+              },
+            }),
             {
               name: 'related',
               label: 'Neighbors',
@@ -77,9 +80,9 @@ export const Factory = ({
               on: 'neighbors',
             },
             ...shipsTo.map((port) => ({
-              name: port,
+              name: port.factory,
               type: 'join',
-              collection: port as CollectionSlug,
+              collection: port.factory as CollectionSlug,
               on: incomingConfig.slug,
             })),
           ],
@@ -89,6 +92,7 @@ export const Factory = ({
     },
   ],
   admin: {
+    ...incomingConfig.admin,
     useAsTitle: 'name',
     defaultColumns: ['name', 'products'],
   },

@@ -40,11 +40,15 @@ export const FactoryOverseer: React.FC<{ path: string; field: Field }> = ({ path
   }, [mostRecentUpdate, manageCollection, factorySlug])
 
   useEffect(() => {
-    if (factoryId && doc && (factoryId !== value?.id || !value)) {
+    if (
+      factoryId &&
+      doc &&
+      (!value || factoryId !== value.id || doc.updatedAt !== value.updatedAt)
+    ) {
       setValue(doc)
-    } else if (updated) {
-      setValue(doc)
-      setUpdated(false)
+      if (updated) {
+        setUpdated(false)
+      }
     }
   }, [factoryId, value, setValue, doc, updated, setUpdated])
 

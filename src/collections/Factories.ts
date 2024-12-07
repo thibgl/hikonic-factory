@@ -1,15 +1,20 @@
 import { CreateFactory } from './factory/CreateFactory'
+import type { FactoryIdentity } from './factory/types'
+
+const pagesFactoryIdentity: FactoryIdentity = { factory: 'indexes', products: 'pages' }
+const itemsFactoryIdentity: FactoryIdentity = { factory: 'tokens', products: 'items' }
 
 export const Factories = [
   ...CreateFactory({
-    name: 'pages',
-    portsFrom: ['items'],
+    identity: pagesFactoryIdentity,
+    portsFrom: [itemsFactoryIdentity],
     factory: { fields: [] },
     product: { fields: [] },
   }),
   ...CreateFactory({
-    name: 'items',
-    shipsTo: ['pages'],
+    identity: itemsFactoryIdentity,
+    shipsTo: [pagesFactoryIdentity],
+    filterNeighbors: true,
     factory: { fields: [] },
     product: { fields: [] },
   }),
