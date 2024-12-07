@@ -1,5 +1,5 @@
-import { CreateFactory } from './factory/CreateFactory'
-import type { FactoryIdentity } from './factory/types'
+import { CreateFactory } from '@/factory/CreateFactory'
+import type { FactoryIdentity } from '@/factory/types'
 
 const pagesFactoryIdentity: FactoryIdentity = { factory: 'indexes', products: 'pages' }
 const itemsFactoryIdentity: FactoryIdentity = { factory: 'tokens', products: 'items' }

@@ -13,11 +13,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    v2indexes: V2Index;
-    v2pages: V2Page;
-    v2tokens: V2Token;
-    v2items: V2Item;
-    v2blocks: V2Block;
+    blocks: Block;
     indexes: Index;
     pages: Page;
     tokens: Token;
@@ -27,20 +23,6 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
-    v2indexes: {
-      products: 'v2pages';
-      related: 'v2indexes';
-    };
-    v2pages: {
-      related: 'v2pages';
-    };
-    v2tokens: {
-      products: 'v2items';
-      related: 'v2tokens';
-    };
-    v2items: {
-      related: 'v2items';
-    };
     indexes: {
       products: 'pages';
       related: 'indexes';
@@ -61,11 +43,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    v2indexes: V2IndexesSelect<false> | V2IndexesSelect<true>;
-    v2pages: V2PagesSelect<false> | V2PagesSelect<true>;
-    v2tokens: V2TokensSelect<false> | V2TokensSelect<true>;
-    v2items: V2ItemsSelect<false> | V2ItemsSelect<true>;
-    v2blocks: V2BlocksSelect<false> | V2BlocksSelect<true>;
+    blocks: BlocksSelect<false> | BlocksSelect<true>;
     indexes: IndexesSelect<false> | IndexesSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     tokens: TokensSelect<false> | TokensSelect<true>;
@@ -148,108 +126,9 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2indexes".
+ * via the `definition` "blocks".
  */
-export interface V2Index {
-  id: string;
-  name: string;
-  producing?: boolean | null;
-  home?: boolean | null;
-  paginated?: boolean | null;
-  neighbors?: (string | V2Index)[] | null;
-  products?: {
-    docs?: (string | V2Page)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  related?: {
-    docs?: (string | V2Index)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  layout?: {
-    hero?: {
-      preset?: (string | null) | V2Block;
-      section?: ('hero' | 'text') | null;
-    };
-    main?:
-      | {
-          preset?: (string | null) | V2Block;
-          section?: ('hero' | 'text') | null;
-          id?: string | null;
-        }[]
-      | null;
-    footer?: {
-      preset?: (string | null) | V2Block;
-      section?: ('hero' | 'text') | null;
-    };
-  };
-  childrenLayout?: {
-    hero?: {
-      preset?: (string | null) | V2Block;
-      section?: ('hero' | 'text') | null;
-    };
-    main?:
-      | {
-          preset?: (string | null) | V2Block;
-          section?: ('hero' | 'text') | null;
-          id?: string | null;
-        }[]
-      | null;
-    footer?: {
-      preset?: (string | null) | V2Block;
-      section?: ('hero' | 'text') | null;
-    };
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2pages".
- */
-export interface V2Page {
-  id: string;
-  name: string;
-  factory: string | V2Index;
-  factoryData?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  test2?: boolean | null;
-  neighbors?: (string | V2Page)[] | null;
-  related?: {
-    docs?: (string | V2Page)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  layout?: {
-    hero?: {
-      preset?: (string | null) | V2Block;
-      section?: ('hero' | 'text') | null;
-    };
-    main?:
-      | {
-          preset?: (string | null) | V2Block;
-          section?: ('hero' | 'text') | null;
-          id?: string | null;
-        }[]
-      | null;
-    footer?: {
-      preset?: (string | null) | V2Block;
-      section?: ('hero' | 'text') | null;
-    };
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2blocks".
- */
-export interface V2Block {
+export interface Block {
   id: string;
   title?: string | null;
   block?:
@@ -260,69 +139,6 @@ export interface V2Block {
         blockType: 'text';
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2tokens".
- */
-export interface V2Token {
-  id: string;
-  name: string;
-  producing?: boolean | null;
-  colors?: ('1' | '2' | '3') | null;
-  icon?: boolean | null;
-  neighbors?: (string | V2Token)[] | null;
-  products?: {
-    docs?: (string | V2Item)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  related?: {
-    docs?: (string | V2Token)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2items".
- */
-export interface V2Item {
-  id: string;
-  name: string;
-  factory: string | V2Token;
-  factoryData?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  icon?: string | null;
-  neighbors?: (string | V2Item)[] | null;
-  related?: {
-    docs?: (string | V2Item)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -442,24 +258,8 @@ export interface PayloadLockedDocument {
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'v2indexes';
-        value: string | V2Index;
-      } | null)
-    | ({
-        relationTo: 'v2pages';
-        value: string | V2Page;
-      } | null)
-    | ({
-        relationTo: 'v2tokens';
-        value: string | V2Token;
-      } | null)
-    | ({
-        relationTo: 'v2items';
-        value: string | V2Item;
-      } | null)
-    | ({
-        relationTo: 'v2blocks';
-        value: string | V2Block;
+        relationTo: 'blocks';
+        value: string | Block;
       } | null)
     | ({
         relationTo: 'indexes';
@@ -554,137 +354,9 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2indexes_select".
+ * via the `definition` "blocks_select".
  */
-export interface V2IndexesSelect<T extends boolean = true> {
-  name?: T;
-  producing?: T;
-  home?: T;
-  paginated?: T;
-  neighbors?: T;
-  products?: T;
-  related?: T;
-  layout?:
-    | T
-    | {
-        hero?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-            };
-        main?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-              id?: T;
-            };
-        footer?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-            };
-      };
-  childrenLayout?:
-    | T
-    | {
-        hero?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-            };
-        main?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-              id?: T;
-            };
-        footer?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-            };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2pages_select".
- */
-export interface V2PagesSelect<T extends boolean = true> {
-  name?: T;
-  factory?: T;
-  factoryData?: T;
-  test2?: T;
-  neighbors?: T;
-  related?: T;
-  layout?:
-    | T
-    | {
-        hero?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-            };
-        main?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-              id?: T;
-            };
-        footer?:
-          | T
-          | {
-              preset?: T;
-              section?: T;
-            };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2tokens_select".
- */
-export interface V2TokensSelect<T extends boolean = true> {
-  name?: T;
-  producing?: T;
-  colors?: T;
-  icon?: T;
-  neighbors?: T;
-  products?: T;
-  related?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2items_select".
- */
-export interface V2ItemsSelect<T extends boolean = true> {
-  name?: T;
-  factory?: T;
-  factoryData?: T;
-  description?: T;
-  icon?: T;
-  neighbors?: T;
-  related?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2blocks_select".
- */
-export interface V2BlocksSelect<T extends boolean = true> {
+export interface BlocksSelect<T extends boolean = true> {
   title?: T;
   block?:
     | T
@@ -795,7 +467,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface V2Website {
   id: string;
   title?: string | null;
-  hero?: (string | null) | V2Block;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -805,7 +476,6 @@ export interface V2Website {
  */
 export interface V2WebsiteSelect<T extends boolean = true> {
   title?: T;
-  hero?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -7,10 +7,10 @@ export const Website: GlobalConfig = {
       name: 'title',
       type: 'text',
     },
-    {
-      name: 'hero',
-      type: 'relationship',
-      relationTo: 'v2blocks',
-    },
+    // {
+    //   name: 'hero',
+    //   type: 'relationship',
+    //   relationTo: 'v2blocks',
+    // },
   ],
 }

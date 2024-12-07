@@ -50,7 +50,7 @@ export const Product = ({
               },
               admin: {
                 components: {
-                  Field: 'src/components/FactoryOverseer#FactoryOverseer',
+                  Field: 'src/factory/components/FactoryOverseer#FactoryOverseer',
                   clientProps: {
                     factory,
                   },
@@ -68,7 +68,7 @@ export const Product = ({
               type: 'relationship',
               relationTo: incomingConfig.slug as CollectionSlug,
               hasMany: true,
-              filterOptions: ({ id }) => {
+              filterOptions: ({ id, data }) => {
                 if (filterNeighbors) {
                   const factoryNeighbors = data?.factoryData?.neighbors || []
                   return factoryNeighbors.length > 0

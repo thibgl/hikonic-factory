@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { Item } from './base/Item'
 
 export const Blocks: CollectionConfig = Item({
-  slug: 'v2blocks',
+  slug: 'blocks',
   fields: [
     {
       name: 'block',
