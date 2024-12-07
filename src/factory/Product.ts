@@ -73,12 +73,12 @@ export const Product = ({
                   const factoryNeighbors = data?.factoryData?.neighbors || []
                   return factoryNeighbors.length > 0
                     ? {
-                        neighbors: {
+                        factory: {
                           in: factoryNeighbors.map((product) => product.id),
                         },
                       }
                     : {
-                        neighbors: {
+                        factory: {
                           exists: false, // This ensures no results when array is empty/undefined
                         },
                       }
