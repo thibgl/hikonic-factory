@@ -1,12 +1,14 @@
-import type { CollectionConfig, CollectionSlug, Tab } from 'payload'
-import type { FactoryIdentity } from './types'
+import type { CollectionConfig, CollectionSlug, Field, Tab } from 'payload'
+import type { FactoryIdentity, OptionalCollection } from './types'
+
 import { ConditionalField } from '@/fields/Conditional'
 
-export interface Factory extends CollectionConfig {
+export interface Factory extends OptionalCollection {
   products: string
   tabs?: Tab[]
   shipsTo?: FactoryIdentity[]
   portsFrom?: FactoryIdentity[]
+  productsMaxDepth?: number
 }
 
 export const Factory = ({
@@ -14,6 +16,7 @@ export const Factory = ({
   tabs = [],
   shipsTo = [],
   portsFrom = [],
+  productsMaxDepth = 2,
   ...incomingConfig
 }: Factory): CollectionConfig => ({
   ...incomingConfig,
@@ -35,7 +38,7 @@ export const Factory = ({
               type: 'checkbox',
               defaultValue: false,
             },
-            ...incomingConfig.fields,
+            ...(incomingConfig.fields || []),
           ],
         },
         {
@@ -46,16 +49,19 @@ export const Factory = ({
               type: 'relationship',
               relationTo: incomingConfig.slug as CollectionSlug,
               hasMany: true,
-              filterOptions: ({ id }) => ({
-                id: { not_equals: id },
-              }),
+              filterOptions: ({ id }) =>
+                id
+                  ? {
+                      id: { not_equals: id },
+                    }
+                  : true,
             },
-            ...portsFrom.map((port) => ({
+            ...(portsFrom.map((port) => ({
               name: port.factory,
               type: 'relationship',
               relationTo: port.factory as CollectionSlug,
               hasMany: true,
-            })),
+            })) as Field[]),
           ],
         },
         {
@@ -64,14 +70,14 @@ export const Factory = ({
             ConditionalField({
               path: 'producing',
               value: true,
-              fallback: false,
               field: {
                 name: 'products',
                 type: 'join',
                 collection: products as CollectionSlug,
                 on: 'factory',
+                maxDepth: productsMaxDepth,
               },
-            }),
+            }) as Field,
             {
               name: 'related',
               label: 'Neighbors',
@@ -79,12 +85,12 @@ export const Factory = ({
               collection: incomingConfig.slug as CollectionSlug,
               on: 'neighbors',
             },
-            ...shipsTo.map((port) => ({
+            ...(shipsTo.map((port) => ({
               name: port.factory,
               type: 'join',
               collection: port.factory as CollectionSlug,
               on: incomingConfig.slug,
-            })),
+            })) as Field[]),
           ],
         },
         ...tabs,
@@ -92,8 +98,8 @@ export const Factory = ({
     },
   ],
   admin: {
-    ...incomingConfig.admin,
+    ...(incomingConfig.admin || {}),
     useAsTitle: 'name',
-    defaultColumns: ['name', 'products'],
+    defaultColumns: ['name', 'producing'],
   },
 })
