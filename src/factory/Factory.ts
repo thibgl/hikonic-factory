@@ -62,6 +62,18 @@ export const Factory = ({
               relationTo: port.factory as CollectionSlug,
               hasMany: true,
             })) as Field[]),
+            {
+              name: 'meta',
+              type: 'json',
+              hooks: {
+                beforeValidate: [
+                  async ({ siblingData }) => [
+                    ...siblingData.neighbors,
+                    ...portsFrom.flatMap((port) => siblingData[port.factory] || []),
+                  ],
+                ],
+              },
+            },
           ],
         },
         {

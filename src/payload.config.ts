@@ -36,15 +36,15 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  // db: mongooseAdapter({
-  //   url: process.env.DATABASE_URI || '',
-  // }),
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URL,
-      authToken: process.env.DATABASE_AUTH_TOKEN,
-    },
+  db: mongooseAdapter({
+    url: process.env.DATABASE_URI || '',
   }),
+  // db: sqliteAdapter({
+  //   client: {
+  //     url: process.env.DATABASE_URL,
+  //     authToken: process.env.DATABASE_AUTH_TOKEN,
+  //   },
+  // }),
   sharp,
   plugins: [
     payloadCloudPlugin(),

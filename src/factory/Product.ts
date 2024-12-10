@@ -41,9 +41,9 @@ export const Product = ({
                   producing: { equals: true },
                 }
               },
-              access: {
-                read: ({ req: { user } }) => Boolean(user),
-              },
+              // access: {
+              //   read: ({ req: { user } }) => Boolean(user),
+              // },
             },
             {
               name: 'factoryData',

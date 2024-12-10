@@ -53,7 +53,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {
     v2website: V2Website;
@@ -93,7 +93,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -110,7 +110,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -129,7 +129,7 @@ export interface Media {
  * via the `definition` "blocks".
  */
 export interface Block {
-  id: number;
+  id: string;
   title?: string | null;
   block?:
     | {
@@ -147,22 +147,31 @@ export interface Block {
  * via the `definition` "indexes".
  */
 export interface Index {
-  id: number;
+  id: string;
   name: string;
   producing?: boolean | null;
-  neighbors?: (number | Index)[] | null;
-  tokens?: (number | Token)[] | null;
+  neighbors?: (string | Index)[] | null;
+  tokens?: (string | Token)[] | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   products?: {
-    docs?: (number | Page)[] | null;
+    docs?: (string | Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   related?: {
-    docs?: (number | Index)[] | null;
+    docs?: (string | Index)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   layout?: {
     hero?: {
-      preset?: (number | null) | Block;
+      preset?: (string | null) | Block;
       header?: string | null;
       body?: {
         root: {
@@ -181,8 +190,16 @@ export interface Index {
       } | null;
       component?:
         | {
-            tokens?: (number | null) | Token;
-            items?: (number | Item)[] | null;
+            factory?:
+              | ({
+                  relationTo: 'indexes';
+                  value: string | Index;
+                } | null)
+              | ({
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null);
+            items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'wall';
@@ -191,7 +208,7 @@ export interface Index {
     };
     main?:
       | {
-          preset?: (number | null) | Block;
+          preset?: (string | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -210,8 +227,16 @@ export interface Index {
           } | null;
           component?:
             | {
-                tokens?: (number | null) | Token;
-                items?: (number | Item)[] | null;
+                factory?:
+                  | ({
+                      relationTo: 'indexes';
+                      value: string | Index;
+                    } | null)
+                  | ({
+                      relationTo: 'tokens';
+                      value: string | Token;
+                    } | null);
+                items?: (string | Item)[] | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'wall';
@@ -221,7 +246,7 @@ export interface Index {
         }[]
       | null;
     footer?: {
-      preset?: (number | null) | Block;
+      preset?: (string | null) | Block;
       header?: string | null;
       body?: {
         root: {
@@ -240,8 +265,16 @@ export interface Index {
       } | null;
       component?:
         | {
-            tokens?: (number | null) | Token;
-            items?: (number | Item)[] | null;
+            factory?:
+              | ({
+                  relationTo: 'indexes';
+                  value: string | Index;
+                } | null)
+              | ({
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null);
+            items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'wall';
@@ -251,7 +284,7 @@ export interface Index {
   };
   childrenLayout?: {
     hero?: {
-      preset?: (number | null) | Block;
+      preset?: (string | null) | Block;
       header?: string | null;
       body?: {
         root: {
@@ -270,8 +303,16 @@ export interface Index {
       } | null;
       component?:
         | {
-            tokens?: (number | null) | Token;
-            items?: (number | Item)[] | null;
+            factory?:
+              | ({
+                  relationTo: 'indexes';
+                  value: string | Index;
+                } | null)
+              | ({
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null);
+            items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'wall';
@@ -280,7 +321,7 @@ export interface Index {
     };
     main?:
       | {
-          preset?: (number | null) | Block;
+          preset?: (string | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -299,8 +340,16 @@ export interface Index {
           } | null;
           component?:
             | {
-                tokens?: (number | null) | Token;
-                items?: (number | Item)[] | null;
+                factory?:
+                  | ({
+                      relationTo: 'indexes';
+                      value: string | Index;
+                    } | null)
+                  | ({
+                      relationTo: 'tokens';
+                      value: string | Token;
+                    } | null);
+                items?: (string | Item)[] | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'wall';
@@ -310,7 +359,7 @@ export interface Index {
         }[]
       | null;
     footer?: {
-      preset?: (number | null) | Block;
+      preset?: (string | null) | Block;
       header?: string | null;
       body?: {
         root: {
@@ -329,8 +378,16 @@ export interface Index {
       } | null;
       component?:
         | {
-            tokens?: (number | null) | Token;
-            items?: (number | Item)[] | null;
+            factory?:
+              | ({
+                  relationTo: 'indexes';
+                  value: string | Index;
+                } | null)
+              | ({
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null);
+            items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'wall';
@@ -346,20 +403,29 @@ export interface Index {
  * via the `definition` "tokens".
  */
 export interface Token {
-  id: number;
+  id: string;
   name: string;
   producing?: boolean | null;
-  neighbors?: (number | Token)[] | null;
+  neighbors?: (string | Token)[] | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   products?: {
-    docs?: (number | Item)[] | null;
+    docs?: (string | Item)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   related?: {
-    docs?: (number | Token)[] | null;
+    docs?: (string | Token)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   indexes?: {
-    docs?: (number | Index)[] | null;
+    docs?: (string | Index)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   updatedAt: string;
@@ -370,9 +436,9 @@ export interface Token {
  * via the `definition` "items".
  */
 export interface Item {
-  id: number;
+  id: string;
   name: string;
-  factory: number | Token;
+  factory: string | Token;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -382,13 +448,13 @@ export interface Item {
     | number
     | boolean
     | null;
-  neighbors?: (number | Item)[] | null;
+  neighbors?: (string | Item)[] | null;
   related?: {
-    docs?: (number | Item)[] | null;
+    docs?: (string | Item)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   pages?: {
-    docs?: (number | Page)[] | null;
+    docs?: (string | Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   updatedAt: string;
@@ -399,9 +465,9 @@ export interface Item {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
+  id: string;
   name: string;
-  factory: number | Index;
+  factory: string | Index;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -411,10 +477,10 @@ export interface Page {
     | number
     | boolean
     | null;
-  neighbors?: (number | Page)[] | null;
-  items?: (number | Item)[] | null;
+  neighbors?: (string | Page)[] | null;
+  items?: (string | Item)[] | null;
   related?: {
-    docs?: (number | Page)[] | null;
+    docs?: (string | Page)[] | null;
     hasNextPage?: boolean | null;
   } | null;
   updatedAt: string;
@@ -425,40 +491,40 @@ export interface Page {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'blocks';
-        value: number | Block;
+        value: string | Block;
       } | null)
     | ({
         relationTo: 'indexes';
-        value: number | Index;
+        value: string | Index;
       } | null)
     | ({
         relationTo: 'pages';
-        value: number | Page;
+        value: string | Page;
       } | null)
     | ({
         relationTo: 'tokens';
-        value: number | Token;
+        value: string | Token;
       } | null)
     | ({
         relationTo: 'items';
-        value: number | Item;
+        value: string | Item;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -468,10 +534,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -491,7 +557,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -559,6 +625,7 @@ export interface IndexesSelect<T extends boolean = true> {
   producing?: T;
   neighbors?: T;
   tokens?: T;
+  meta?: T;
   products?: T;
   related?: T;
   layout?:
@@ -576,7 +643,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     wall?:
                       | T
                       | {
-                          tokens?: T;
+                          factory?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -595,7 +662,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     wall?:
                       | T
                       | {
-                          tokens?: T;
+                          factory?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -615,7 +682,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     wall?:
                       | T
                       | {
-                          tokens?: T;
+                          factory?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -638,7 +705,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     wall?:
                       | T
                       | {
-                          tokens?: T;
+                          factory?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -657,7 +724,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     wall?:
                       | T
                       | {
-                          tokens?: T;
+                          factory?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -677,7 +744,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     wall?:
                       | T
                       | {
-                          tokens?: T;
+                          factory?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -710,6 +777,7 @@ export interface TokensSelect<T extends boolean = true> {
   name?: T;
   producing?: T;
   neighbors?: T;
+  meta?: T;
   products?: T;
   related?: T;
   indexes?: T;
@@ -767,7 +835,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "v2website".
  */
 export interface V2Website {
-  id: number;
+  id: string;
   title?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;

@@ -5,16 +5,24 @@ const WallBlock = (children = false): Block => ({
   slug: 'wall',
   fields: [
     {
-      name: 'tokens',
+      name: 'factory',
       type: 'relationship',
-      relationTo: 'tokens',
+      relationTo: ['indexes', 'tokens'],
       hidden: !children,
-      filterOptions: ({ data }) => {
+      filterOptions: ({ data, relationTo }) => {
+        const neighbors = data.neighbors || []
         const tokens = data.tokens || []
-        if (tokens.length > 0) {
+        if (relationTo === 'tokens' && tokens.length > 0) {
           return {
             id: {
               in: tokens,
+            },
+          }
+        }
+        if (relationTo === 'indexes' && neighbors.length > 0) {
+          return {
+            id: {
+              in: neighbors,
             },
           }
         }
