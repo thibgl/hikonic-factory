@@ -1,10 +1,10 @@
 import type { Block, Field } from 'payload'
-import { ConditionalField } from '@/fields/Conditional'
+import { ConditionalField, IdSerializer } from '@/fields'
 
 const WallBlock = (children = false): Block => ({
-  slug: 'wall',
+  slug: 'Wall',
   fields: [
-    {
+    ...IdSerializer({
       name: 'factory',
       type: 'relationship',
       relationTo: ['indexes', 'tokens'],
@@ -28,7 +28,7 @@ const WallBlock = (children = false): Block => ({
         }
         return false
       },
-    },
+    }),
     {
       name: 'items',
       type: 'relationship',

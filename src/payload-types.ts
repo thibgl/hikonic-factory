@@ -152,15 +152,6 @@ export interface Index {
   producing?: boolean | null;
   neighbors?: (string | Index)[] | null;
   tokens?: (string | Token)[] | null;
-  meta?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   products?: {
     docs?: (string | Page)[] | null;
     hasNextPage?: boolean | null;
@@ -199,10 +190,11 @@ export interface Index {
                   relationTo: 'tokens';
                   value: string | Token;
                 } | null);
+            factoryId?: string | null;
             items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'wall';
+            blockType: 'Wall';
           }[]
         | null;
     };
@@ -236,10 +228,11 @@ export interface Index {
                       relationTo: 'tokens';
                       value: string | Token;
                     } | null);
+                factoryId?: string | null;
                 items?: (string | Item)[] | null;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: 'wall';
+                blockType: 'Wall';
               }[]
             | null;
           id?: string | null;
@@ -274,10 +267,11 @@ export interface Index {
                   relationTo: 'tokens';
                   value: string | Token;
                 } | null);
+            factoryId?: string | null;
             items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'wall';
+            blockType: 'Wall';
           }[]
         | null;
     };
@@ -312,10 +306,11 @@ export interface Index {
                   relationTo: 'tokens';
                   value: string | Token;
                 } | null);
+            factoryId?: string | null;
             items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'wall';
+            blockType: 'Wall';
           }[]
         | null;
     };
@@ -349,10 +344,11 @@ export interface Index {
                       relationTo: 'tokens';
                       value: string | Token;
                     } | null);
+                factoryId?: string | null;
                 items?: (string | Item)[] | null;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: 'wall';
+                blockType: 'Wall';
               }[]
             | null;
           id?: string | null;
@@ -387,10 +383,11 @@ export interface Index {
                   relationTo: 'tokens';
                   value: string | Token;
                 } | null);
+            factoryId?: string | null;
             items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'wall';
+            blockType: 'Wall';
           }[]
         | null;
     };
@@ -407,15 +404,6 @@ export interface Token {
   name: string;
   producing?: boolean | null;
   neighbors?: (string | Token)[] | null;
-  meta?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   products?: {
     docs?: (string | Item)[] | null;
     hasNextPage?: boolean | null;
@@ -625,7 +613,6 @@ export interface IndexesSelect<T extends boolean = true> {
   producing?: T;
   neighbors?: T;
   tokens?: T;
-  meta?: T;
   products?: T;
   related?: T;
   layout?:
@@ -640,10 +627,11 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    wall?:
+                    Wall?:
                       | T
                       | {
                           factory?: T;
+                          factoryId?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -659,10 +647,11 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    wall?:
+                    Wall?:
                       | T
                       | {
                           factory?: T;
+                          factoryId?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -679,10 +668,11 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    wall?:
+                    Wall?:
                       | T
                       | {
                           factory?: T;
+                          factoryId?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -702,10 +692,11 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    wall?:
+                    Wall?:
                       | T
                       | {
                           factory?: T;
+                          factoryId?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -721,10 +712,11 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    wall?:
+                    Wall?:
                       | T
                       | {
                           factory?: T;
+                          factoryId?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -741,10 +733,11 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    wall?:
+                    Wall?:
                       | T
                       | {
                           factory?: T;
+                          factoryId?: T;
                           items?: T;
                           id?: T;
                           blockName?: T;
@@ -777,7 +770,6 @@ export interface TokensSelect<T extends boolean = true> {
   name?: T;
   producing?: T;
   neighbors?: T;
-  meta?: T;
   products?: T;
   related?: T;
   indexes?: T;

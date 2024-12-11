@@ -62,18 +62,6 @@ export const Factory = ({
               relationTo: port.factory as CollectionSlug,
               hasMany: true,
             })) as Field[]),
-            {
-              name: 'meta',
-              type: 'json',
-              hooks: {
-                beforeValidate: [
-                  async ({ siblingData }) => [
-                    ...siblingData.neighbors,
-                    ...portsFrom.flatMap((port) => siblingData[port.factory] || []),
-                  ],
-                ],
-              },
-            },
           ],
         },
         {
@@ -114,4 +102,79 @@ export const Factory = ({
     useAsTitle: 'name',
     defaultColumns: ['name', 'producing'],
   },
+  // hooks: {
+  // beforeValidate: [
+  //   async ({ req: { payload }, operation, doc }) => {
+  //     if (operation === 'update') {
+  //       // Helper function to recursively find and process relationship fields
+  //       const processFields = (fields: Field[]) => {
+  //         fields.forEach(field => {
+  //           if (field.type === 'tabs' && field.tabs) {
+  //             field.tabs.forEach(tab => {
+  //               if (tab.fields) processFields(tab.fields)
+  //             })
+  //           }
+  //           if (field.type === 'relationship') {
+  //             // Filter product relationships
+  //             if (field.relationTo === products) {
+  //               if (field.hasMany && doc[field.name]) {
+  //                 doc[field.name] = doc[field.name].filter(item =>
+  //                   item.producing === true
+  //                 )
+  //               } else if (!field.hasMany && doc[field.name]) {
+  //                 const product = await payload.findByID({
+  //                   collection: products as CollectionSlug,
+  //                   id: doc[field.name]
+  //                 })
+  //                 if (!product?.producing) {
+  //                   doc[field.name] = null
+  //                 }
+  //               }
+  //             }
+  //             // Filter portsFrom relationships
+  //             const portConfig = portsFrom.find(port =>
+  //               port.factory === field.relationTo
+  //             )
+  //             if (portConfig) {
+  //               if (field.hasMany && doc[field.name]) {
+  //                 doc[field.name] = doc[field.name].filter(item => {
+  //                   // Add your filtering logic here based on the port configuration
+  //                   return true // Replace with actual condition
+  //                 })
+  //               } else if (!field.hasMany && doc[field.name]) {
+  //                 // Add your single relationship filtering logic here
+  //                 // Similar to the Product sync endpoint
+  //               }
+  //             }
+  //           }
+  //         })
+  //       }
+  //       // Start processing from the top-level fields
+  //       if (incomingConfig.fields) {
+  //         processFields(incomingConfig.fields)
+  //       }
+  //       // Keep existing neighbors reset
+  //       doc.neighbors = []
+  //     }
+  //   },
+  // // ],
+  // afterChange: [
+  //   async ({ req: { payload }, operation, doc }) => {
+  //     if (operation === 'update') {
+  //       const factory = await payload.findByID({
+  //         collection: incomingConfig.slug as CollectionSlug,
+  //         id: doc.id,
+  //       })
+  //       const origin = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+  //       await fetch(`${origin}/api/${products}/sync`, {
+  //         method: 'post',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(factory),
+  //       })
+  //     }
+  //   },
+  // ],
+  // },
 })
