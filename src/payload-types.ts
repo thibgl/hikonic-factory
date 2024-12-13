@@ -24,20 +24,22 @@ export interface Config {
   };
   collectionsJoins: {
     indexes: {
-      products: 'pages';
-      related: 'indexes';
+      'related.products': 'pages';
+      'related.neighbors': 'pages';
+      'related.tokens': 'tokens';
     };
     pages: {
-      related: 'pages';
+      'related.neighbors': 'pages';
+      'related.items': 'items';
     };
     tokens: {
-      products: 'items';
-      related: 'tokens';
-      indexes: 'indexes';
+      'related.products': 'items';
+      'related.neighbors': 'items';
+      'related.indexes': 'indexes';
     };
     items: {
-      related: 'items';
-      pages: 'pages';
+      'related.neighbors': 'items';
+      'related.pages': 'pages';
     };
   };
   collectionsSelect: {
@@ -148,18 +150,8 @@ export interface Block {
  */
 export interface Index {
   id: string;
-  name: string;
   producing?: boolean | null;
-  neighbors?: (string | Index)[] | null;
-  tokens?: (string | Token)[] | null;
-  products?: {
-    docs?: (string | Page)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  related?: {
-    docs?: (string | Index)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
+  title: string;
   layout?: {
     hero?: {
       preset?: (string | null) | Block;
@@ -181,17 +173,12 @@ export interface Index {
       } | null;
       component?:
         | {
-            factory?:
-              | ({
-                  relationTo: 'indexes';
-                  value: string | Index;
-                } | null)
-              | ({
-                  relationTo: 'tokens';
-                  value: string | Token;
-                } | null);
-            factoryId?: string | null;
             items?: (string | Item)[] | null;
+            factory?: {
+              relationTo: 'tokens';
+              value: string | Token;
+            } | null;
+            factoryId?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'Wall';
@@ -219,17 +206,12 @@ export interface Index {
           } | null;
           component?:
             | {
-                factory?:
-                  | ({
-                      relationTo: 'indexes';
-                      value: string | Index;
-                    } | null)
-                  | ({
-                      relationTo: 'tokens';
-                      value: string | Token;
-                    } | null);
-                factoryId?: string | null;
                 items?: (string | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -258,17 +240,12 @@ export interface Index {
       } | null;
       component?:
         | {
-            factory?:
-              | ({
-                  relationTo: 'indexes';
-                  value: string | Index;
-                } | null)
-              | ({
-                  relationTo: 'tokens';
-                  value: string | Token;
-                } | null);
-            factoryId?: string | null;
             items?: (string | Item)[] | null;
+            factory?: {
+              relationTo: 'tokens';
+              value: string | Token;
+            } | null;
+            factoryId?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'Wall';
@@ -297,17 +274,12 @@ export interface Index {
       } | null;
       component?:
         | {
-            factory?:
-              | ({
-                  relationTo: 'indexes';
-                  value: string | Index;
-                } | null)
-              | ({
-                  relationTo: 'tokens';
-                  value: string | Token;
-                } | null);
-            factoryId?: string | null;
             items?: (string | Item)[] | null;
+            factory?: {
+              relationTo: 'tokens';
+              value: string | Token;
+            } | null;
+            factoryId?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'Wall';
@@ -335,17 +307,12 @@ export interface Index {
           } | null;
           component?:
             | {
-                factory?:
-                  | ({
-                      relationTo: 'indexes';
-                      value: string | Index;
-                    } | null)
-                  | ({
-                      relationTo: 'tokens';
-                      value: string | Token;
-                    } | null);
-                factoryId?: string | null;
                 items?: (string | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -374,23 +341,72 @@ export interface Index {
       } | null;
       component?:
         | {
-            factory?:
-              | ({
-                  relationTo: 'indexes';
-                  value: string | Index;
-                } | null)
-              | ({
-                  relationTo: 'tokens';
-                  value: string | Token;
-                } | null);
-            factoryId?: string | null;
             items?: (string | Item)[] | null;
+            factory?: {
+              relationTo: 'tokens';
+              value: string | Token;
+            } | null;
+            factoryId?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'Wall';
           }[]
         | null;
     };
+  };
+  meta?: {
+    neighbors?: (string | Index)[] | null;
+    tokens?: (string | Token)[] | null;
+  };
+  related?: {
+    products?: {
+      docs?: (string | Page)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    neighbors?: {
+      docs?: (string | Page)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    tokens?: {
+      docs?: (string | Token)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "items".
+ */
+export interface Item {
+  id: string;
+  factoryData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  factory: string | Token;
+  factoryId?: string | null;
+  updated?: boolean | null;
+  title: string;
+  meta?: {
+    neighbors?: (string | Item)[] | null;
+    pages?: (string | Page)[] | null;
+  };
+  related?: {
+    neighbors?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    pages?: {
+      docs?: (string | Page)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -401,50 +417,26 @@ export interface Index {
  */
 export interface Token {
   id: string;
-  name: string;
   producing?: boolean | null;
-  neighbors?: (string | Token)[] | null;
-  products?: {
-    docs?: (string | Item)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
+  title: string;
+  meta?: {
+    neighbors?: (string | Token)[] | null;
+    indexes?: (string | Index)[] | null;
+  };
   related?: {
-    docs?: (string | Token)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  indexes?: {
-    docs?: (string | Index)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "items".
- */
-export interface Item {
-  id: string;
-  name: string;
-  factory: string | Token;
-  factoryData?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  neighbors?: (string | Item)[] | null;
-  related?: {
-    docs?: (string | Item)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
-  pages?: {
-    docs?: (string | Page)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
+    products?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    neighbors?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    indexes?: {
+      docs?: (string | Index)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -454,8 +446,6 @@ export interface Item {
  */
 export interface Page {
   id: string;
-  name: string;
-  factory: string | Index;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -465,12 +455,24 @@ export interface Page {
     | number
     | boolean
     | null;
-  neighbors?: (string | Page)[] | null;
-  items?: (string | Item)[] | null;
+  factory: string | Index;
+  factoryId?: string | null;
+  updated?: boolean | null;
+  title: string;
+  meta?: {
+    neighbors?: (string | Page)[] | null;
+    items?: (string | Item)[] | null;
+  };
   related?: {
-    docs?: (string | Page)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
+    neighbors?: {
+      docs?: (string | Page)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    items?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -609,12 +611,8 @@ export interface BlocksSelect<T extends boolean = true> {
  * via the `definition` "indexes_select".
  */
 export interface IndexesSelect<T extends boolean = true> {
-  name?: T;
   producing?: T;
-  neighbors?: T;
-  tokens?: T;
-  products?: T;
-  related?: T;
+  title?: T;
   layout?:
     | T
     | {
@@ -630,9 +628,9 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
-                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -650,9 +648,9 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
-                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -671,9 +669,9 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
-                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -695,9 +693,9 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
-                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -715,9 +713,9 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
-                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -736,14 +734,27 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
-                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
                   };
             };
+      };
+  meta?:
+    | T
+    | {
+        neighbors?: T;
+        tokens?: T;
+      };
+  related?:
+    | T
+    | {
+        products?: T;
+        neighbors?: T;
+        tokens?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -753,12 +764,23 @@ export interface IndexesSelect<T extends boolean = true> {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  name?: T;
-  factory?: T;
   factoryData?: T;
-  neighbors?: T;
-  items?: T;
-  related?: T;
+  factory?: T;
+  factoryId?: T;
+  updated?: T;
+  title?: T;
+  meta?:
+    | T
+    | {
+        neighbors?: T;
+        items?: T;
+      };
+  related?:
+    | T
+    | {
+        neighbors?: T;
+        items?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -767,12 +789,21 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "tokens_select".
  */
 export interface TokensSelect<T extends boolean = true> {
-  name?: T;
   producing?: T;
-  neighbors?: T;
-  products?: T;
-  related?: T;
-  indexes?: T;
+  title?: T;
+  meta?:
+    | T
+    | {
+        neighbors?: T;
+        indexes?: T;
+      };
+  related?:
+    | T
+    | {
+        products?: T;
+        neighbors?: T;
+        indexes?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -781,12 +812,23 @@ export interface TokensSelect<T extends boolean = true> {
  * via the `definition` "items_select".
  */
 export interface ItemsSelect<T extends boolean = true> {
-  name?: T;
-  factory?: T;
   factoryData?: T;
-  neighbors?: T;
-  related?: T;
-  pages?: T;
+  factory?: T;
+  factoryId?: T;
+  updated?: T;
+  title?: T;
+  meta?:
+    | T
+    | {
+        neighbors?: T;
+        pages?: T;
+      };
+  related?:
+    | T
+    | {
+        neighbors?: T;
+        pages?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

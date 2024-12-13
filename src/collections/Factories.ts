@@ -5,13 +5,20 @@ import { ConditionalField } from '@/fields/Conditional'
 import { Item, Layout } from './base'
 import { Field } from 'payload'
 
-const pagesFactoryIdentity: FactoryIdentity = { factory: 'indexes', products: 'pages' }
-const itemsFactoryIdentity: FactoryIdentity = { factory: 'tokens', products: 'items' }
+const pagesFactoryIdentity: FactoryIdentity = {
+  factory: { singular: 'index', plural: 'indexes' },
+  products: { singular: 'page', plural: 'pages' },
+}
+const itemsFactoryIdentity: FactoryIdentity = {
+  factory: { singular: 'token', plural: 'tokens' },
+  products: { singular: 'item', plural: 'items' },
+}
 
 export const Factories = [
   ...CreateFactory({
     identity: pagesFactoryIdentity,
     portsFrom: [itemsFactoryIdentity],
+    shipsTo: [itemsFactoryIdentity],
     filterNeighbors: true,
     commons: {
       versions: true,
@@ -38,11 +45,14 @@ export const Factories = [
         },
       ],
     },
-    product: {},
+    product: {
+      tabs: [],
+    },
   }),
   ...CreateFactory({
     identity: itemsFactoryIdentity,
     shipsTo: [pagesFactoryIdentity],
+    portsFrom: [pagesFactoryIdentity],
     filterNeighbors: true,
     commons: {
       versions: true,

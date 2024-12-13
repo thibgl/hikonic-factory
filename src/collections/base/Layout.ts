@@ -4,14 +4,21 @@ import { ConditionalField, IdSerializer } from '@/fields'
 const WallBlock = (children = false): Block => ({
   slug: 'Wall',
   fields: [
+    {
+      name: 'items',
+      type: 'relationship',
+      relationTo: 'items',
+      hasMany: true,
+      hidden: children,
+    },
     ...IdSerializer({
       name: 'factory',
       type: 'relationship',
-      relationTo: ['indexes', 'tokens'],
+      relationTo: ['tokens'],
       hidden: !children,
       filterOptions: ({ data, relationTo }) => {
-        const neighbors = data.neighbors || []
-        const tokens = data.tokens || []
+        const neighbors = data.meta?.neighbors || []
+        const tokens = data.meta?.tokens || []
         if (relationTo === 'tokens' && tokens.length > 0) {
           return {
             id: {
@@ -29,13 +36,6 @@ const WallBlock = (children = false): Block => ({
         return false
       },
     }),
-    {
-      name: 'items',
-      type: 'relationship',
-      relationTo: 'items',
-      hasMany: true,
-      hidden: children,
-    },
   ],
 })
 

@@ -1,8 +1,10 @@
 import type { CollectionConfig, CollectionSlug, Field, Tab } from 'payload'
 import type { FactoryIdentity, OptionalCollection } from './types'
 
+import { IdSerializer } from '@/fields'
+
 export interface Product extends OptionalCollection {
-  factory: string
+  identity: FactoryIdentity
   tabs?: Tab[]
   shipsTo?: FactoryIdentity[]
   portsFrom?: FactoryIdentity[]
@@ -10,7 +12,7 @@ export interface Product extends OptionalCollection {
 }
 
 export const Product = ({
-  factory,
+  identity,
   tabs = [],
   shipsTo = [],
   portsFrom = [],
@@ -18,69 +20,79 @@ export const Product = ({
   ...incomingConfig
 }: Product): CollectionConfig => ({
   ...incomingConfig,
+  slug: identity.products.plural,
   fields: [
+    {
+      name: 'factoryData',
+      type: 'json',
+      access: {
+        read: ({ req: { user } }) => Boolean(user),
+      },
+      admin: {
+        components: {
+          Field: {
+            path: 'src/factory/components/FactoryOverseer#FactoryOverseer',
+            clientProps: {
+              factory: identity.factory.plural,
+            },
+          },
+        },
+      },
+    },
     {
       type: 'tabs',
       tabs: [
         {
-          label: 'Product',
+          label:
+            identity.products.singular.charAt(0).toUpperCase() +
+            identity.products.singular.slice(1),
           fields: [
-            {
-              name: 'name',
-              type: 'text',
-              required: true,
-              unique: true,
-            },
-            {
+            ...IdSerializer({
               name: 'factory',
               type: 'relationship',
               required: true,
-              relationTo: factory as CollectionSlug,
+              relationTo: identity.factory.plural as CollectionSlug,
               filterOptions: () => {
                 return {
                   producing: { equals: true },
                 }
               },
-              // access: {
-              //   read: ({ req: { user } }) => Boolean(user),
-              // },
+            }),
+            {
+              name: 'updated',
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                readOnly: true,
+                hidden: true,
+              },
             },
             {
-              name: 'factoryData',
-              type: 'json',
-              access: {
-                read: ({ req: { user } }) => Boolean(user),
-              },
-              admin: {
-                components: {
-                  Field: 'src/factory/components/FactoryOverseer#FactoryOverseer',
-                  clientProps: {
-                    factory,
-                  },
-                },
-              },
+              name: 'title',
+              type: 'text',
+              required: true,
+              unique: true,
             },
             ...(incomingConfig.fields || []),
           ],
         },
+        ...tabs,
         {
-          label: 'Meta',
+          name: 'meta',
           fields: [
             {
               name: 'neighbors',
               type: 'relationship',
-              relationTo: incomingConfig.slug as CollectionSlug,
+              relationTo: identity.products.plural as CollectionSlug,
               hasMany: true,
               filterOptions: ({ id, data }) => {
-                if (filterNeighbors) {
-                  const factoryNeighbors = data?.factoryData?.neighbors || []
-                  return factoryNeighbors.length > 0
-                    ? {
-                        factory: {
-                          in: factoryNeighbors.map((product) => product.id),
-                        },
-                      }
-                    : false
+                const factoryNeighbors = data?.factoryData?.meta?.neighbors || []
+                if (filterNeighbors && factoryNeighbors.length > 0) {
+                  return {
+                    factory: {
+                      in: factoryNeighbors,
+                    },
+                  }
                 }
                 return {
                   id: { not_equals: id },
@@ -93,64 +105,79 @@ export const Product = ({
               // }
             },
             ...(portsFrom.map((port) => ({
-              name: port.products,
+              name: port.products.plural,
               type: 'relationship',
-              relationTo: port.products as CollectionSlug,
+              relationTo: port.products.plural as CollectionSlug,
               hasMany: true,
               filterOptions: ({ data }) => {
-                const factoryLinks = data?.factoryData?.[port.factory] || []
-                return factoryLinks.length > 0
-                  ? {
-                      factory: {
-                        in: factoryLinks.map((link) => link.id),
-                      },
-                    }
-                  : false
+                const factoryLinks = data?.factoryData?.meta?.[port.factory.plural] || []
+                if (factoryLinks.length > 0) {
+                  return {
+                    factory: {
+                      in: factoryLinks,
+                    },
+                  }
+                }
+                return false
               },
             })) as Field[]),
           ],
         },
         {
-          label: 'Related',
+          name: 'related',
           fields: [
             {
-              name: 'related',
-              label: 'Neighbors',
+              name: 'neighbors',
               type: 'join',
-              collection: incomingConfig.slug as CollectionSlug,
-              on: 'neighbors',
+              collection: identity.products.plural as CollectionSlug,
+              on: 'meta.neighbors',
             },
             ...(shipsTo.map((port) => ({
-              name: port.products,
+              name: port.products.plural,
               type: 'join',
-              collection: port.products as CollectionSlug,
-              on: incomingConfig.slug,
+              collection: port.products.plural as CollectionSlug,
+              on: `meta.${identity.products.plural}`,
             })) as Field[]),
           ],
         },
-        ...tabs,
       ],
     },
   ],
-  // hooks: {
-  //   afterRead: [
-  //     async ({ doc, req: { payload } }) => {
-  //       const res = await payload.find({
-  //         collection: factory as CollectionSlug,
-  //         where: {
-  //           id: { equals: doc.factory },
-  //         },
-  //       })
-
-  //       doc.factoryData = res.docs[0]
-  //       return doc
-  //     },
-  //   ],
-  // },
   admin: {
-    ...(incomingConfig.admin || {}),
-    useAsTitle: 'name',
-    defaultColumns: ['name', 'factory'],
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'factory', 'updated'],
+  },
+  hooks: {
+    beforeValidate: [
+      async ({ data, req }) => {
+        if (data && req.url?.includes('/api/')) {
+          data.updated = true
+          return data
+        }
+      },
+    ],
+    // beforeChange: [
+    //   async ({ data, req }) => {
+    //     if (data) {
+    //       data.factoryData = null
+    //       return data
+    //     }
+    //   },
+    // ],
+    // afterRead: [
+    //   async ({ doc, req: { payload } }) => {
+    //     console.log(doc)
+    //     const res = await payload.find({
+    //       collection: factory as CollectionSlug,
+    //       where: {
+    //         id: { equals: doc.factory },
+    //       },
+    //     })
+    //     // console.log(res.docs[0])
+    //     doc.data = res.docs[0]
+    //     return doc
+    //   },
+    // ],
   },
   // endpoints: [
   //   {

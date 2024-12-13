@@ -5,19 +5,13 @@ import { Product } from './Product'
 
 interface CreateFactory {
   identity: FactoryIdentity
-  factory?: Omit<Factory, 'slug' | 'shipsTo' | 'portsFrom' | 'products'>
-  product?: Omit<Product, 'slug' | 'shipsTo' | 'portsFrom' | 'factory' | 'filterNeighbors'>
+  factory?: Omit<Factory, 'identity' | 'shipsTo' | 'portsFrom' | 'products'>
+  product?: Omit<Product, 'identity' | 'shipsTo' | 'portsFrom' | 'factory' | 'filterNeighbors'>
   commons?: Omit<OptionalCollection, 'slug'>
   shipsTo?: FactoryIdentity[]
   portsFrom?: FactoryIdentity[]
   filterNeighbors?: boolean
   productsMaxDepth?: number
-}
-
-const mapFactoryIdentity = (identity: FactoryIdentity) => {
-  const factory = identity.factory
-  const products = identity.products || `${factory}Products`
-  return { factory, products }
 }
 
 export const CreateFactory = ({
@@ -29,30 +23,22 @@ export const CreateFactory = ({
   portsFrom = [],
   filterNeighbors = false,
   productsMaxDepth = 2,
-}: CreateFactory) => {
-  const { factory: factoryName, products: productName } = mapFactoryIdentity(identity)
-  const shipsToIds = shipsTo.map(mapFactoryIdentity)
-  const portsFromIds = portsFrom.map(mapFactoryIdentity)
-
-  return [
-    Factory({
-      ...mergeArrayValues(commons, factory),
-      slug: factoryName,
-      products: productName,
-      shipsTo: shipsToIds,
-      portsFrom: portsFromIds,
-      productsMaxDepth,
-    }),
-    Product({
-      ...mergeArrayValues(commons, product),
-      slug: productName,
-      factory: factoryName,
-      shipsTo: shipsToIds,
-      portsFrom: portsFromIds,
-      filterNeighbors,
-    }),
-  ]
-}
+}: CreateFactory) => [
+  Factory({
+    ...mergeArrayValues(commons, factory),
+    identity,
+    shipsTo: shipsTo,
+    portsFrom: portsFrom,
+    productsMaxDepth,
+  }),
+  Product({
+    ...mergeArrayValues(commons, product),
+    identity,
+    shipsTo: shipsTo,
+    portsFrom: portsFrom,
+    filterNeighbors,
+  }),
+]
 
 const mergeArrayValues = (obj1: any, obj2: any): any => {
   const result = { ...obj1 }
