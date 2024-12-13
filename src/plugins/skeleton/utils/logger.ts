@@ -1,0 +1,11 @@
+const PREFIX = 'Skeleton Plugin |'
+
+const logger = {
+  log: (...args: any[]) => console.log(PREFIX, ...args),
+  info: (...args: any[]) => console.info(PREFIX, ...args),
+  warn: (...args: any[]) => console.warn(PREFIX, ...args),
+  error: (...args: any[]) => console.error(PREFIX, ...args),
+  debug: (...args: any[]) => console.debug(PREFIX, ...args),
+}
+
+export default logger

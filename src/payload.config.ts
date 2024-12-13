@@ -2,6 +2,9 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { seoPlugin } from '@payloadcms/plugin-seo'
+import { iconifyPlugin } from '@/plugins/iconify'
+import { skeletonPlugin } from '@/plugins/skeleton'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -26,7 +29,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
-      providers: ['/factory/context/FactoryContext#FactoryProvider'],
+      providers: ['/plugins/factory/context/FactoryContext#FactoryProvider'],
     },
   },
   globals: [Website],
@@ -48,7 +51,18 @@ export default buildConfig({
   // }),
   sharp,
   plugins: [
+    iconifyPlugin(),
+    skeletonPlugin({
+      clientPath: '../client',
+    }),
     payloadCloudPlugin(),
+    seoPlugin({
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => {
+        return `Website.com — ${doc.title}`
+      },
+      generateDescription: ({ doc }) => doc.excerpt,
+    }),
     // storage-adapter-placeholder
   ],
 })

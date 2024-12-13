@@ -1,20 +1,10 @@
-import type { CollectionConfig, Field } from 'payload'
+import type { Field } from 'payload'
 
-export interface Item {
-  slug: string
-  fields?: any[]
-}
-
-export const Item = ({ slug, fields }: Item): CollectionConfig => ({
-  slug,
-  fields: [
-    {
-      name: 'title',
-      type: 'text',
-    },
-    ...(fields || []),
-  ],
-  admin: {
-    useAsTitle: 'title',
+export const ItemFields: Field[] = [
+  { name: 'description', type: 'richText' },
+  {
+    name: 'illustration',
+    type: 'upload',
+    relationTo: 'media',
   },
-})
+]

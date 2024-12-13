@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
-import { Item } from './base/Item'
+// import { Item } from './base/Item'
 
-export const Blocks: CollectionConfig = Item({
+export const Blocks: CollectionConfig = {
   slug: 'blocks',
   fields: [
     {
@@ -16,4 +16,4 @@ export const Blocks: CollectionConfig = Item({
     },
     // { name: 'related', type: 'join', collection: 'v2pages', on: 'layout' },
   ],
-})
+}

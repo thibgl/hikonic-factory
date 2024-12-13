@@ -18,6 +18,8 @@ export interface Config {
     pages: Page;
     tokens: Token;
     items: Item;
+    iconifySets: IconifySet;
+    skeletonThemes: SkeletonTheme;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -50,6 +52,8 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     tokens: TokensSelect<false> | TokensSelect<true>;
     items: ItemsSelect<false> | ItemsSelect<true>;
+    iconifySets: IconifySetsSelect<false> | IconifySetsSelect<true>;
+    skeletonThemes: SkeletonThemesSelect<false> | SkeletonThemesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -58,10 +62,14 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {
-    v2website: V2Website;
+    website: Website;
+    iconify: Iconify;
+    skeleton: Skeleton;
   };
   globalsSelect: {
-    v2website: V2WebsiteSelect<false> | V2WebsiteSelect<true>;
+    website: WebsiteSelect<false> | WebsiteSelect<true>;
+    iconify: IconifySelect<false> | IconifySelect<true>;
+    skeleton: SkeletonSelect<false> | SkeletonSelect<true>;
   };
   locale: null;
   user: User & {
@@ -132,7 +140,6 @@ export interface Media {
  */
 export interface Block {
   id: string;
-  title?: string | null;
   block?:
     | {
         text?: string | null;
@@ -152,39 +159,61 @@ export interface Index {
   id: string;
   producing?: boolean | null;
   title: string;
-  layout?: {
-    hero?: {
-      preset?: (string | null) | Block;
-      header?: string | null;
-      body?: {
-        root: {
-          type: string;
-          children: {
-            type: string;
-            version: number;
-            [k: string]: unknown;
-          }[];
-          direction: ('ltr' | 'rtl') | null;
-          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-          indent: number;
-          version: number;
-        };
+  slug: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
         [k: string]: unknown;
-      } | null;
-      component?:
-        | {
-            items?: (string | Item)[] | null;
-            factory?: {
-              relationTo: 'tokens';
-              value: string | Token;
-            } | null;
-            factoryId?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'Wall';
-          }[]
-        | null;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
     };
+    [k: string]: unknown;
+  } | null;
+  illustration?: (string | null) | Media;
+  icon?: {
+    custom?: boolean | null;
+    set?: string | null;
+    icon?: string | null;
+    svg?: string | null;
+    customSvg?: string | null;
+  };
+  layout?: {
+    hero?:
+      | {
+          preset?: (string | null) | Block;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
+                type: string;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          component?:
+            | {
+                items?: (string | Item)[] | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: 'Wall';
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
     main?:
       | {
           preset?: (string | null) | Block;
@@ -207,11 +236,6 @@ export interface Index {
           component?:
             | {
                 items?: (string | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: string | Token;
-                } | null;
-                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -220,73 +244,105 @@ export interface Index {
           id?: string | null;
         }[]
       | null;
-    footer?: {
-      preset?: (string | null) | Block;
-      header?: string | null;
-      body?: {
-        root: {
-          type: string;
-          children: {
-            type: string;
-            version: number;
+    footer?:
+      | {
+          preset?: (string | null) | Block;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
+                type: string;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
             [k: string]: unknown;
-          }[];
-          direction: ('ltr' | 'rtl') | null;
-          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-          indent: number;
-          version: number;
-        };
-        [k: string]: unknown;
-      } | null;
-      component?:
-        | {
-            items?: (string | Item)[] | null;
-            factory?: {
-              relationTo: 'tokens';
-              value: string | Token;
-            } | null;
-            factoryId?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'Wall';
-          }[]
-        | null;
-    };
+          } | null;
+          component?:
+            | {
+                items?: (string | Item)[] | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: 'Wall';
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   childrenLayout?: {
-    hero?: {
-      preset?: (string | null) | Block;
-      header?: string | null;
-      body?: {
-        root: {
-          type: string;
-          children: {
-            type: string;
-            version: number;
+    hero?:
+      | {
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
+                type: string;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
             [k: string]: unknown;
-          }[];
-          direction: ('ltr' | 'rtl') | null;
-          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-          indent: number;
-          version: number;
-        };
-        [k: string]: unknown;
-      } | null;
-      component?:
-        | {
-            items?: (string | Item)[] | null;
-            factory?: {
-              relationTo: 'tokens';
-              value: string | Token;
-            } | null;
-            factoryId?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'Wall';
-          }[]
-        | null;
-    };
+          } | null;
+          component?:
+            | {
+                factory?: {
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null;
+                factoryId?: string | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: 'Wall';
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
     main?:
+      | {
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
+                type: string;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          component?:
+            | {
+                factory?: {
+                  relationTo: 'tokens';
+                  value: string | Token;
+                } | null;
+                factoryId?: string | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: 'Wall';
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    footer?:
       | {
           preset?: (string | null) | Block;
           header?: string | null;
@@ -308,11 +364,6 @@ export interface Index {
           component?:
             | {
                 items?: (string | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: string | Token;
-                } | null;
-                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -321,38 +372,18 @@ export interface Index {
           id?: string | null;
         }[]
       | null;
-    footer?: {
-      preset?: (string | null) | Block;
-      header?: string | null;
-      body?: {
-        root: {
-          type: string;
-          children: {
-            type: string;
-            version: number;
-            [k: string]: unknown;
-          }[];
-          direction: ('ltr' | 'rtl') | null;
-          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-          indent: number;
-          version: number;
-        };
-        [k: string]: unknown;
-      } | null;
-      component?:
-        | {
-            items?: (string | Item)[] | null;
-            factory?: {
-              relationTo: 'tokens';
-              value: string | Token;
-            } | null;
-            factoryId?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'Wall';
-          }[]
-        | null;
-    };
+  };
+  seo?: {
+    qa?: boolean | null;
+    title?: string | null;
+    image?: (string | null) | Media;
+    description?: string | null;
+    keywords?:
+      | {
+          keyword?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   meta?: {
     neighbors?: (string | Index)[] | null;
@@ -374,6 +405,7 @@ export interface Index {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -394,6 +426,30 @@ export interface Item {
   factoryId?: string | null;
   updated?: boolean | null;
   title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  illustration?: (string | null) | Media;
+  icon?: {
+    custom?: boolean | null;
+    set?: string | null;
+    icon?: string | null;
+    svg?: string | null;
+    customSvg?: string | null;
+  };
+  colors?: string[] | null;
   meta?: {
     neighbors?: (string | Item)[] | null;
     pages?: (string | Page)[] | null;
@@ -410,6 +466,7 @@ export interface Item {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -419,6 +476,26 @@ export interface Token {
   id: string;
   producing?: boolean | null;
   title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  illustration?: (string | null) | Media;
+  options?: {
+    icon?: boolean | null;
+    colors?: ('1' | '2' | '3') | null;
+  };
   meta?: {
     neighbors?: (string | Token)[] | null;
     indexes?: (string | Index)[] | null;
@@ -439,6 +516,7 @@ export interface Token {
   };
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -459,6 +537,97 @@ export interface Page {
   factoryId?: string | null;
   updated?: boolean | null;
   title: string;
+  slug: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  illustration?: (string | null) | Media;
+  layout?: {
+    beforeMain?:
+      | {
+          preset?: (string | null) | Block;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
+                type: string;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          component?:
+            | {
+                items?: (string | Item)[] | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: 'Wall';
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    afterMain?:
+      | {
+          preset?: (string | null) | Block;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
+                type: string;
+                version: number;
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
+          component?:
+            | {
+                items?: (string | Item)[] | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: 'Wall';
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  seo?: {
+    qa?: boolean | null;
+    title?: string | null;
+    image?: (string | null) | Media;
+    description?: string | null;
+    keywords?:
+      | {
+          keyword?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   meta?: {
     neighbors?: (string | Page)[] | null;
     items?: (string | Item)[] | null;
@@ -473,6 +642,107 @@ export interface Page {
       hasNextPage?: boolean | null;
     } | null;
   };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "iconifySets".
+ */
+export interface IconifySet {
+  id: string;
+  name: string;
+  prefix: string;
+  packageVersion: string;
+  homepage?: string | null;
+  category?: string | null;
+  total?: number | null;
+  version?: string | null;
+  author: string;
+  license: string;
+  filters?: {
+    prefixes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    suffixes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    categories?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  icons?: {
+    width?: number | null;
+    height?: number | null;
+    options?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  categories?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skeletonThemes".
+ */
+export interface SkeletonTheme {
+  id: string;
+  name: string;
+  label: string;
+  default: boolean;
+  enhancements: boolean;
+  colors?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  source:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -510,6 +780,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'items';
         value: string | Item;
+      } | null)
+    | ({
+        relationTo: 'iconifySets';
+        value: string | IconifySet;
+      } | null)
+    | ({
+        relationTo: 'skeletonThemes';
+        value: string | SkeletonTheme;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -591,7 +869,6 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "blocks_select".
  */
 export interface BlocksSelect<T extends boolean = true> {
-  title?: T;
   block?:
     | T
     | {
@@ -613,6 +890,18 @@ export interface BlocksSelect<T extends boolean = true> {
 export interface IndexesSelect<T extends boolean = true> {
   producing?: T;
   title?: T;
+  slug?: T;
+  description?: T;
+  illustration?: T;
+  icon?:
+    | T
+    | {
+        custom?: T;
+        set?: T;
+        icon?: T;
+        svg?: T;
+        customSvg?: T;
+      };
   layout?:
     | T
     | {
@@ -629,12 +918,11 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
                   };
+              id?: T;
             };
         main?:
           | T
@@ -649,8 +937,6 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -670,12 +956,11 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
                   };
+              id?: T;
             };
       };
   childrenLayout?:
@@ -684,7 +969,6 @@ export interface IndexesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
-              preset?: T;
               header?: T;
               body?: T;
               component?:
@@ -693,18 +977,17 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
-                          items?: T;
                           factory?: T;
                           factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
                   };
+              id?: T;
             };
         main?:
           | T
           | {
-              preset?: T;
               header?: T;
               body?: T;
               component?:
@@ -713,7 +996,6 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
-                          items?: T;
                           factory?: T;
                           factoryId?: T;
                           id?: T;
@@ -735,12 +1017,25 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
                   };
+              id?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        qa?: T;
+        title?: T;
+        image?: T;
+        description?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
             };
       };
   meta?:
@@ -758,6 +1053,7 @@ export interface IndexesSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -769,6 +1065,65 @@ export interface PagesSelect<T extends boolean = true> {
   factoryId?: T;
   updated?: T;
   title?: T;
+  slug?: T;
+  description?: T;
+  illustration?: T;
+  layout?:
+    | T
+    | {
+        beforeMain?:
+          | T
+          | {
+              preset?: T;
+              header?: T;
+              body?: T;
+              component?:
+                | T
+                | {
+                    Wall?:
+                      | T
+                      | {
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+        afterMain?:
+          | T
+          | {
+              preset?: T;
+              header?: T;
+              body?: T;
+              component?:
+                | T
+                | {
+                    Wall?:
+                      | T
+                      | {
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        qa?: T;
+        title?: T;
+        image?: T;
+        description?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
+      };
   meta?:
     | T
     | {
@@ -783,6 +1138,7 @@ export interface PagesSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -791,6 +1147,14 @@ export interface PagesSelect<T extends boolean = true> {
 export interface TokensSelect<T extends boolean = true> {
   producing?: T;
   title?: T;
+  description?: T;
+  illustration?: T;
+  options?:
+    | T
+    | {
+        icon?: T;
+        colors?: T;
+      };
   meta?:
     | T
     | {
@@ -806,6 +1170,7 @@ export interface TokensSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -817,6 +1182,18 @@ export interface ItemsSelect<T extends boolean = true> {
   factoryId?: T;
   updated?: T;
   title?: T;
+  description?: T;
+  illustration?: T;
+  icon?:
+    | T
+    | {
+        custom?: T;
+        set?: T;
+        icon?: T;
+        svg?: T;
+        customSvg?: T;
+      };
+  colors?: T;
   meta?:
     | T
     | {
@@ -829,6 +1206,53 @@ export interface ItemsSelect<T extends boolean = true> {
         neighbors?: T;
         pages?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "iconifySets_select".
+ */
+export interface IconifySetsSelect<T extends boolean = true> {
+  name?: T;
+  prefix?: T;
+  packageVersion?: T;
+  homepage?: T;
+  category?: T;
+  total?: T;
+  version?: T;
+  author?: T;
+  license?: T;
+  filters?:
+    | T
+    | {
+        prefixes?: T;
+        suffixes?: T;
+        categories?: T;
+      };
+  icons?:
+    | T
+    | {
+        width?: T;
+        height?: T;
+        options?: T;
+      };
+  categories?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skeletonThemes_select".
+ */
+export interface SkeletonThemesSelect<T extends boolean = true> {
+  name?: T;
+  label?: T;
+  default?: T;
+  enhancements?: T;
+  colors?: T;
+  source?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -866,9 +1290,9 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2website".
+ * via the `definition` "website".
  */
-export interface V2Website {
+export interface Website {
   id: string;
   title?: string | null;
   updatedAt?: string | null;
@@ -876,10 +1300,104 @@ export interface V2Website {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "v2website_select".
+ * via the `definition` "iconify".
  */
-export interface V2WebsiteSelect<T extends boolean = true> {
+export interface Iconify {
+  id: string;
+  sets?: {
+    installed?: string[] | null;
+    options?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    nodes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    updatedAt?: string | null;
+  };
+  settings?: {
+    base?: {
+      outputXml?: boolean | null;
+    };
+    nodes?: {
+      clientPath?: string | null;
+      packageManager?: ('npm' | 'yarn' | 'pnpm') | null;
+    };
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skeleton".
+ */
+export interface Skeleton {
+  id: string;
+  theme?: (string | null) | SkeletonTheme;
+  newTheme?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "website_select".
+ */
+export interface WebsiteSelect<T extends boolean = true> {
   title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "iconify_select".
+ */
+export interface IconifySelect<T extends boolean = true> {
+  sets?:
+    | T
+    | {
+        installed?: T;
+        options?: T;
+        nodes?: T;
+        updatedAt?: T;
+      };
+  settings?:
+    | T
+    | {
+        base?:
+          | T
+          | {
+              outputXml?: T;
+            };
+        nodes?:
+          | T
+          | {
+              clientPath?: T;
+              packageManager?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "skeleton_select".
+ */
+export interface SkeletonSelect<T extends boolean = true> {
+  theme?: T;
+  newTheme?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

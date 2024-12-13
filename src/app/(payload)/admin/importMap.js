@@ -20,8 +20,20 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { FactoryOverseer as FactoryOverseer_88c3d556949ae34b9352225d4295c7f7 } from 'src/factory/components/FactoryOverseer'
-import { FactoryProvider as FactoryProvider_0cd8c1836ef23638c5fde28679607bb1 } from 'src/factory/context/FactoryContext'
+import { SelectIconSet as SelectIconSet_ba81f905cccb3c8067ba7f58204a8c05 } from 'src/plugins/iconify/components/SelectIconSet'
+import { SelectIcon as SelectIcon_5a48706ea4182f27c99fe987879a8af7 } from 'src/plugins/iconify/components/SelectIcon'
+import { Preview as Preview_e9d5ad88216195b6f0547808c3e0c1a6 } from 'src/plugins/iconify/components/Preview'
+import { OverviewComponent as OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { FactoryOverseer as FactoryOverseer_9c742e0a9ff86e79ad8e08f087d1f628 } from 'src/plugins/factory/components/FactoryOverseer'
+import { SelectColor as SelectColor_5c9d2c3540165cd8c4daef5b3ba03b12 } from 'src/plugins/skeleton/components/SelectColor'
+import { InstallIconSets as InstallIconSets_79cf1bf27894ce6710b55ff6debb791e } from 'src/plugins/iconify/components/InstallIconSets'
+import { ReadMe as ReadMe_be43cbc9c5b4e499681f5047d7602418 } from 'src/plugins/iconify/components/ReadMe'
+import { Webview as Webview_cdf9844f3f9e8925b293a3aef6ef7911 } from 'src/plugins/skeleton/components/Webview'
+import { FactoryProvider as FactoryProvider_49a0080162b6cafecd5c2124063a7699 } from 'src/plugins/factory/context/FactoryContext'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -46,6 +58,18 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "src/factory/components/FactoryOverseer#FactoryOverseer": FactoryOverseer_88c3d556949ae34b9352225d4295c7f7,
-  "/factory/context/FactoryContext#FactoryProvider": FactoryProvider_0cd8c1836ef23638c5fde28679607bb1
+  "src/plugins/iconify/components/SelectIconSet#SelectIconSet": SelectIconSet_ba81f905cccb3c8067ba7f58204a8c05,
+  "src/plugins/iconify/components/SelectIcon#SelectIcon": SelectIcon_5a48706ea4182f27c99fe987879a8af7,
+  "src/plugins/iconify/components/Preview#Preview": Preview_e9d5ad88216195b6f0547808c3e0c1a6,
+  "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "src/plugins/factory/components/FactoryOverseer#FactoryOverseer": FactoryOverseer_9c742e0a9ff86e79ad8e08f087d1f628,
+  "src/plugins/skeleton/components/SelectColor#SelectColor": SelectColor_5c9d2c3540165cd8c4daef5b3ba03b12,
+  "src/plugins/iconify/components/InstallIconSets#InstallIconSets": InstallIconSets_79cf1bf27894ce6710b55ff6debb791e,
+  "src/plugins/iconify/components/ReadMe#ReadMe": ReadMe_be43cbc9c5b4e499681f5047d7602418,
+  "src/plugins/skeleton/components/Webview#Webview": Webview_cdf9844f3f9e8925b293a3aef6ef7911,
+  "/plugins/factory/context/FactoryContext#FactoryProvider": FactoryProvider_49a0080162b6cafecd5c2124063a7699
 }

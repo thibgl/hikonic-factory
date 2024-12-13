@@ -23,16 +23,17 @@ export const ConditionalField = ({
   isTopLevel = true,
 }: ConditionalFieldArgs): Field | Field[] => {
   if (Array.isArray(field)) {
-    return field.map((singleField) =>
-      ConditionalField({
-        field: singleField,
-        path,
-        value,
-        fallback,
-        sibling,
-        nullify,
-        isTopLevel,
-      }),
+    return field.map(
+      (singleField) =>
+        ConditionalField({
+          field: singleField,
+          path,
+          value,
+          fallback,
+          sibling,
+          nullify,
+          isTopLevel,
+        }) as Field,
     )
   }
 

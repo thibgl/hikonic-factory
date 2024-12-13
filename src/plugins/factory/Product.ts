@@ -31,7 +31,7 @@ export const Product = ({
       admin: {
         components: {
           Field: {
-            path: 'src/factory/components/FactoryOverseer#FactoryOverseer',
+            path: 'src/plugins/factory/components/FactoryOverseer#FactoryOverseer',
             clientProps: {
               factory: identity.factory.plural,
             },
@@ -87,12 +87,15 @@ export const Product = ({
               hasMany: true,
               filterOptions: ({ id, data }) => {
                 const factoryNeighbors = data?.factoryData?.meta?.neighbors || []
-                if (filterNeighbors && factoryNeighbors.length > 0) {
-                  return {
-                    factory: {
-                      in: factoryNeighbors,
-                    },
+                if (filterNeighbors) {
+                  if (factoryNeighbors.length > 0) {
+                    return {
+                      factory: {
+                        in: factoryNeighbors,
+                      },
+                    }
                   }
+                  return false
                 }
                 return {
                   id: { not_equals: id },

@@ -7,6 +7,7 @@ export interface Factory extends OptionalCollection {
   identity: FactoryIdentity
   products: string
   tabs?: Tab[]
+  options?: Field[]
   shipsTo?: FactoryIdentity[]
   portsFrom?: FactoryIdentity[]
   productsMaxDepth?: number
@@ -15,6 +16,7 @@ export interface Factory extends OptionalCollection {
 export const Factory = ({
   identity,
   tabs = [],
+  options = [],
   shipsTo = [],
   portsFrom = [],
   productsMaxDepth = 2,
@@ -45,6 +47,7 @@ export const Factory = ({
           ],
         },
         ...tabs,
+        ...(options.length > 0 ? [{ name: 'options', fields: options }] : []),
         {
           name: 'meta',
           fields: [

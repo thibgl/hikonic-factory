@@ -1,9 +1,16 @@
-import type { FactoryIdentity } from '@/factory/types'
+import type { Field } from 'payload'
+import type { FactoryIdentity } from '@/plugins/factory/types'
 
-import { CreateFactory } from '@/factory/CreateFactory'
+import { CreateFactory } from '@/plugins/factory/CreateFactory'
 import { ConditionalField } from '@/fields/Conditional'
-import { Item, Layout } from './base'
-import { Field } from 'payload'
+import { RootLayout, ChildrenLayout, PageLayout } from '@/layouts'
+import { ItemFields } from './base'
+import { SeoTab } from './page'
+import { authenticated, authenticatedOrPublished } from '@/access'
+import { IconField } from '@/plugins/iconify/fields/Icon'
+import { ColorsField } from '@/plugins/skeleton/fields/Colors'
+
+import { slugify } from '@/utils/slugify'
 
 const pagesFactoryIdentity: FactoryIdentity = {
   factory: { singular: 'index', plural: 'indexes' },
@@ -21,16 +28,46 @@ export const Factories = [
     shipsTo: [itemsFactoryIdentity],
     filterNeighbors: true,
     commons: {
-      versions: true,
-      access: {
-        read: () => true,
+      versions: {
+        drafts: true,
       },
+      access: {
+        create: authenticated,
+        delete: authenticated,
+        read: authenticatedOrPublished,
+        update: authenticated,
+      },
+      fields: [
+        {
+          name: 'slug',
+          type: 'text',
+          unique: true,
+          required: true,
+          hooks: {
+            beforeValidate: [
+              async ({ data, value }) => {
+                const initialSlug = value || data?.title
+                return initialSlug ? slugify(initialSlug) : null
+              },
+            ],
+          },
+        },
+        ...ItemFields,
+      ],
     },
     factory: {
+      fields: [
+        ConditionalField({
+          path: 'producing',
+          sibling: false,
+          value: true,
+          field: IconField(),
+        }) as Field,
+      ],
       tabs: [
         {
           label: 'Layout',
-          fields: [Layout()],
+          fields: [RootLayout],
         },
         {
           label: 'Children Layout',
@@ -39,14 +76,21 @@ export const Factories = [
               path: 'producing',
               value: true,
               sibling: false,
-              field: Layout('childrenLayout', true),
+              field: ChildrenLayout,
             }) as Field,
           ],
         },
+        SeoTab,
       ],
     },
     product: {
-      tabs: [],
+      tabs: [
+        {
+          label: 'Layout',
+          fields: [PageLayout],
+        },
+        SeoTab,
+      ],
     },
   }),
   ...CreateFactory({
@@ -55,12 +99,43 @@ export const Factories = [
     portsFrom: [pagesFactoryIdentity],
     filterNeighbors: true,
     commons: {
-      versions: true,
-      access: {
-        read: () => true,
+      versions: {
+        drafts: true,
       },
+      access: {
+        create: authenticated,
+        delete: authenticated,
+        read: authenticatedOrPublished,
+        update: authenticated,
+      },
+      fields: [...ItemFields],
     },
-    factory: {},
-    product: {},
+    factory: {
+      options: [
+        ...(ConditionalField({
+          path: 'producing',
+          value: true,
+          sibling: false,
+          field: [
+            {
+              name: 'icon',
+              type: 'checkbox',
+            },
+            { name: 'colors', type: 'select', options: ['1', '2', '3'] },
+          ],
+        }) as Field[]),
+      ],
+    },
+    product: {
+      fields: [
+        ConditionalField({
+          path: 'factoryData.options.icon',
+          sibling: false,
+          value: true,
+          field: IconField(),
+        }) as Field,
+        ColorsField(),
+      ],
+    },
   }),
 ]

@@ -1,7 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 export const Website: GlobalConfig = {
-  slug: 'v2website',
+  slug: 'website',
   fields: [
     {
       name: 'title',
