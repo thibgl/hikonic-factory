@@ -59,7 +59,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   globals: {
     website: Website;
@@ -103,7 +103,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -120,7 +120,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -139,7 +139,7 @@ export interface Media {
  * via the `definition` "blocks".
  */
 export interface Block {
-  id: string;
+  id: number;
   block?:
     | {
         text?: string | null;
@@ -156,7 +156,7 @@ export interface Block {
  * via the `definition` "indexes".
  */
 export interface Index {
-  id: string;
+  id: number;
   producing?: boolean | null;
   title: string;
   slug: string;
@@ -175,7 +175,7 @@ export interface Index {
     };
     [k: string]: unknown;
   } | null;
-  illustration?: (string | null) | Media;
+  illustration?: (number | null) | Media;
   icon?: {
     custom?: boolean | null;
     set?: string | null;
@@ -186,7 +186,7 @@ export interface Index {
   layout?: {
     hero?:
       | {
-          preset?: (string | null) | Block;
+          preset?: (number | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -205,7 +205,12 @@ export interface Index {
           } | null;
           component?:
             | {
-                items?: (string | Item)[] | null;
+                items?: (number | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: number | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -216,7 +221,7 @@ export interface Index {
       | null;
     main?:
       | {
-          preset?: (string | null) | Block;
+          preset?: (number | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -235,7 +240,12 @@ export interface Index {
           } | null;
           component?:
             | {
-                items?: (string | Item)[] | null;
+                items?: (number | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: number | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -246,7 +256,7 @@ export interface Index {
       | null;
     footer?:
       | {
-          preset?: (string | null) | Block;
+          preset?: (number | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -265,7 +275,12 @@ export interface Index {
           } | null;
           component?:
             | {
-                items?: (string | Item)[] | null;
+                items?: (number | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: number | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -296,9 +311,10 @@ export interface Index {
           } | null;
           component?:
             | {
+                items?: (number | Item)[] | null;
                 factory?: {
                   relationTo: 'tokens';
-                  value: string | Token;
+                  value: number | Token;
                 } | null;
                 factoryId?: string | null;
                 id?: string | null;
@@ -329,9 +345,10 @@ export interface Index {
           } | null;
           component?:
             | {
+                items?: (number | Item)[] | null;
                 factory?: {
                   relationTo: 'tokens';
-                  value: string | Token;
+                  value: number | Token;
                 } | null;
                 factoryId?: string | null;
                 id?: string | null;
@@ -344,7 +361,7 @@ export interface Index {
       | null;
     footer?:
       | {
-          preset?: (string | null) | Block;
+          preset?: (number | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -363,7 +380,12 @@ export interface Index {
           } | null;
           component?:
             | {
-                items?: (string | Item)[] | null;
+                items?: (number | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: number | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -376,7 +398,7 @@ export interface Index {
   seo?: {
     qa?: boolean | null;
     title?: string | null;
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
     keywords?:
       | {
@@ -386,20 +408,20 @@ export interface Index {
       | null;
   };
   meta?: {
-    neighbors?: (string | Index)[] | null;
-    tokens?: (string | Token)[] | null;
+    neighbors?: (number | Index)[] | null;
+    tokens?: (number | Token)[] | null;
   };
   related?: {
     products?: {
-      docs?: (string | Page)[] | null;
+      docs?: (number | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     neighbors?: {
-      docs?: (string | Page)[] | null;
+      docs?: (number | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     tokens?: {
-      docs?: (string | Token)[] | null;
+      docs?: (number | Token)[] | null;
       hasNextPage?: boolean | null;
     } | null;
   };
@@ -412,7 +434,7 @@ export interface Index {
  * via the `definition` "items".
  */
 export interface Item {
-  id: string;
+  id: number;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -422,7 +444,7 @@ export interface Item {
     | number
     | boolean
     | null;
-  factory: string | Token;
+  factory: number | Token;
   factoryId?: string | null;
   updated?: boolean | null;
   title: string;
@@ -441,7 +463,7 @@ export interface Item {
     };
     [k: string]: unknown;
   } | null;
-  illustration?: (string | null) | Media;
+  illustration?: (number | null) | Media;
   icon?: {
     custom?: boolean | null;
     set?: string | null;
@@ -451,16 +473,16 @@ export interface Item {
   };
   colors?: string[] | null;
   meta?: {
-    neighbors?: (string | Item)[] | null;
-    pages?: (string | Page)[] | null;
+    neighbors?: (number | Item)[] | null;
+    pages?: (number | Page)[] | null;
   };
   related?: {
     neighbors?: {
-      docs?: (string | Item)[] | null;
+      docs?: (number | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     pages?: {
-      docs?: (string | Page)[] | null;
+      docs?: (number | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
   };
@@ -473,7 +495,7 @@ export interface Item {
  * via the `definition` "tokens".
  */
 export interface Token {
-  id: string;
+  id: number;
   producing?: boolean | null;
   title: string;
   description?: {
@@ -491,26 +513,33 @@ export interface Token {
     };
     [k: string]: unknown;
   } | null;
-  illustration?: (string | null) | Media;
+  illustration?: (number | null) | Media;
+  icon?: {
+    custom?: boolean | null;
+    set?: string | null;
+    icon?: string | null;
+    svg?: string | null;
+    customSvg?: string | null;
+  };
   options?: {
     icon?: boolean | null;
     colors?: ('1' | '2' | '3') | null;
   };
   meta?: {
-    neighbors?: (string | Token)[] | null;
-    indexes?: (string | Index)[] | null;
+    neighbors?: (number | Token)[] | null;
+    indexes?: (number | Index)[] | null;
   };
   related?: {
     products?: {
-      docs?: (string | Item)[] | null;
+      docs?: (number | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     neighbors?: {
-      docs?: (string | Item)[] | null;
+      docs?: (number | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     indexes?: {
-      docs?: (string | Index)[] | null;
+      docs?: (number | Index)[] | null;
       hasNextPage?: boolean | null;
     } | null;
   };
@@ -523,7 +552,7 @@ export interface Token {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: string;
+  id: number;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -533,7 +562,7 @@ export interface Page {
     | number
     | boolean
     | null;
-  factory: string | Index;
+  factory: number | Index;
   factoryId?: string | null;
   updated?: boolean | null;
   title: string;
@@ -553,11 +582,11 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
-  illustration?: (string | null) | Media;
+  illustration?: (number | null) | Media;
   layout?: {
     beforeMain?:
       | {
-          preset?: (string | null) | Block;
+          preset?: (number | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -576,7 +605,12 @@ export interface Page {
           } | null;
           component?:
             | {
-                items?: (string | Item)[] | null;
+                items?: (number | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: number | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -587,7 +621,7 @@ export interface Page {
       | null;
     afterMain?:
       | {
-          preset?: (string | null) | Block;
+          preset?: (number | null) | Block;
           header?: string | null;
           body?: {
             root: {
@@ -606,7 +640,12 @@ export interface Page {
           } | null;
           component?:
             | {
-                items?: (string | Item)[] | null;
+                items?: (number | Item)[] | null;
+                factory?: {
+                  relationTo: 'tokens';
+                  value: number | Token;
+                } | null;
+                factoryId?: string | null;
                 id?: string | null;
                 blockName?: string | null;
                 blockType: 'Wall';
@@ -619,7 +658,7 @@ export interface Page {
   seo?: {
     qa?: boolean | null;
     title?: string | null;
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
     keywords?:
       | {
@@ -629,16 +668,16 @@ export interface Page {
       | null;
   };
   meta?: {
-    neighbors?: (string | Page)[] | null;
-    items?: (string | Item)[] | null;
+    neighbors?: (number | Page)[] | null;
+    items?: (number | Item)[] | null;
   };
   related?: {
     neighbors?: {
-      docs?: (string | Page)[] | null;
+      docs?: (number | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     items?: {
-      docs?: (string | Item)[] | null;
+      docs?: (number | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
   };
@@ -651,7 +690,7 @@ export interface Page {
  * via the `definition` "iconifySets".
  */
 export interface IconifySet {
-  id: string;
+  id: number;
   name: string;
   prefix: string;
   packageVersion: string;
@@ -720,7 +759,7 @@ export interface IconifySet {
  * via the `definition` "skeletonThemes".
  */
 export interface SkeletonTheme {
-  id: string;
+  id: number;
   name: string;
   label: string;
   default: boolean;
@@ -751,48 +790,48 @@ export interface SkeletonTheme {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'blocks';
-        value: string | Block;
+        value: number | Block;
       } | null)
     | ({
         relationTo: 'indexes';
-        value: string | Index;
+        value: number | Index;
       } | null)
     | ({
         relationTo: 'pages';
-        value: string | Page;
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'tokens';
-        value: string | Token;
+        value: number | Token;
       } | null)
     | ({
         relationTo: 'items';
-        value: string | Item;
+        value: number | Item;
       } | null)
     | ({
         relationTo: 'iconifySets';
-        value: string | IconifySet;
+        value: number | IconifySet;
       } | null)
     | ({
         relationTo: 'skeletonThemes';
-        value: string | SkeletonTheme;
+        value: number | SkeletonTheme;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -802,10 +841,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -825,7 +864,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -918,6 +957,8 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
+                          factory?: T;
+                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -937,6 +978,8 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
+                          factory?: T;
+                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -956,6 +999,8 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
+                          factory?: T;
+                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -977,6 +1022,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
                           id?: T;
@@ -996,6 +1042,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Wall?:
                       | T
                       | {
+                          items?: T;
                           factory?: T;
                           factoryId?: T;
                           id?: T;
@@ -1017,6 +1064,8 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
+                          factory?: T;
+                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -1084,6 +1133,8 @@ export interface PagesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
+                          factory?: T;
+                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -1103,6 +1154,8 @@ export interface PagesSelect<T extends boolean = true> {
                       | T
                       | {
                           items?: T;
+                          factory?: T;
+                          factoryId?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -1149,6 +1202,15 @@ export interface TokensSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   illustration?: T;
+  icon?:
+    | T
+    | {
+        custom?: T;
+        set?: T;
+        icon?: T;
+        svg?: T;
+        customSvg?: T;
+      };
   options?:
     | T
     | {
@@ -1293,7 +1355,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "website".
  */
 export interface Website {
-  id: string;
+  id: number;
   title?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1303,7 +1365,7 @@ export interface Website {
  * via the `definition` "iconify".
  */
 export interface Iconify {
-  id: string;
+  id: number;
   sets?: {
     installed?: string[] | null;
     options?:
@@ -1343,8 +1405,8 @@ export interface Iconify {
  * via the `definition` "skeleton".
  */
 export interface Skeleton {
-  id: string;
-  theme?: (string | null) | SkeletonTheme;
+  id: number;
+  theme?: (number | null) | SkeletonTheme;
   newTheme?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;

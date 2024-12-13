@@ -32,6 +32,9 @@ export default buildConfig({
       providers: ['/plugins/factory/context/FactoryContext#FactoryProvider'],
     },
   },
+  routes: {
+    admin: '/',
+  },
   globals: [Website],
   collections: [Users, Media, Blocks, ...Factories],
   editor: lexicalEditor(),
@@ -39,16 +42,16 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
-    transactionOptions: false,
-  }),
-  // db: sqliteAdapter({
-  //   client: {
-  //     url: process.env.DATABASE_URL,
-  //     authToken: process.env.DATABASE_AUTH_TOKEN,
-  //   },
+  // db: mongooseAdapter({
+  //   url: process.env.DATABASE_URI || '',
+  //   transactionOptions: false,
   // }),
+  db: sqliteAdapter({
+    client: {
+      url: process.env.DATABASE_URL || 'db.sqlite',
+      authToken: process.env.DATABASE_AUTH_TOKEN,
+    },
+  }),
   sharp,
   plugins: [
     iconifyPlugin(),

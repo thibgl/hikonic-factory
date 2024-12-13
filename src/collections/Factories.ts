@@ -111,6 +111,14 @@ export const Factories = [
       fields: [...ItemFields],
     },
     factory: {
+      fields: [
+        ConditionalField({
+          path: 'producing',
+          sibling: false,
+          value: true,
+          field: IconField(),
+        }) as Field,
+      ],
       options: [
         ...(ConditionalField({
           path: 'producing',

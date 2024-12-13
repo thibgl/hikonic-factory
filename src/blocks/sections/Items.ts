@@ -1,13 +1,21 @@
 import type { Block } from 'payload'
 import { IdSerializer } from '@/fields'
 
-export const ItemsChildrenBlock = (slug: string): Block => ({
+export const ItemsBlock = (slug: string, children: boolean = false): Block => ({
   slug,
   fields: [
+    {
+      name: 'items',
+      type: 'relationship',
+      relationTo: 'items',
+      hasMany: true,
+      hidden: children,
+    },
     ...IdSerializer({
       name: 'factory',
       type: 'relationship',
       relationTo: ['tokens'],
+      hidden: !children,
       filterOptions: ({ data, relationTo }) => {
         const neighbors = data.meta?.neighbors || []
         const tokens = data.meta?.tokens || []

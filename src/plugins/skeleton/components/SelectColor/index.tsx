@@ -5,7 +5,7 @@ import logger from '../../utils/logger'
 import type { SelectFieldClientComponent } from 'payload'
 import type { ColorOption } from './Input'
 
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react'
 
 import { useForm, useField, withCondition, usePayloadAPI, useFormFields } from '@payloadcms/ui'
 import { SelectColorInput } from './Input'
@@ -64,6 +64,16 @@ const SelectColorComponent: SelectFieldClientComponent = (props) => {
     },
     [disabled, colors, setColors, n, resetColorField],
   )
+
+  const prevN = useRef(n)
+
+  useEffect(() => {
+    if (n < prevN.current && colors.length > n) {
+      // Trim colors array if n decreased
+      setColors(colors.slice(0, n))
+    }
+    prevN.current = n
+  }, [n, colors, setColors])
 
   return (
     <>
