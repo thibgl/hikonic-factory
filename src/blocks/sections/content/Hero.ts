@@ -1,8 +1,8 @@
-import { Section } from '../base'
+import type { Block } from 'payload'
 
-const Hero = Section({
+const Hero: Block = {
   slug: 'Hero',
-  data: [
+  fields: [
     {
       name: 'header',
       type: 'text',
@@ -13,18 +13,7 @@ const Hero = Section({
       type: 'text',
       required: true,
     },
-    // {
-    //   name: 'orientation',
-    //   type: 'select',
-    //   options: ['Left to Right', 'Right to Left'],
-    //   defaultValue: 'Left to Right',
-    //   required: true,
-    // },
-    // {
-    //   name: 'background',
-    //   type: 'text',
-    // },
   ],
-})
+}
 
 export default Hero

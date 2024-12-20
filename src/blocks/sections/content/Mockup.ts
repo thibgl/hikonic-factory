@@ -1,9 +1,8 @@
 import type { Block } from 'payload'
-import { Section } from '../base'
 
-const Mockup: Block = Section({
+const Mockup: Block = {
   slug: 'Mockup',
-  data: [
+  fields: [
     {
       name: 'mobileScreens',
       type: 'array',
@@ -15,6 +14,6 @@ const Mockup: Block = Section({
       fields: [{ type: 'upload', name: 'illustration', label: false, relationTo: 'media' }],
     },
   ],
-})
+}
 
 export default Mockup

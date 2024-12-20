@@ -1,8 +1,8 @@
-import { Section } from '../base'
+import type { Block } from 'payload'
 
-const Form = Section({
+const Form: Block = {
   slug: 'Form',
-  relations: ['forms'],
-})
+  fields: [{ name: 'form', type: 'relationship', relationTo: 'forms' }],
+}
 
 export default Form

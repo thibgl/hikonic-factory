@@ -5,6 +5,8 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { iconifyPlugin } from '@/plugins/iconify'
 import { skeletonPlugin } from '@/plugins/skeleton'
+import { masqueradePlugin } from 'payload-plugin-masquerade'
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -42,21 +44,24 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  // db: mongooseAdapter({
-  //   url: process.env.DATABASE_URI || '',
-  //   transactionOptions: false,
-  // }),
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URL || 'db.sqlite',
-      authToken: process.env.DATABASE_AUTH_TOKEN,
-    },
+  db: mongooseAdapter({
+    url: process.env.DATABASE_URI || '',
+    // transactionOptions: false,
   }),
+  // db: sqliteAdapter({
+  //   client: {
+  //     url: process.env.DATABASE_URL || 'db.sqlite',
+  //     authToken: process.env.DATABASE_AUTH_TOKEN,
+  //   },
+  // }),
   sharp,
   plugins: [
     iconifyPlugin(),
     skeletonPlugin({
       clientPath: '../client',
+    }),
+    masqueradePlugin({
+      enabled: true,
     }),
     payloadCloudPlugin(),
     seoPlugin({
@@ -65,6 +70,24 @@ export default buildConfig({
         return `Website.com — ${doc.title}`
       },
       generateDescription: ({ doc }) => doc.excerpt,
+    }),
+    formBuilderPlugin({
+      formOverrides: {
+        slug: 'forms',
+        // access: {
+        //   read: ({ req: { user } }) => !!user, // authenticated users only
+        //   update: () => false,
+        // },
+        fields: ({ defaultFields }) => {
+          return [
+            ...defaultFields,
+            {
+              name: 'hasModal',
+              type: 'checkbox',
+            },
+          ]
+        },
+      },
     }),
     // storage-adapter-placeholder
   ],

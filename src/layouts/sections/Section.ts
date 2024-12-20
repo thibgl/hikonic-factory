@@ -1,26 +1,15 @@
+import type { Field } from 'payload'
+
 import { RootBlocks } from '@/blocks/sections'
-import { ConditionalField } from '@/fields'
-import { Field } from 'payload'
+import { BaseSection, BaseOptions } from './Base'
 
 export const Section: Field[] = [
+  BaseOptions,
+  BaseSection,
   {
-    name: 'preset',
-    type: 'relationship',
-    relationTo: 'blocks',
-    defaultValue: null,
+    name: 'component',
+    type: 'blocks',
+    maxRows: 1,
+    blocks: RootBlocks,
   },
-  ...(ConditionalField({
-    path: 'preset',
-    value: null,
-    field: [
-      { name: 'header', type: 'text' },
-      { name: 'body', type: 'richText' },
-      {
-        name: 'component',
-        type: 'blocks',
-        maxRows: 1,
-        blocks: RootBlocks,
-      },
-    ],
-  }) as Field[]),
 ]

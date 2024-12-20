@@ -1,17 +1,16 @@
 import { Field } from 'payload'
 import { Section } from './sections'
 
-export const PageLayout: Field = {
+export const WebsiteLayout: Field = {
   name: 'layout',
   label: false,
   type: 'group',
   fields: [
     {
-      type: 'row',
-      fields: [
-        { name: 'websiteBeforeMain', type: 'checkbox', defaultValue: true },
-        { name: 'websiteAfterMain', type: 'checkbox', defaultValue: true },
-      ],
+      name: 'hero',
+      type: 'array',
+      fields: Section,
+      maxRows: 1,
     },
     {
       name: 'beforeMain',
@@ -22,6 +21,12 @@ export const PageLayout: Field = {
       name: 'afterMain',
       type: 'array',
       fields: Section,
+    },
+    {
+      name: 'footer',
+      type: 'array',
+      fields: Section,
+      maxRows: 1,
     },
   ],
   admin: {

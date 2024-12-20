@@ -1,0 +1,13 @@
+{
+  "default": "en",
+  "locales": [
+    {
+      "label": "English",
+      "code": "en"
+    },
+    {
+      "label": "Français",
+      "code": "fr"
+    }
+  ]
+}

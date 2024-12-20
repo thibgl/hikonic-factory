@@ -1,16 +1,19 @@
-import { Section } from '../base'
-import { RichTextFields } from '@/fields'
+import type { Block } from 'payload'
 import { IconField } from '@/plugins/iconify/fields/Icon'
 
-const Collapsible = Section({
+const Collapsible: Block = {
   slug: 'Collapsible',
-  data: [
+  fields: [
     {
-      name: 'items',
+      name: 'elements',
       type: 'array',
-      fields: [{ name: 'title', type: 'text', localized: true }, ...RichTextFields(), IconField()],
+      fields: [
+        { name: 'header', type: 'text', localized: true },
+        { name: 'body', type: 'richText', localized: true },
+        IconField(),
+      ],
     },
   ],
-})
+}
 
 export default Collapsible

@@ -1,8 +1,6 @@
 import type { CollectionConfig, CollectionSlug, Field, Tab } from 'payload'
 import type { FactoryIdentity, OptionalCollection } from './types'
 
-import { IdSerializer } from '@/fields'
-
 export interface Product extends OptionalCollection {
   identity: FactoryIdentity
   tabs?: Tab[]
@@ -47,7 +45,7 @@ export const Product = ({
             identity.products.singular.charAt(0).toUpperCase() +
             identity.products.singular.slice(1),
           fields: [
-            ...IdSerializer({
+            {
               name: 'factory',
               type: 'relationship',
               required: true,
@@ -57,7 +55,7 @@ export const Product = ({
                   producing: { equals: true },
                 }
               },
-            }),
+            },
             {
               name: 'updated',
               type: 'checkbox',
@@ -147,11 +145,17 @@ export const Product = ({
     },
   ],
   admin: {
+    ...incomingConfig.admin,
     useAsTitle: 'title',
-    defaultColumns: ['title', 'factory', 'updated'],
+    defaultColumns: [
+      ...['title', 'factory', 'updated'],
+      ...(incomingConfig.admin?.defaultColumns || []),
+    ],
   },
   hooks: {
+    ...incomingConfig.hooks,
     beforeValidate: [
+      ...(incomingConfig.hooks?.beforeValidate || []),
       async ({ data, req }) => {
         if (data && req.url?.includes('/api/')) {
           data.updated = true

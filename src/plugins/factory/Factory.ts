@@ -104,11 +104,14 @@ export const Factory = ({
     },
   ],
   admin: {
+    ...incomingConfig.admin,
     useAsTitle: 'title',
-    defaultColumns: ['title', 'producing'],
+    defaultColumns: [...['title', 'producing'], ...(incomingConfig.admin?.defaultColumns || [])],
   },
   hooks: {
+    ...incomingConfig.hooks,
     afterChange: [
+      ...(incomingConfig.hooks?.afterChange || []),
       async ({ doc, req: { payload } }) => {
         await payload.update({
           collection: identity.products.plural as CollectionSlug,

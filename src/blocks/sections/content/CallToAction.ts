@@ -1,8 +1,8 @@
-import { Section } from './base/Section'
+import type { Block } from 'payload'
 
-const CallToAction = Section({
+const CallToAction: Block = {
   slug: 'CallToAction',
-  data: [
+  fields: [
     {
       name: 'content',
       type: 'text',
@@ -13,6 +13,6 @@ const CallToAction = Section({
       type: 'text',
     },
   ],
-})
+}
 
 export default CallToAction

@@ -1,9 +1,10 @@
 import { Field } from 'payload'
 import { ChildrenBlocks } from '@/blocks/sections'
+import { BaseSection, BaseOptions } from './Base'
 
 export const ChildrenSection: Field[] = [
-  { name: 'header', type: 'text' },
-  { name: 'body', type: 'richText' },
+  BaseOptions,
+  BaseSection,
   {
     name: 'component',
     type: 'blocks',

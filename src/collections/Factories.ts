@@ -54,6 +54,9 @@ export const Factories = [
         },
         ...ItemFields,
       ],
+      admin: {
+        defaultColumns: ['slug'],
+      },
     },
     factory: {
       fields: [

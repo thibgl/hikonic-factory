@@ -7,6 +7,13 @@ export const RootLayout: Field = {
   type: 'group',
   fields: [
     {
+      type: 'row',
+      fields: [
+        { name: 'websiteBeforeMain', type: 'checkbox', defaultValue: true },
+        { name: 'websiteAfterMain', type: 'checkbox', defaultValue: true },
+      ],
+    },
+    {
       name: 'hero',
       type: 'array',
       maxRows: 1,

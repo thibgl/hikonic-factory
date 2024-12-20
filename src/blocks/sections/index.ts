@@ -1,7 +1,17 @@
-const itemsBlocks = ['Wall']
-const pageBlocks = ['Page']
+const itemsBlocks = ['ItemCards', 'Wall']
+const pageBlocks = ['Page', 'PageCards', 'Slider']
 
-import { ItemsBlock } from './Items'
+import { ItemsBlock, PagesBlock } from './root'
+import { ItemsChildrenBlock, PagesChildrenBlock } from './children'
+import { ContentBlocks } from './content'
 
-export const RootBlocks = itemsBlocks.map((slug) => ItemsBlock(slug))
-export const ChildrenBlocks = itemsBlocks.map((slug) => ItemsBlock(slug, true))
+export const RootBlocks = [
+  ...itemsBlocks.map((slug) => ItemsBlock(slug)),
+  ...pageBlocks.map((slug) => PagesBlock(slug)),
+  ...ContentBlocks,
+]
+export const ChildrenBlocks = [
+  ...itemsBlocks.map((slug) => ItemsChildrenBlock(slug)),
+  ...pageBlocks.map((slug) => PagesChildrenBlock(slug)),
+  ...ContentBlocks,
+]

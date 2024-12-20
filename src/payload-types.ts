@@ -20,6 +20,8 @@ export interface Config {
     items: Item;
     iconifySets: IconifySet;
     skeletonThemes: SkeletonTheme;
+    forms: Form;
+    'form-submissions': FormSubmission;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -54,12 +56,14 @@ export interface Config {
     items: ItemsSelect<false> | ItemsSelect<true>;
     iconifySets: IconifySetsSelect<false> | IconifySetsSelect<true>;
     skeletonThemes: SkeletonThemesSelect<false> | SkeletonThemesSelect<true>;
+    forms: FormsSelect<false> | FormsSelect<true>;
+    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {
     website: Website;
@@ -103,7 +107,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -120,7 +124,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -139,7 +143,7 @@ export interface Media {
  * via the `definition` "blocks".
  */
 export interface Block {
-  id: number;
+  id: string;
   block?:
     | {
         text?: string | null;
@@ -156,7 +160,7 @@ export interface Block {
  * via the `definition` "indexes".
  */
 export interface Index {
-  id: number;
+  id: string;
   producing?: boolean | null;
   title: string;
   slug: string;
@@ -175,7 +179,7 @@ export interface Index {
     };
     [k: string]: unknown;
   } | null;
-  illustration?: (number | null) | Media;
+  illustration?: (string | null) | Media;
   icon?: {
     custom?: boolean | null;
     set?: string | null;
@@ -184,107 +188,574 @@ export interface Index {
     customSvg?: string | null;
   };
   layout?: {
+    websiteBeforeMain?: boolean | null;
+    websiteAfterMain?: boolean | null;
     hero?:
       | {
-          preset?: (number | null) | Block;
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
       | null;
     main?:
       | {
-          preset?: (number | null) | Block;
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
       | null;
     footer?:
       | {
-          preset?: (number | null) | Block;
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
@@ -293,103 +764,560 @@ export interface Index {
   childrenLayout?: {
     hero?:
       | {
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    items?: {
+                      relationTo: 'tokens';
+                      value: string | Token;
+                    } | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    items?: {
+                      relationTo: 'tokens';
+                      value: string | Token;
+                    } | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'pages';
+                          value: string | Page;
+                        } | null);
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'pages';
+                          value: string | Page;
+                        } | null);
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'pages';
+                          value: string | Page;
+                        } | null);
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
       | null;
     main?:
       | {
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    items?: {
+                      relationTo: 'tokens';
+                      value: string | Token;
+                    } | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    items?: {
+                      relationTo: 'tokens';
+                      value: string | Token;
+                    } | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'pages';
+                          value: string | Page;
+                        } | null);
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'pages';
+                          value: string | Page;
+                        } | null);
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'pages';
+                          value: string | Page;
+                        } | null);
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
       | null;
     footer?:
       | {
-          preset?: (number | null) | Block;
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
@@ -398,7 +1326,7 @@ export interface Index {
   seo?: {
     qa?: boolean | null;
     title?: string | null;
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
     description?: string | null;
     keywords?:
       | {
@@ -408,81 +1336,20 @@ export interface Index {
       | null;
   };
   meta?: {
-    neighbors?: (number | Index)[] | null;
-    tokens?: (number | Token)[] | null;
+    neighbors?: (string | Index)[] | null;
+    tokens?: (string | Token)[] | null;
   };
   related?: {
     products?: {
-      docs?: (number | Page)[] | null;
+      docs?: (string | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     neighbors?: {
-      docs?: (number | Page)[] | null;
+      docs?: (string | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     tokens?: {
-      docs?: (number | Token)[] | null;
-      hasNextPage?: boolean | null;
-    } | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "items".
- */
-export interface Item {
-  id: number;
-  factoryData?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  factory: number | Token;
-  factoryId?: string | null;
-  updated?: boolean | null;
-  title: string;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  illustration?: (number | null) | Media;
-  icon?: {
-    custom?: boolean | null;
-    set?: string | null;
-    icon?: string | null;
-    svg?: string | null;
-    customSvg?: string | null;
-  };
-  colors?: string[] | null;
-  meta?: {
-    neighbors?: (number | Item)[] | null;
-    pages?: (number | Page)[] | null;
-  };
-  related?: {
-    neighbors?: {
-      docs?: (number | Item)[] | null;
-      hasNextPage?: boolean | null;
-    } | null;
-    pages?: {
-      docs?: (number | Page)[] | null;
+      docs?: (string | Token)[] | null;
       hasNextPage?: boolean | null;
     } | null;
   };
@@ -495,7 +1362,7 @@ export interface Item {
  * via the `definition` "tokens".
  */
 export interface Token {
-  id: number;
+  id: string;
   producing?: boolean | null;
   title: string;
   description?: {
@@ -513,7 +1380,7 @@ export interface Token {
     };
     [k: string]: unknown;
   } | null;
-  illustration?: (number | null) | Media;
+  illustration?: (string | null) | Media;
   icon?: {
     custom?: boolean | null;
     set?: string | null;
@@ -526,20 +1393,80 @@ export interface Token {
     colors?: ('1' | '2' | '3') | null;
   };
   meta?: {
-    neighbors?: (number | Token)[] | null;
-    indexes?: (number | Index)[] | null;
+    neighbors?: (string | Token)[] | null;
+    indexes?: (string | Index)[] | null;
   };
   related?: {
     products?: {
-      docs?: (number | Item)[] | null;
+      docs?: (string | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     neighbors?: {
-      docs?: (number | Item)[] | null;
+      docs?: (string | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     indexes?: {
-      docs?: (number | Index)[] | null;
+      docs?: (string | Index)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "items".
+ */
+export interface Item {
+  id: string;
+  factoryData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  factory: string | Token;
+  updated?: boolean | null;
+  title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  illustration?: (string | null) | Media;
+  icon?: {
+    custom?: boolean | null;
+    set?: string | null;
+    icon?: string | null;
+    svg?: string | null;
+    customSvg?: string | null;
+  };
+  colors?: string[] | null;
+  meta?: {
+    neighbors?: (string | Item)[] | null;
+    pages?: (string | Page)[] | null;
+  };
+  related?: {
+    neighbors?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    pages?: {
+      docs?: (string | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
   };
@@ -552,7 +1479,7 @@ export interface Token {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
+  id: string;
   factoryData?:
     | {
         [k: string]: unknown;
@@ -562,8 +1489,7 @@ export interface Page {
     | number
     | boolean
     | null;
-  factory: number | Index;
-  factoryId?: string | null;
+  factory: string | Index;
   updated?: boolean | null;
   title: string;
   slug: string;
@@ -582,74 +1508,386 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
-  illustration?: (number | null) | Media;
+  illustration?: (string | null) | Media;
   layout?: {
+    websiteBeforeMain?: boolean | null;
+    websiteAfterMain?: boolean | null;
     beforeMain?:
       | {
-          preset?: (number | null) | Block;
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
       | null;
     afterMain?:
       | {
-          preset?: (number | null) | Block;
-          header?: string | null;
-          body?: {
-            root: {
-              type: string;
-              children: {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
                 type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
                 version: number;
-                [k: string]: unknown;
-              }[];
-              direction: ('ltr' | 'rtl') | null;
-              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-              indent: number;
-              version: number;
-            };
-            [k: string]: unknown;
-          } | null;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
           component?:
-            | {
-                items?: (number | Item)[] | null;
-                factory?: {
-                  relationTo: 'tokens';
-                  value: number | Token;
-                } | null;
-                factoryId?: string | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: 'Wall';
-              }[]
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
             | null;
           id?: string | null;
         }[]
@@ -658,7 +1896,7 @@ export interface Page {
   seo?: {
     qa?: boolean | null;
     title?: string | null;
-    image?: (number | null) | Media;
+    image?: (string | null) | Media;
     description?: string | null;
     keywords?:
       | {
@@ -668,16 +1906,16 @@ export interface Page {
       | null;
   };
   meta?: {
-    neighbors?: (number | Page)[] | null;
-    items?: (number | Item)[] | null;
+    neighbors?: (string | Page)[] | null;
+    items?: (string | Item)[] | null;
   };
   related?: {
     neighbors?: {
-      docs?: (number | Page)[] | null;
+      docs?: (string | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     items?: {
-      docs?: (number | Item)[] | null;
+      docs?: (string | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
   };
@@ -687,10 +1925,175 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms".
+ */
+export interface Form {
+  id: string;
+  title: string;
+  fields?:
+    | (
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            defaultValue?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkbox';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'country';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'email';
+          }
+        | {
+            message?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'message';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'number';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'select';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'state';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textarea';
+          }
+      )[]
+    | null;
+  submitButtonLabel?: string | null;
+  confirmationType?: ('message' | 'redirect') | null;
+  confirmationMessage?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  redirect?: {
+    url: string;
+  };
+  emails?:
+    | {
+        emailTo?: string | null;
+        cc?: string | null;
+        bcc?: string | null;
+        replyTo?: string | null;
+        emailFrom?: string | null;
+        subject: string;
+        message?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  hasModal?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "iconifySets".
  */
 export interface IconifySet {
-  id: number;
+  id: string;
   name: string;
   prefix: string;
   packageVersion: string;
@@ -759,7 +2162,7 @@ export interface IconifySet {
  * via the `definition` "skeletonThemes".
  */
 export interface SkeletonTheme {
-  id: number;
+  id: string;
   name: string;
   label: string;
   default: boolean;
@@ -787,51 +2190,76 @@ export interface SkeletonTheme {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions".
+ */
+export interface FormSubmission {
+  id: string;
+  form: string | Form;
+  submissionData?:
+    | {
+        field: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'blocks';
-        value: number | Block;
+        value: string | Block;
       } | null)
     | ({
         relationTo: 'indexes';
-        value: number | Index;
+        value: string | Index;
       } | null)
     | ({
         relationTo: 'pages';
-        value: number | Page;
+        value: string | Page;
       } | null)
     | ({
         relationTo: 'tokens';
-        value: number | Token;
+        value: string | Token;
       } | null)
     | ({
         relationTo: 'items';
-        value: number | Item;
+        value: string | Item;
       } | null)
     | ({
         relationTo: 'iconifySets';
-        value: number | IconifySet;
+        value: string | IconifySet;
       } | null)
     | ({
         relationTo: 'skeletonThemes';
-        value: number | SkeletonTheme;
+        value: string | SkeletonTheme;
+      } | null)
+    | ({
+        relationTo: 'forms';
+        value: string | Form;
+      } | null)
+    | ({
+        relationTo: 'form-submissions';
+        value: string | FormSubmission;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -841,10 +2269,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -864,7 +2292,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -944,21 +2372,133 @@ export interface IndexesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        websiteBeforeMain?: T;
+        websiteAfterMain?: T;
         hero?:
           | T
           | {
-              preset?: T;
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
+                          token?: T;
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -968,18 +2508,128 @@ export interface IndexesSelect<T extends boolean = true> {
         main?:
           | T
           | {
-              preset?: T;
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
+                          token?: T;
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -989,18 +2639,128 @@ export interface IndexesSelect<T extends boolean = true> {
         footer?:
           | T
           | {
-              preset?: T;
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
+                          token?: T;
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -1014,17 +2774,126 @@ export interface IndexesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -1034,17 +2903,126 @@ export interface IndexesSelect<T extends boolean = true> {
         main?:
           | T
           | {
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -1054,18 +3032,128 @@ export interface IndexesSelect<T extends boolean = true> {
         footer?:
           | T
           | {
-              preset?: T;
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
+                          token?: T;
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -1111,7 +3199,6 @@ export interface IndexesSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   factoryData?: T;
   factory?: T;
-  factoryId?: T;
   updated?: T;
   title?: T;
   slug?: T;
@@ -1120,21 +3207,133 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        websiteBeforeMain?: T;
+        websiteAfterMain?: T;
         beforeMain?:
           | T
           | {
-              preset?: T;
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
+                          token?: T;
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -1144,18 +3343,128 @@ export interface PagesSelect<T extends boolean = true> {
         afterMain?:
           | T
           | {
-              preset?: T;
-              header?: T;
-              body?: T;
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
               component?:
                 | T
                 | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Wall?:
                       | T
                       | {
+                          token?: T;
                           items?: T;
-                          factory?: T;
-                          factoryId?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -1241,7 +3550,6 @@ export interface TokensSelect<T extends boolean = true> {
 export interface ItemsSelect<T extends boolean = true> {
   factoryData?: T;
   factory?: T;
-  factoryId?: T;
   updated?: T;
   title?: T;
   description?: T;
@@ -1320,6 +3628,155 @@ export interface SkeletonThemesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms_select".
+ */
+export interface FormsSelect<T extends boolean = true> {
+  title?: T;
+  fields?:
+    | T
+    | {
+        checkbox?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              defaultValue?: T;
+              id?: T;
+              blockName?: T;
+            };
+        country?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        email?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        message?:
+          | T
+          | {
+              message?: T;
+              id?: T;
+              blockName?: T;
+            };
+        number?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        select?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        state?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        text?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textarea?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  submitButtonLabel?: T;
+  confirmationType?: T;
+  confirmationMessage?: T;
+  redirect?:
+    | T
+    | {
+        url?: T;
+      };
+  emails?:
+    | T
+    | {
+        emailTo?: T;
+        cc?: T;
+        bcc?: T;
+        replyTo?: T;
+        emailFrom?: T;
+        subject?: T;
+        message?: T;
+        id?: T;
+      };
+  hasModal?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions_select".
+ */
+export interface FormSubmissionsSelect<T extends boolean = true> {
+  form?: T;
+  submissionData?:
+    | T
+    | {
+        field?: T;
+        value?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -1355,8 +3812,928 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "website".
  */
 export interface Website {
-  id: number;
-  title?: string | null;
+  id: string;
+  general: {
+    title: string;
+    description?: string | null;
+    logo?: (string | null) | Media;
+  };
+  layout?: {
+    hero?:
+      | {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
+          component?:
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    beforeMain?:
+      | {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
+          component?:
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    afterMain?:
+      | {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
+          component?:
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    footer?:
+      | {
+          options?: {
+            blackedOut?: boolean | null;
+            carded?: boolean | null;
+          };
+          section?: {
+            title?: string | null;
+            slug?: string | null;
+            header?: string | null;
+            body?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+          };
+          component?:
+            | (
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Wall';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
+                  }
+                | {
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          icon?: {
+                            custom?: boolean | null;
+                            set?: string | null;
+                            icon?: string | null;
+                            svg?: string | null;
+                            customSvg?: string | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Collapsible';
+                  }
+                | {
+                    form?: (string | null) | Form;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Form';
+                  }
+                | {
+                    header: string;
+                    body: string;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Hero';
+                  }
+                | {
+                    mobileScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    desktopScreens?:
+                      | {
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    alternateDirection?: boolean | null;
+                    elements?:
+                      | {
+                          header?: string | null;
+                          body?: {
+                            root: {
+                              type: string;
+                              children: {
+                                type: string;
+                                version: number;
+                                [k: string]: unknown;
+                              }[];
+                              direction: ('ltr' | 'rtl') | null;
+                              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                              indent: number;
+                              version: number;
+                            };
+                            [k: string]: unknown;
+                          } | null;
+                          display?: ('carded' | 'free' | 'mockup') | null;
+                          illustration?: (string | null) | Media;
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Walkthrough';
+                  }
+              )[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  social?: {
+    networks?:
+      | {
+          title?: string | null;
+          url?: string | null;
+          icon?: {
+            custom?: boolean | null;
+            set?: string | null;
+            icon?: string | null;
+            svg?: string | null;
+            customSvg?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  ui?: {
+    posts?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    projects?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    skills?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    technologies?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    services?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    caretDown?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    contact?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    hamburger?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    newTab?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    settings?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    search?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    previous?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    next?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    play?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+    pause?: {
+      custom?: boolean | null;
+      set?: string | null;
+      icon?: string | null;
+      svg?: string | null;
+      customSvg?: string | null;
+    };
+  };
+  localization?: {
+    locales?:
+      | {
+          name: string;
+          code: string;
+          icon?: {
+            custom?: boolean | null;
+            set?: string | null;
+            icon?: string | null;
+            svg?: string | null;
+            customSvg?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  google?: {
+    recaptchaId?: string | null;
+    gtagId?: string | null;
+  };
+  cookies?: {};
+  seo?: {
+    canonical?: string | null;
+    xHandle?: string | null;
+    keywords?:
+      | {
+          keyword?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1365,7 +4742,7 @@ export interface Website {
  * via the `definition` "iconify".
  */
 export interface Iconify {
-  id: number;
+  id: string;
   sets?: {
     installed?: string[] | null;
     options?:
@@ -1405,8 +4782,8 @@ export interface Iconify {
  * via the `definition` "skeleton".
  */
 export interface Skeleton {
-  id: number;
-  theme?: (number | null) | SkeletonTheme;
+  id: string;
+  theme?: (string | null) | SkeletonTheme;
   newTheme?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1416,7 +4793,739 @@ export interface Skeleton {
  * via the `definition` "website_select".
  */
 export interface WebsiteSelect<T extends boolean = true> {
-  title?: T;
+  general?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        logo?: T;
+      };
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
+              component?:
+                | T
+                | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Wall?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+        beforeMain?:
+          | T
+          | {
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
+              component?:
+                | T
+                | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Wall?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+        afterMain?:
+          | T
+          | {
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
+              component?:
+                | T
+                | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Wall?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+        footer?:
+          | T
+          | {
+              options?:
+                | T
+                | {
+                    blackedOut?: T;
+                    carded?: T;
+                  };
+              section?:
+                | T
+                | {
+                    title?: T;
+                    slug?: T;
+                    header?: T;
+                    body?: T;
+                  };
+              component?:
+                | T
+                | {
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Wall?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Collapsible?:
+                      | T
+                      | {
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                icon?:
+                                  | T
+                                  | {
+                                      custom?: T;
+                                      set?: T;
+                                      icon?: T;
+                                      svg?: T;
+                                      customSvg?: T;
+                                    };
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Form?:
+                      | T
+                      | {
+                          form?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Hero?:
+                      | T
+                      | {
+                          header?: T;
+                          body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          mobileScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          desktopScreens?:
+                            | T
+                            | {
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Walkthrough?:
+                      | T
+                      | {
+                          alternateDirection?: T;
+                          elements?:
+                            | T
+                            | {
+                                header?: T;
+                                body?: T;
+                                display?: T;
+                                illustration?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+      };
+  social?:
+    | T
+    | {
+        networks?:
+          | T
+          | {
+              title?: T;
+              url?: T;
+              icon?:
+                | T
+                | {
+                    custom?: T;
+                    set?: T;
+                    icon?: T;
+                    svg?: T;
+                    customSvg?: T;
+                  };
+              id?: T;
+            };
+      };
+  ui?:
+    | T
+    | {
+        posts?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        projects?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        skills?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        technologies?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        services?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        caretDown?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        contact?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        hamburger?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        newTab?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        settings?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        search?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        previous?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        next?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        play?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        pause?:
+          | T
+          | {
+              custom?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+      };
+  localization?:
+    | T
+    | {
+        locales?:
+          | T
+          | {
+              name?: T;
+              code?: T;
+              icon?:
+                | T
+                | {
+                    custom?: T;
+                    set?: T;
+                    icon?: T;
+                    svg?: T;
+                    customSvg?: T;
+                  };
+              id?: T;
+            };
+      };
+  google?:
+    | T
+    | {
+        recaptchaId?: T;
+        gtagId?: T;
+      };
+  cookies?: T | {};
+  seo?:
+    | T
+    | {
+        canonical?: T;
+        xHandle?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

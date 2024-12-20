@@ -1,3 +1,5 @@
+import { NullField as NullField_d4add19c08047af2d7c2e6635227b358 } from 'payload-plugin-masquerade/ui'
+import { MasqueradeCell as MasqueradeCell_d4add19c08047af2d7c2e6635227b358 } from 'payload-plugin-masquerade/ui'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -33,9 +35,12 @@ import { SelectColor as SelectColor_5c9d2c3540165cd8c4daef5b3ba03b12 } from 'src
 import { InstallIconSets as InstallIconSets_79cf1bf27894ce6710b55ff6debb791e } from 'src/plugins/iconify/components/InstallIconSets'
 import { ReadMe as ReadMe_be43cbc9c5b4e499681f5047d7602418 } from 'src/plugins/iconify/components/ReadMe'
 import { Webview as Webview_cdf9844f3f9e8925b293a3aef6ef7911 } from 'src/plugins/skeleton/components/Webview'
+import { Unmasquerade as Unmasquerade_d4add19c08047af2d7c2e6635227b358 } from 'payload-plugin-masquerade/ui'
 import { FactoryProvider as FactoryProvider_49a0080162b6cafecd5c2124063a7699 } from 'src/plugins/factory/context/FactoryContext'
 
 export const importMap = {
+  "payload-plugin-masquerade/ui#NullField": NullField_d4add19c08047af2d7c2e6635227b358,
+  "payload-plugin-masquerade/ui#MasqueradeCell": MasqueradeCell_d4add19c08047af2d7c2e6635227b358,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
@@ -71,5 +76,6 @@ export const importMap = {
   "src/plugins/iconify/components/InstallIconSets#InstallIconSets": InstallIconSets_79cf1bf27894ce6710b55ff6debb791e,
   "src/plugins/iconify/components/ReadMe#ReadMe": ReadMe_be43cbc9c5b4e499681f5047d7602418,
   "src/plugins/skeleton/components/Webview#Webview": Webview_cdf9844f3f9e8925b293a3aef6ef7911,
+  "payload-plugin-masquerade/ui#Unmasquerade": Unmasquerade_d4add19c08047af2d7c2e6635227b358,
   "/plugins/factory/context/FactoryContext#FactoryProvider": FactoryProvider_49a0080162b6cafecd5c2124063a7699
 }

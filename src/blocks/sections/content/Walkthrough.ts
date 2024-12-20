@@ -1,12 +1,11 @@
-import { Section } from '../base'
-import { RichTextFields } from '@/fields'
+import type { Block } from 'payload'
 
-const Walkthrough = Section({
+const Walkthrough: Block = {
   slug: 'Walkthrough',
-  data: [
+  fields: [
     { name: 'alternateDirection', type: 'checkbox' },
     {
-      name: 'items',
+      name: 'elements',
       type: 'array',
       fields: [
         {
@@ -14,7 +13,11 @@ const Walkthrough = Section({
           type: 'text',
           localized: true,
         },
-        ...RichTextFields(),
+        {
+          name: 'body',
+          type: 'richText',
+          localized: true,
+        },
         {
           name: 'display',
           type: 'radio',
@@ -33,6 +36,6 @@ const Walkthrough = Section({
       ],
     },
   ],
-})
+}
 
 export default Walkthrough

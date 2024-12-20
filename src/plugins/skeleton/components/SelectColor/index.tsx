@@ -16,7 +16,7 @@ const SelectColorComponent: SelectFieldClientComponent = (props) => {
   // const n = props.field.admin?.clientProps?.n || 1
   const n = useFormFields(([fields]) => {
     console.log(fields)
-    return Number(fields.factoryData.value.options?.colors)
+    return Number(fields.factoryData.value?.options?.colors)
   })
   console.log(n)
   const [{ data, isLoading }] = usePayloadAPI('/api/globals/skeleton')
