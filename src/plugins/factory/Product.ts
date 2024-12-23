@@ -84,8 +84,8 @@ export const Product = ({
               relationTo: identity.products.plural as CollectionSlug,
               hasMany: true,
               filterOptions: ({ id, data }) => {
-                const factoryNeighbors = data?.factoryData?.meta?.neighbors || []
                 if (filterNeighbors) {
+                  const factoryNeighbors = data?.factoryData?.meta?.neighbors || []
                   if (factoryNeighbors.length > 0) {
                     return {
                       factory: {

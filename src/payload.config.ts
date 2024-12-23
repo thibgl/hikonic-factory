@@ -16,7 +16,7 @@ import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 
-import { Blocks } from './collections/Blocks'
+import { Sections } from './collections/Sections'
 import { Website } from './globals/Website'
 
 import { Factories } from './collections/Factories'
@@ -38,7 +38,7 @@ export default buildConfig({
     admin: '/',
   },
   globals: [Website],
-  collections: [Users, Media, Blocks, ...Factories],
+  collections: [Users, Media, Sections, ...Factories],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

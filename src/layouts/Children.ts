@@ -10,18 +10,18 @@ export const ChildrenLayout: Field = {
       name: 'hero',
       type: 'array',
       maxRows: 1,
-      fields: ChildrenSection,
+      fields: ChildrenSection(false),
     },
     {
       name: 'main',
       type: 'array',
-      fields: ChildrenSection,
+      fields: ChildrenSection(),
     },
     {
       name: 'footer',
       type: 'array',
       maxRows: 1,
-      fields: Section,
+      fields: Section(false),
     },
   ],
   admin: {

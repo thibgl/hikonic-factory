@@ -16,12 +16,12 @@ export const PageLayout: Field = {
     {
       name: 'beforeMain',
       type: 'array',
-      fields: Section,
+      fields: Section(),
     },
     {
       name: 'afterMain',
       type: 'array',
-      fields: Section,
+      fields: Section(),
     },
   ],
   admin: {

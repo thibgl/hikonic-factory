@@ -50,6 +50,7 @@ export const FactoryOverseer: React.FC<{ path: string; field: Field; factory: st
     ) {
       const data = {
         id: doc.id,
+        slug: doc.slug,
         updatedAt: doc.updatedAt,
         options: doc.options || {},
         meta: Object.entries(doc.meta).reduce(

@@ -9,23 +9,23 @@ export const WebsiteLayout: Field = {
     {
       name: 'hero',
       type: 'array',
-      fields: Section,
+      fields: Section(false),
       maxRows: 1,
     },
     {
       name: 'beforeMain',
       type: 'array',
-      fields: Section,
+      fields: Section(),
     },
     {
       name: 'afterMain',
       type: 'array',
-      fields: Section,
+      fields: Section(),
     },
     {
       name: 'footer',
       type: 'array',
-      fields: Section,
+      fields: Section(false),
       maxRows: 1,
     },
   ],

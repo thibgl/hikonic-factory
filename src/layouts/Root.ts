@@ -17,18 +17,18 @@ export const RootLayout: Field = {
       name: 'hero',
       type: 'array',
       maxRows: 1,
-      fields: Section,
+      fields: Section(false),
     },
     {
       name: 'main',
       type: 'array',
-      fields: Section,
+      fields: Section(),
     },
     {
       name: 'footer',
       type: 'array',
       maxRows: 1,
-      fields: Section,
+      fields: Section(false),
     },
   ],
   admin: {
