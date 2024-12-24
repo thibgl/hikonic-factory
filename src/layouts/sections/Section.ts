@@ -11,12 +11,12 @@ export const Section = (main = true): Field[] => [
     relationTo: 'sections',
     defaultValue: null,
   },
-  BaseOptions,
+  ...BaseOptions,
   ...(ConditionalField({
     path: 'preset',
     value: null,
     field: [
-      BaseSection(main),
+      ...BaseSection(main),
       {
         name: 'component',
         type: 'blocks',

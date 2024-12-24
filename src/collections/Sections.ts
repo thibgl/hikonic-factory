@@ -6,7 +6,7 @@ import { RootBlocks } from '@/blocks/sections'
 export const Sections: CollectionConfig = {
   slug: 'sections',
   fields: [
-    BaseSection(),
+    ...BaseSection(),
     {
       name: 'component',
       type: 'blocks',
@@ -15,6 +15,7 @@ export const Sections: CollectionConfig = {
     },
   ],
   admin: {
+    useAsTitle: 'title',
     defaultColumns: ['title', 'slug'],
   },
 }

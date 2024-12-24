@@ -144,26 +144,24 @@ export interface Media {
  */
 export interface Section {
   id: string;
-  section?: {
-    title?: string | null;
-    slug?: string | null;
-    header?: string | null;
-    body?: {
-      root: {
+  title?: string | null;
+  slug?: string | null;
+  header?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
         type: string;
-        children: {
-          type: string;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
         version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-  };
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   component?:
     | (
         | {
@@ -179,6 +177,7 @@ export interface Section {
             blockType: 'Wall';
           }
         | {
+            index?: (string | null) | Index;
             pages?:
               | (
                   | {
@@ -196,6 +195,7 @@ export interface Section {
             blockType: 'Page';
           }
         | {
+            index?: (string | null) | Index;
             pages?:
               | (
                   | {
@@ -213,6 +213,7 @@ export interface Section {
             blockType: 'PageCards';
           }
         | {
+            index?: (string | null) | Index;
             pages?:
               | (
                   | {
@@ -486,28 +487,24 @@ export interface Index {
     hero?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -523,6 +520,7 @@ export interface Index {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -540,6 +538,7 @@ export interface Index {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -557,6 +556,7 @@ export interface Index {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -678,30 +678,26 @@ export interface Index {
     main?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            title?: string | null;
-            slug?: string | null;
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          title?: string | null;
+          slug?: string | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -717,6 +713,7 @@ export interface Index {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -734,6 +731,7 @@ export interface Index {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -751,6 +749,7 @@ export interface Index {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -872,28 +871,24 @@ export interface Index {
     footer?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -909,6 +904,7 @@ export interface Index {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -926,6 +922,7 @@ export interface Index {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -943,6 +940,7 @@ export interface Index {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1065,28 +1063,24 @@ export interface Index {
   childrenLayout?: {
     hero?:
       | {
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -1226,30 +1220,26 @@ export interface Index {
       | null;
     main?:
       | {
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            title?: string | null;
-            slug?: string | null;
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          title?: string | null;
+          slug?: string | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -1390,28 +1380,24 @@ export interface Index {
     footer?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -1427,6 +1413,7 @@ export interface Index {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1444,6 +1431,7 @@ export interface Index {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1461,6 +1449,7 @@ export interface Index {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1655,30 +1644,26 @@ export interface Page {
     beforeMain?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            title?: string | null;
-            slug?: string | null;
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          title?: string | null;
+          slug?: string | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -1694,6 +1679,7 @@ export interface Page {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1711,6 +1697,7 @@ export interface Page {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1728,6 +1715,7 @@ export interface Page {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1849,30 +1837,26 @@ export interface Page {
     afterMain?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            title?: string | null;
-            slug?: string | null;
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          title?: string | null;
+          slug?: string | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -1888,6 +1872,7 @@ export interface Page {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1905,6 +1890,7 @@ export interface Page {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -1922,6 +1908,7 @@ export interface Page {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -2484,14 +2471,10 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "sections_select".
  */
 export interface SectionsSelect<T extends boolean = true> {
-  section?:
-    | T
-    | {
-        title?: T;
-        slug?: T;
-        header?: T;
-        body?: T;
-      };
+  title?: T;
+  slug?: T;
+  header?: T;
+  body?: T;
   component?:
     | T
     | {
@@ -2512,6 +2495,7 @@ export interface SectionsSelect<T extends boolean = true> {
         Page?:
           | T
           | {
+              index?: T;
               pages?: T;
               id?: T;
               blockName?: T;
@@ -2519,6 +2503,7 @@ export interface SectionsSelect<T extends boolean = true> {
         PageCards?:
           | T
           | {
+              index?: T;
               pages?: T;
               id?: T;
               blockName?: T;
@@ -2526,6 +2511,7 @@ export interface SectionsSelect<T extends boolean = true> {
         Slider?:
           | T
           | {
+              index?: T;
               pages?: T;
               id?: T;
               blockName?: T;
@@ -2639,18 +2625,10 @@ export interface IndexesSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -2671,6 +2649,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2678,6 +2657,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2685,6 +2665,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2773,20 +2754,12 @@ export interface IndexesSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              title?: T;
+              slug?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -2807,6 +2780,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2814,6 +2788,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2821,6 +2796,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2909,18 +2885,10 @@ export interface IndexesSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -2941,6 +2909,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2948,6 +2917,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -2955,6 +2925,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3046,18 +3017,10 @@ export interface IndexesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -3182,20 +3145,12 @@ export interface IndexesSelect<T extends boolean = true> {
         main?:
           | T
           | {
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              title?: T;
+              slug?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -3321,18 +3276,10 @@ export interface IndexesSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -3353,6 +3300,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3360,6 +3308,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3367,6 +3316,7 @@ export interface IndexesSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3504,20 +3454,12 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              title?: T;
+              slug?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -3538,6 +3480,7 @@ export interface PagesSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3545,6 +3488,7 @@ export interface PagesSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3552,6 +3496,7 @@ export interface PagesSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3640,20 +3585,12 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              title?: T;
+              slug?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -3674,6 +3611,7 @@ export interface PagesSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3681,6 +3619,7 @@ export interface PagesSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -3688,6 +3627,7 @@ export interface PagesSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -4123,28 +4063,24 @@ export interface Website {
     hero?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -4160,6 +4096,7 @@ export interface Website {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4177,6 +4114,7 @@ export interface Website {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4194,6 +4132,7 @@ export interface Website {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4315,30 +4254,26 @@ export interface Website {
     beforeMain?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            title?: string | null;
-            slug?: string | null;
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          title?: string | null;
+          slug?: string | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -4354,6 +4289,7 @@ export interface Website {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4371,6 +4307,7 @@ export interface Website {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4388,6 +4325,7 @@ export interface Website {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4509,30 +4447,26 @@ export interface Website {
     afterMain?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            title?: string | null;
-            slug?: string | null;
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          title?: string | null;
+          slug?: string | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -4548,6 +4482,7 @@ export interface Website {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4565,6 +4500,7 @@ export interface Website {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4582,6 +4518,7 @@ export interface Website {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4703,28 +4640,24 @@ export interface Website {
     footer?:
       | {
           preset?: (string | null) | Section;
-          options?: {
-            blackedOut?: boolean | null;
-            carded?: boolean | null;
-          };
-          section?: {
-            header?: string | null;
-            body?: {
-              root: {
+          blackedOut?: boolean | null;
+          carded?: boolean | null;
+          header?: string | null;
+          body?: {
+            root: {
+              type: string;
+              children: {
                 type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
                 version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-          };
+                [k: string]: unknown;
+              }[];
+              direction: ('ltr' | 'rtl') | null;
+              format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+              indent: number;
+              version: number;
+            };
+            [k: string]: unknown;
+          } | null;
           component?:
             | (
                 | {
@@ -4740,6 +4673,7 @@ export interface Website {
                     blockType: 'Wall';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4757,6 +4691,7 @@ export interface Website {
                     blockType: 'Page';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -4774,6 +4709,7 @@ export interface Website {
                     blockType: 'PageCards';
                   }
                 | {
+                    index?: (string | null) | Index;
                     pages?:
                       | (
                           | {
@@ -5120,18 +5056,10 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -5152,6 +5080,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5159,6 +5088,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5166,6 +5096,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5254,20 +5185,12 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              title?: T;
+              slug?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -5288,6 +5211,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5295,6 +5219,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5302,6 +5227,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5390,20 +5316,12 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    title?: T;
-                    slug?: T;
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              title?: T;
+              slug?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -5424,6 +5342,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5431,6 +5350,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5438,6 +5358,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5526,18 +5447,10 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               preset?: T;
-              options?:
-                | T
-                | {
-                    blackedOut?: T;
-                    carded?: T;
-                  };
-              section?:
-                | T
-                | {
-                    header?: T;
-                    body?: T;
-                  };
+              blackedOut?: T;
+              carded?: T;
+              header?: T;
+              body?: T;
               component?:
                 | T
                 | {
@@ -5558,6 +5471,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Page?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5565,6 +5479,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     PageCards?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;
@@ -5572,6 +5487,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                     Slider?:
                       | T
                       | {
+                          index?: T;
                           pages?: T;
                           id?: T;
                           blockName?: T;

@@ -23,9 +23,9 @@ export const Product = ({
     {
       name: 'factoryData',
       type: 'json',
-      access: {
-        read: ({ req: { user } }) => Boolean(user),
-      },
+      // access: {
+      //   read: ({ req: { user } }) => Boolean(user),
+      // },
       admin: {
         components: {
           Field: {
