@@ -67,6 +67,25 @@ export const Factories = [
           field: IconField(),
         }) as Field,
       ],
+      options: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'screens',
+              type: 'checkbox',
+            },
+            {
+              name: 'article',
+              type: 'checkbox',
+            },
+          ],
+        },
+        // {
+        //   name: 'href',
+        //   type: 'checkbox',
+        // },
+      ],
       tabs: [
         {
           label: 'Layout',
@@ -87,6 +106,23 @@ export const Factories = [
       ],
     },
     product: {
+      fields: ConditionalField({
+        path: 'factoryData.options.screens',
+        value: true,
+        sibling: false,
+        field: [
+          {
+            name: 'mobileScreens',
+            type: 'array',
+            fields: [{ type: 'upload', name: 'illustration', label: false, relationTo: 'media' }],
+          },
+          {
+            name: 'desktopScreens',
+            type: 'array',
+            fields: [{ type: 'upload', name: 'illustration', label: false, relationTo: 'media' }],
+          },
+        ],
+      }) as Field[],
       tabs: [
         {
           label: 'Layout',

@@ -3,12 +3,12 @@ const pageBlocks = ['Page', 'PageCards', 'Slider']
 
 import { ItemsBlock, PagesBlock } from './root'
 import { ItemsChildrenBlock, PagesChildrenBlock } from './children'
-import { ContentBlocks } from './content'
+import { CollapsibleBlock, FormBlock, HeroBlock, MockupBlock, WalkthroughBlock } from './content'
 
 export const RootBlocks = [
   ...itemsBlocks.map((slug) => ItemsBlock(slug)),
   ...pageBlocks.map((slug) => PagesBlock(slug)),
-  ...ContentBlocks,
+  ...[CollapsibleBlock, FormBlock, HeroBlock, MockupBlock, WalkthroughBlock],
   {
     slug: 'Products',
     labels: { singular: 'Products', plural: 'Products' },
@@ -18,9 +18,17 @@ export const RootBlocks = [
 export const ChildrenBlocks = [
   ...itemsBlocks.map((slug) => ItemsChildrenBlock(slug)),
   ...pageBlocks.map((slug) => PagesChildrenBlock(slug)),
-  ...ContentBlocks,
+  ...[CollapsibleBlock, FormBlock, HeroBlock, WalkthroughBlock],
+  {
+    slug: 'Mockup',
+    fields: [{ name: 'decription', type: 'ui', description: 'Hello' }],
+  },
   {
     slug: 'Illustration',
+    fields: [{ name: 'decription', type: 'ui', description: 'Hello' }],
+  },
+  {
+    slug: 'Description',
     fields: [{ name: 'decription', type: 'ui', description: 'Hello' }],
   },
 ]

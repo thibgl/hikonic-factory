@@ -1163,23 +1163,6 @@ export interface Index {
                     blockType: 'Hero';
                   }
                 | {
-                    mobileScreens?:
-                      | {
-                          illustration?: (string | null) | Media;
-                          id?: string | null;
-                        }[]
-                      | null;
-                    desktopScreens?:
-                      | {
-                          illustration?: (string | null) | Media;
-                          id?: string | null;
-                        }[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Mockup';
-                  }
-                | {
                     alternateDirection?: boolean | null;
                     elements?:
                       | {
@@ -1211,7 +1194,17 @@ export interface Index {
                 | {
                     id?: string | null;
                     blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
                     blockType: 'Illustration';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Description';
                   }
               )[]
             | null;
@@ -1322,23 +1315,6 @@ export interface Index {
                     blockType: 'Hero';
                   }
                 | {
-                    mobileScreens?:
-                      | {
-                          illustration?: (string | null) | Media;
-                          id?: string | null;
-                        }[]
-                      | null;
-                    desktopScreens?:
-                      | {
-                          illustration?: (string | null) | Media;
-                          id?: string | null;
-                        }[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Mockup';
-                  }
-                | {
                     alternateDirection?: boolean | null;
                     elements?:
                       | {
@@ -1370,7 +1346,17 @@ export interface Index {
                 | {
                     id?: string | null;
                     blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
                     blockType: 'Illustration';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Description';
                   }
               )[]
             | null;
@@ -1581,6 +1567,10 @@ export interface Index {
         }[]
       | null;
   };
+  options?: {
+    screens?: boolean | null;
+    article?: boolean | null;
+  };
   meta?: {
     neighbors?: (string | Index)[] | null;
     tokens?: (string | Token)[] | null;
@@ -1638,6 +1628,18 @@ export interface Page {
     [k: string]: unknown;
   } | null;
   illustration?: (string | null) | Media;
+  mobileScreens?:
+    | {
+        illustration?: (string | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  desktopScreens?:
+    | {
+        illustration?: (string | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
   layout?: {
     websiteBeforeMain?: boolean | null;
     websiteAfterMain?: boolean | null;
@@ -3099,24 +3101,6 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Mockup?:
-                      | T
-                      | {
-                          mobileScreens?:
-                            | T
-                            | {
-                                illustration?: T;
-                                id?: T;
-                              };
-                          desktopScreens?:
-                            | T
-                            | {
-                                illustration?: T;
-                                id?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     Walkthrough?:
                       | T
                       | {
@@ -3133,7 +3117,19 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    Mockup?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
                     Illustration?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Description?:
                       | T
                       | {
                           id?: T;
@@ -3229,24 +3225,6 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Mockup?:
-                      | T
-                      | {
-                          mobileScreens?:
-                            | T
-                            | {
-                                illustration?: T;
-                                id?: T;
-                              };
-                          desktopScreens?:
-                            | T
-                            | {
-                                illustration?: T;
-                                id?: T;
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
                     Walkthrough?:
                       | T
                       | {
@@ -3263,7 +3241,19 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    Mockup?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
                     Illustration?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Description?:
                       | T
                       | {
                           id?: T;
@@ -3416,6 +3406,12 @@ export interface IndexesSelect<T extends boolean = true> {
               id?: T;
             };
       };
+  options?:
+    | T
+    | {
+        screens?: T;
+        article?: T;
+      };
   meta?:
     | T
     | {
@@ -3445,6 +3441,18 @@ export interface PagesSelect<T extends boolean = true> {
   slug?: T;
   description?: T;
   illustration?: T;
+  mobileScreens?:
+    | T
+    | {
+        illustration?: T;
+        id?: T;
+      };
+  desktopScreens?:
+    | T
+    | {
+        illustration?: T;
+        id?: T;
+      };
   layout?:
     | T
     | {
