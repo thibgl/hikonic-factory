@@ -4,7 +4,7 @@ import type { OptionObject, SelectFieldClient } from 'payload'
 import type { MarkOptional } from 'ts-essentials'
 
 import { FC } from 'react'
-import { components } from 'react-select'
+import Select, { components } from 'react-select'
 import { ReactSelect, FieldLabel, fieldBaseClass } from '@payloadcms/ui'
 
 export interface IconOption {
@@ -131,7 +131,7 @@ export const SelectIconInput: FC<SelectInputProps & { viewBox: ViewBox }> = (pro
     >
       <FieldLabel field={field} />
       <div className={`${fieldBaseClass}__wrap react_select`}>
-        <ReactSelect
+        <Select
           className="react_select"
           disabled={readOnly}
           onChange={onChange}

@@ -1,10 +1,11 @@
-import type { GlobalConfig } from 'payload'
+import type { Field, GlobalConfig } from 'payload'
 
 import { WebsiteLayout } from '@/layouts/Website'
 import { IconField } from '@/plugins/iconify/fields/Icon'
 // import { SetsCache } from '@/plugins/iconify/fields/SetsCache'
 import { toKebabCase } from '@/utils/toKebabCase'
 import { handleIconsChange, handleLocalesChange } from './hooks'
+import { ConditionalField } from '@/fields'
 
 export const Website: GlobalConfig = {
   slug: 'website',
@@ -38,6 +39,92 @@ export const Website: GlobalConfig = {
         },
         { label: 'Layout', fields: [WebsiteLayout] },
         {
+          name: 'nav',
+          fields: [
+            {
+              name: 'center',
+              type: 'array',
+              fields: [
+                {
+                  name: 'type',
+                  type: 'radio',
+                  options: [
+                    { value: 'link', label: 'Link' },
+                    { value: 'subMenu', label: 'Sub Menu' },
+                  ],
+                },
+                ...(ConditionalField({
+                  path: 'type',
+                  value: 'subMenu',
+                  field: [
+                    { name: 'title', type: 'text', localized: true },
+                    {
+                      name: 'expanded',
+                      type: 'relationship',
+                      relationTo: 'indexes',
+                      hasMany: true,
+                      filterOptions: ({ siblingData }) => ({
+                        and: [
+                          {
+                            producing: {
+                              equals: true,
+                            },
+                          },
+                          {
+                            id: {
+                              not_in: siblingData?.links || [],
+                            },
+                          },
+                        ],
+                      }),
+                    },
+                    {
+                      name: 'links',
+                      type: 'relationship',
+                      relationTo: 'indexes',
+                      hasMany: true,
+                      filterOptions: ({ siblingData }) => ({
+                        id: {
+                          not_in: siblingData?.expanded || [],
+                        },
+                      }),
+                    },
+                  ],
+                }) as Field[]),
+                ConditionalField({
+                  path: 'type',
+                  value: 'link',
+                  field: {
+                    name: 'link',
+                    type: 'relationship',
+                    relationTo: 'indexes',
+                  },
+                }) as Field,
+              ],
+            },
+            {
+              name: 'trail',
+              type: 'array',
+              fields: [],
+            },
+          ],
+        },
+        {
+          name: 'ui',
+          fields: [
+            IconField('caretDown'),
+            IconField('contact'),
+            IconField('hamburger'),
+            IconField('newTab'),
+            IconField('settings'),
+            IconField('search'),
+            IconField('previous'),
+            IconField('next'),
+            IconField('play'),
+            IconField('pause'),
+          ],
+        },
+        {
           name: 'social',
           fields: [
             {
@@ -63,41 +150,6 @@ export const Website: GlobalConfig = {
             //     },
             //   },
             // },
-          ],
-        },
-        {
-          name: 'ui',
-          fields: [
-            {
-              type: 'tabs',
-              tabs: [
-                {
-                  label: 'Items',
-                  fields: [
-                    IconField('posts'),
-                    IconField('projects'),
-                    IconField('skills'),
-                    IconField('technologies'),
-                    IconField('services'),
-                  ],
-                },
-                {
-                  label: 'Menus',
-                  fields: [
-                    IconField('caretDown'),
-                    IconField('contact'),
-                    IconField('hamburger'),
-                    IconField('newTab'),
-                    IconField('settings'),
-                    IconField('search'),
-                    IconField('previous'),
-                    IconField('next'),
-                    IconField('play'),
-                    IconField('pause'),
-                  ],
-                },
-              ],
-            },
           ],
         },
         {

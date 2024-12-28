@@ -11,6 +11,8 @@ export const RootLayout: Field = {
       fields: [
         { name: 'websiteBeforeMain', type: 'checkbox', defaultValue: true },
         { name: 'websiteAfterMain', type: 'checkbox', defaultValue: true },
+        { name: 'websiteHero', type: 'checkbox' },
+        { name: 'websiteFooter', type: 'checkbox' },
       ],
     },
     {

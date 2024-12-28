@@ -15,6 +15,7 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
+    "@ai-stack/payloadcms": "3.2.1-beta",
     "@payloadcms/db-mongodb": "^3.8.0",
     "@payloadcms/db-sqlite": "^3.8.0",
     "@payloadcms/email-nodemailer": "^3.8.0",

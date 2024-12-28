@@ -2,7 +2,7 @@
 import type { OptionObject } from 'payload'
 
 import { FC } from 'react'
-import { components } from 'react-select'
+import Select, { components } from 'react-select'
 import { ReactSelect, fieldBaseClass } from '@payloadcms/ui'
 
 export interface ColorOption {
@@ -100,7 +100,7 @@ export const SelectColorInput: FC<SelectInputProps> = (props) => {
         </label>
       )}
       <div className={`${fieldBaseClass}__wrap`}>
-        <ReactSelect
+        <Select
           disabled={readOnly}
           onChange={onChange}
           options={options as OptionObject[]}

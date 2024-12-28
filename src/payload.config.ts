@@ -12,6 +12,10 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { payloadAiPlugin } from '@ai-stack/payloadcms'
+
+// Settings
+import locales from '@/config/localization.json'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -54,8 +58,18 @@ export default buildConfig({
   //     authToken: process.env.DATABASE_AUTH_TOKEN,
   //   },
   // }),
+
   sharp,
   plugins: [
+    // payloadAiPlugin({
+    //   collections: {
+    //     indexes: true,
+    //     pages: true,
+    //     tokens: true,
+    //     items: true,
+    //   },
+    //   debugging: true,
+    // }),
     iconifyPlugin(),
     skeletonPlugin({
       clientPath: '../client',
@@ -91,4 +105,9 @@ export default buildConfig({
     }),
     // storage-adapter-placeholder
   ],
+  localization: {
+    locales: locales.locales,
+    defaultLocale: locales.default,
+    fallback: true,
+  },
 })

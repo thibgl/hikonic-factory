@@ -1,5 +1,5 @@
 const itemsBlocks = ['ItemCards', 'Wall']
-const pageBlocks = ['Page', 'PageCards', 'Slider']
+const pageBlocks = ['Carousel', 'Page', 'PageCards', 'Slider']
 
 import { ItemsBlock, PagesBlock } from './root'
 import { ItemsChildrenBlock, PagesChildrenBlock } from './children'
@@ -12,9 +12,20 @@ export const RootBlocks = [
   {
     slug: 'Products',
     labels: { singular: 'Products', plural: 'Products' },
-    fields: [{ name: 'decription', type: 'ui', description: 'Hello' }],
+    fields: [
+      { name: 'decription', type: 'ui', description: 'Hello' },
+      {
+        name: 'block',
+        type: 'select',
+        options: [
+          { value: 'PageCards', label: 'PageCards' },
+          { value: 'Bento', label: 'Bento' },
+        ],
+      },
+    ],
   },
-]
+].sort((a, b) => a.slug.localeCompare(b.slug))
+
 export const ChildrenBlocks = [
   ...itemsBlocks.map((slug) => ItemsChildrenBlock(slug)),
   ...pageBlocks.map((slug) => PagesChildrenBlock(slug)),
@@ -31,4 +42,4 @@ export const ChildrenBlocks = [
     slug: 'Description',
     fields: [{ name: 'decription', type: 'ui', description: 'Hello' }],
   },
-]
+].sort((a, b) => a.slug.localeCompare(b.slug))

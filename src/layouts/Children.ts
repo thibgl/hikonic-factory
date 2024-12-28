@@ -7,6 +7,15 @@ export const ChildrenLayout: Field = {
   type: 'group',
   fields: [
     {
+      type: 'row',
+      fields: [
+        { name: 'websiteBeforeMain', type: 'checkbox', defaultValue: true },
+        { name: 'websiteAfterMain', type: 'checkbox', defaultValue: true },
+        { name: 'websiteHero', type: 'checkbox' },
+        { name: 'websiteFooter', type: 'checkbox' },
+      ],
+    },
+    {
       name: 'hero',
       type: 'array',
       maxRows: 1,

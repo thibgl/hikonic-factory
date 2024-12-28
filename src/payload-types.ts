@@ -75,7 +75,7 @@ export interface Config {
     iconify: IconifySelect<false> | IconifySelect<true>;
     skeleton: SkeletonSelect<false> | SkeletonSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'fr';
   user: User & {
     collection: 'users';
   };
@@ -165,18 +165,6 @@ export interface Section {
   component?:
     | (
         | {
-            items?: (string | Item)[] | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'ItemCards';
-          }
-        | {
-            items?: (string | Item)[] | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'Wall';
-          }
-        | {
             index?: (string | null) | Index;
             pages?:
               | (
@@ -192,43 +180,7 @@ export interface Section {
               | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'Page';
-          }
-        | {
-            index?: (string | null) | Index;
-            pages?:
-              | (
-                  | {
-                      relationTo: 'indexes';
-                      value: string | Index;
-                    }
-                  | {
-                      relationTo: 'pages';
-                      value: string | Page;
-                    }
-                )[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'PageCards';
-          }
-        | {
-            index?: (string | null) | Index;
-            pages?:
-              | (
-                  | {
-                      relationTo: 'indexes';
-                      value: string | Index;
-                    }
-                  | {
-                      relationTo: 'pages';
-                      value: string | Page;
-                    }
-                )[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'Slider';
+            blockType: 'Carousel';
           }
         | {
             elements?:
@@ -277,6 +229,13 @@ export interface Section {
             blockType: 'Hero';
           }
         | {
+            token?: (string | null) | Token;
+            items?: (string | Item)[] | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ItemCards';
+          }
+        | {
             mobileScreens?:
               | {
                   illustration?: (string | null) | Media;
@@ -292,6 +251,66 @@ export interface Section {
             id?: string | null;
             blockName?: string | null;
             blockType: 'Mockup';
+          }
+        | {
+            index?: (string | null) | Index;
+            pages?:
+              | (
+                  | {
+                      relationTo: 'indexes';
+                      value: string | Index;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: string | Page;
+                    }
+                )[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'Page';
+          }
+        | {
+            index?: (string | null) | Index;
+            pages?:
+              | (
+                  | {
+                      relationTo: 'indexes';
+                      value: string | Index;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: string | Page;
+                    }
+                )[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'PageCards';
+          }
+        | {
+            block?: ('PageCards' | 'Bento') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'Products';
+          }
+        | {
+            index?: (string | null) | Index;
+            pages?:
+              | (
+                  | {
+                      relationTo: 'indexes';
+                      value: string | Index;
+                    }
+                  | {
+                      relationTo: 'pages';
+                      value: string | Page;
+                    }
+                )[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'Slider';
           }
         | {
             alternateDirection?: boolean | null;
@@ -323,131 +342,16 @@ export interface Section {
             blockType: 'Walkthrough';
           }
         | {
+            token?: (string | null) | Token;
+            items?: (string | Item)[] | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'Products';
+            blockType: 'Wall';
           }
       )[]
     | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "items".
- */
-export interface Item {
-  id: string;
-  factoryData?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  factory: string | Token;
-  updated?: boolean | null;
-  title: string;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  illustration?: (string | null) | Media;
-  icon?: {
-    custom?: boolean | null;
-    set?: string | null;
-    icon?: string | null;
-    svg?: string | null;
-    customSvg?: string | null;
-  };
-  colors?: string[] | null;
-  meta?: {
-    neighbors?: (string | Item)[] | null;
-    pages?: (string | Page)[] | null;
-  };
-  related?: {
-    neighbors?: {
-      docs?: (string | Item)[] | null;
-      hasNextPage?: boolean | null;
-    } | null;
-    pages?: {
-      docs?: (string | Page)[] | null;
-      hasNextPage?: boolean | null;
-    } | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tokens".
- */
-export interface Token {
-  id: string;
-  producing?: boolean | null;
-  title: string;
-  description?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  illustration?: (string | null) | Media;
-  icon?: {
-    custom?: boolean | null;
-    set?: string | null;
-    icon?: string | null;
-    svg?: string | null;
-    customSvg?: string | null;
-  };
-  options?: {
-    icon?: boolean | null;
-    colors?: ('1' | '2' | '3') | null;
-  };
-  meta?: {
-    neighbors?: (string | Token)[] | null;
-    indexes?: (string | Index)[] | null;
-  };
-  related?: {
-    products?: {
-      docs?: (string | Item)[] | null;
-      hasNextPage?: boolean | null;
-    } | null;
-    neighbors?: {
-      docs?: (string | Item)[] | null;
-      hasNextPage?: boolean | null;
-    } | null;
-    indexes?: {
-      docs?: (string | Index)[] | null;
-      hasNextPage?: boolean | null;
-    } | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -484,6 +388,8 @@ export interface Index {
   layout?: {
     websiteBeforeMain?: boolean | null;
     websiteAfterMain?: boolean | null;
+    websiteHero?: boolean | null;
+    websiteFooter?: boolean | null;
     hero?:
       | {
           preset?: (string | null) | Section;
@@ -508,18 +414,6 @@ export interface Index {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -535,43 +429,7 @@ export interface Index {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -620,6 +478,13 @@ export interface Index {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -635,6 +500,66 @@ export interface Index {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -666,9 +591,11 @@ export interface Index {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -701,18 +628,6 @@ export interface Index {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -728,43 +643,7 @@ export interface Index {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -813,6 +692,13 @@ export interface Index {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -828,6 +714,66 @@ export interface Index {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -859,9 +805,11 @@ export interface Index {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -892,18 +840,6 @@ export interface Index {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -919,43 +855,7 @@ export interface Index {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -1004,6 +904,13 @@ export interface Index {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -1019,6 +926,66 @@ export interface Index {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -1050,9 +1017,11 @@ export interface Index {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -1061,6 +1030,10 @@ export interface Index {
       | null;
   };
   childrenLayout?: {
+    websiteBeforeMain?: boolean | null;
+    websiteAfterMain?: boolean | null;
+    websiteHero?: boolean | null;
+    websiteFooter?: boolean | null;
     hero?:
       | {
           blackedOut?: boolean | null;
@@ -1084,37 +1057,11 @@ export interface Index {
           component?:
             | (
                 | {
-                    token?: (string | null) | Token;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    token?: (string | null) | Token;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     related?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    related?: (string | null) | Index;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    related?: (string | null) | Index;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -1150,6 +1097,11 @@ export interface Index {
                     blockType: 'Collapsible';
                   }
                 | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Description';
+                  }
+                | {
                     form?: (string | null) | Form;
                     id?: string | null;
                     blockName?: string | null;
@@ -1161,6 +1113,43 @@ export interface Index {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Hero';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Illustration';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    related?: (string | null) | Index;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    related?: (string | null) | Index;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    related?: (string | null) | Index;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -1192,19 +1181,10 @@ export interface Index {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Mockup';
-                  }
-                | {
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Illustration';
-                  }
-                | {
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Description';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -1236,37 +1216,11 @@ export interface Index {
           component?:
             | (
                 | {
-                    token?: (string | null) | Token;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    token?: (string | null) | Token;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     related?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    related?: (string | null) | Index;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    related?: (string | null) | Index;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -1302,6 +1256,11 @@ export interface Index {
                     blockType: 'Collapsible';
                   }
                 | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Description';
+                  }
+                | {
                     form?: (string | null) | Form;
                     id?: string | null;
                     blockName?: string | null;
@@ -1313,6 +1272,43 @@ export interface Index {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Hero';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Illustration';
+                  }
+                | {
+                    token?: (string | null) | Token;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    related?: (string | null) | Index;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    related?: (string | null) | Index;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    related?: (string | null) | Index;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -1344,19 +1340,10 @@ export interface Index {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Mockup';
-                  }
-                | {
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Illustration';
-                  }
-                | {
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Description';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -1387,18 +1374,6 @@ export interface Index {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -1414,43 +1389,7 @@ export interface Index {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -1499,6 +1438,13 @@ export interface Index {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -1514,6 +1460,66 @@ export interface Index {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -1545,9 +1551,11 @@ export interface Index {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -1570,6 +1578,8 @@ export interface Index {
   options?: {
     screens?: boolean | null;
     article?: boolean | null;
+    href?: boolean | null;
+    colors?: ('1' | '2' | '3') | null;
   };
   meta?: {
     neighbors?: (string | Index)[] | null;
@@ -1640,9 +1650,8 @@ export interface Page {
         id?: string | null;
       }[]
     | null;
+  colors?: string[] | null;
   layout?: {
-    websiteBeforeMain?: boolean | null;
-    websiteAfterMain?: boolean | null;
     beforeMain?:
       | {
           preset?: (string | null) | Section;
@@ -1669,18 +1678,6 @@ export interface Page {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -1696,43 +1693,7 @@ export interface Page {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -1781,6 +1742,13 @@ export interface Page {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -1796,6 +1764,66 @@ export interface Page {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -1827,9 +1855,11 @@ export interface Page {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -1862,18 +1892,6 @@ export interface Page {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -1889,43 +1907,7 @@ export interface Page {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -1974,6 +1956,13 @@ export interface Page {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -1989,6 +1978,66 @@ export interface Page {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -2020,9 +2069,11 @@ export interface Page {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -2224,6 +2275,123 @@ export interface Form {
   hasModal?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tokens".
+ */
+export interface Token {
+  id: string;
+  producing?: boolean | null;
+  title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  illustration?: (string | null) | Media;
+  icon?: {
+    custom?: boolean | null;
+    set?: string | null;
+    icon?: string | null;
+    svg?: string | null;
+    customSvg?: string | null;
+  };
+  options?: {
+    icon?: boolean | null;
+    colors?: ('1' | '2' | '3') | null;
+  };
+  meta?: {
+    neighbors?: (string | Token)[] | null;
+    indexes?: (string | Index)[] | null;
+  };
+  related?: {
+    products?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    neighbors?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    indexes?: {
+      docs?: (string | Index)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "items".
+ */
+export interface Item {
+  id: string;
+  factoryData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  factory: string | Token;
+  updated?: boolean | null;
+  title: string;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  illustration?: (string | null) | Media;
+  icon?: {
+    custom?: boolean | null;
+    set?: string | null;
+    icon?: string | null;
+    svg?: string | null;
+    customSvg?: string | null;
+  };
+  colors?: string[] | null;
+  meta?: {
+    neighbors?: (string | Item)[] | null;
+    pages?: (string | Page)[] | null;
+  };
+  related?: {
+    neighbors?: {
+      docs?: (string | Item)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+    pages?: {
+      docs?: (string | Page)[] | null;
+      hasNextPage?: boolean | null;
+    } | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2480,37 +2648,7 @@ export interface SectionsSelect<T extends boolean = true> {
   component?:
     | T
     | {
-        ItemCards?:
-          | T
-          | {
-              items?: T;
-              id?: T;
-              blockName?: T;
-            };
-        Wall?:
-          | T
-          | {
-              items?: T;
-              id?: T;
-              blockName?: T;
-            };
-        Page?:
-          | T
-          | {
-              index?: T;
-              pages?: T;
-              id?: T;
-              blockName?: T;
-            };
-        PageCards?:
-          | T
-          | {
-              index?: T;
-              pages?: T;
-              id?: T;
-              blockName?: T;
-            };
-        Slider?:
+        Carousel?:
           | T
           | {
               index?: T;
@@ -2555,6 +2693,14 @@ export interface SectionsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        ItemCards?:
+          | T
+          | {
+              token?: T;
+              items?: T;
+              id?: T;
+              blockName?: T;
+            };
         Mockup?:
           | T
           | {
@@ -2570,6 +2716,37 @@ export interface SectionsSelect<T extends boolean = true> {
                     illustration?: T;
                     id?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        Page?:
+          | T
+          | {
+              index?: T;
+              pages?: T;
+              id?: T;
+              blockName?: T;
+            };
+        PageCards?:
+          | T
+          | {
+              index?: T;
+              pages?: T;
+              id?: T;
+              blockName?: T;
+            };
+        Products?:
+          | T
+          | {
+              block?: T;
+              id?: T;
+              blockName?: T;
+            };
+        Slider?:
+          | T
+          | {
+              index?: T;
+              pages?: T;
               id?: T;
               blockName?: T;
             };
@@ -2589,9 +2766,11 @@ export interface SectionsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        Products?:
+        Wall?:
           | T
           | {
+              token?: T;
+              items?: T;
               id?: T;
               blockName?: T;
             };
@@ -2623,6 +2802,8 @@ export interface IndexesSelect<T extends boolean = true> {
     | {
         websiteBeforeMain?: T;
         websiteAfterMain?: T;
+        websiteHero?: T;
+        websiteFooter?: T;
         hero?:
           | T
           | {
@@ -2634,37 +2815,7 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -2709,6 +2860,14 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -2724,6 +2883,37 @@ export interface IndexesSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -2743,9 +2933,11 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -2765,37 +2957,7 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -2840,6 +3002,14 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -2855,6 +3025,37 @@ export interface IndexesSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -2874,9 +3075,11 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -2894,37 +3097,7 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -2969,6 +3142,14 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -2984,6 +3165,37 @@ export interface IndexesSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3003,9 +3215,11 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3016,6 +3230,10 @@ export interface IndexesSelect<T extends boolean = true> {
   childrenLayout?:
     | T
     | {
+        websiteBeforeMain?: T;
+        websiteAfterMain?: T;
+        websiteHero?: T;
+        websiteFooter?: T;
         hero?:
           | T
           | {
@@ -3026,37 +3244,7 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          token?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          token?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          related?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          related?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -3086,6 +3274,12 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    Description?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
                     Form?:
                       | T
                       | {
@@ -3098,6 +3292,49 @@ export interface IndexesSelect<T extends boolean = true> {
                       | {
                           header?: T;
                           body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Illustration?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          related?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          related?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          related?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3117,21 +3354,10 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Mockup?:
+                    Wall?:
                       | T
                       | {
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Illustration?:
-                      | T
-                      | {
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Description?:
-                      | T
-                      | {
+                          token?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3150,37 +3376,7 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          token?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          token?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          related?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          related?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -3210,6 +3406,12 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    Description?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
                     Form?:
                       | T
                       | {
@@ -3222,6 +3424,49 @@ export interface IndexesSelect<T extends boolean = true> {
                       | {
                           header?: T;
                           body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Illustration?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Mockup?:
+                      | T
+                      | {
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          related?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          related?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          related?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3241,21 +3486,10 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Mockup?:
+                    Wall?:
                       | T
                       | {
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Illustration?:
-                      | T
-                      | {
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Description?:
-                      | T
-                      | {
+                          token?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3273,37 +3507,7 @@ export interface IndexesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -3345,6 +3549,14 @@ export interface IndexesSelect<T extends boolean = true> {
                       | {
                           header?: T;
                           body?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3366,6 +3578,37 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Walkthrough?:
                       | T
                       | {
@@ -3382,9 +3625,11 @@ export interface IndexesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3411,6 +3656,8 @@ export interface IndexesSelect<T extends boolean = true> {
     | {
         screens?: T;
         article?: T;
+        href?: T;
+        colors?: T;
       };
   meta?:
     | T
@@ -3453,11 +3700,10 @@ export interface PagesSelect<T extends boolean = true> {
         illustration?: T;
         id?: T;
       };
+  colors?: T;
   layout?:
     | T
     | {
-        websiteBeforeMain?: T;
-        websiteAfterMain?: T;
         beforeMain?:
           | T
           | {
@@ -3471,37 +3717,7 @@ export interface PagesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -3546,6 +3762,14 @@ export interface PagesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -3561,6 +3785,37 @@ export interface PagesSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3580,9 +3835,11 @@ export interface PagesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3602,37 +3859,7 @@ export interface PagesSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -3677,6 +3904,14 @@ export interface PagesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -3692,6 +3927,37 @@ export interface PagesSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3711,9 +3977,11 @@ export interface PagesSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -4092,18 +4360,6 @@ export interface Website {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -4119,43 +4375,7 @@ export interface Website {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -4204,6 +4424,13 @@ export interface Website {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -4219,6 +4446,66 @@ export interface Website {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -4250,9 +4537,11 @@ export interface Website {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -4285,18 +4574,6 @@ export interface Website {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -4312,43 +4589,7 @@ export interface Website {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -4397,6 +4638,13 @@ export interface Website {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -4412,6 +4660,66 @@ export interface Website {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -4443,9 +4751,11 @@ export interface Website {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -4478,18 +4788,6 @@ export interface Website {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -4505,43 +4803,7 @@ export interface Website {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -4590,6 +4852,13 @@ export interface Website {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -4605,6 +4874,66 @@ export interface Website {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -4636,9 +4965,11 @@ export interface Website {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -4669,18 +5000,6 @@ export interface Website {
           component?:
             | (
                 | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'ItemCards';
-                  }
-                | {
-                    items?: (string | Item)[] | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Wall';
-                  }
-                | {
                     index?: (string | null) | Index;
                     pages?:
                       | (
@@ -4696,43 +5015,7 @@ export interface Website {
                       | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Page';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'PageCards';
-                  }
-                | {
-                    index?: (string | null) | Index;
-                    pages?:
-                      | (
-                          | {
-                              relationTo: 'indexes';
-                              value: string | Index;
-                            }
-                          | {
-                              relationTo: 'pages';
-                              value: string | Page;
-                            }
-                        )[]
-                      | null;
-                    id?: string | null;
-                    blockName?: string | null;
-                    blockType: 'Slider';
+                    blockType: 'Carousel';
                   }
                 | {
                     elements?:
@@ -4781,6 +5064,13 @@ export interface Website {
                     blockType: 'Hero';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'ItemCards';
+                  }
+                | {
                     mobileScreens?:
                       | {
                           illustration?: (string | null) | Media;
@@ -4796,6 +5086,66 @@ export interface Website {
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Mockup';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Page';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'PageCards';
+                  }
+                | {
+                    block?: ('PageCards' | 'Bento') | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Products';
+                  }
+                | {
+                    index?: (string | null) | Index;
+                    pages?:
+                      | (
+                          | {
+                              relationTo: 'indexes';
+                              value: string | Index;
+                            }
+                          | {
+                              relationTo: 'pages';
+                              value: string | Page;
+                            }
+                        )[]
+                      | null;
+                    id?: string | null;
+                    blockName?: string | null;
+                    blockType: 'Slider';
                   }
                 | {
                     alternateDirection?: boolean | null;
@@ -4827,9 +5177,11 @@ export interface Website {
                     blockType: 'Walkthrough';
                   }
                 | {
+                    token?: (string | null) | Token;
+                    items?: (string | Item)[] | null;
                     id?: string | null;
                     blockName?: string | null;
-                    blockType: 'Products';
+                    blockType: 'Wall';
                   }
               )[]
             | null;
@@ -4837,58 +5189,24 @@ export interface Website {
         }[]
       | null;
   };
-  social?: {
-    networks?:
+  nav?: {
+    center?:
       | {
+          type?: ('link' | 'subMenu') | null;
           title?: string | null;
-          url?: string | null;
-          icon?: {
-            custom?: boolean | null;
-            set?: string | null;
-            icon?: string | null;
-            svg?: string | null;
-            customSvg?: string | null;
-          };
+          expanded?: (string | Index)[] | null;
+          links?: (string | Index)[] | null;
+          link?: (string | null) | Index;
+          id?: string | null;
+        }[]
+      | null;
+    trail?:
+      | {
           id?: string | null;
         }[]
       | null;
   };
   ui?: {
-    posts?: {
-      custom?: boolean | null;
-      set?: string | null;
-      icon?: string | null;
-      svg?: string | null;
-      customSvg?: string | null;
-    };
-    projects?: {
-      custom?: boolean | null;
-      set?: string | null;
-      icon?: string | null;
-      svg?: string | null;
-      customSvg?: string | null;
-    };
-    skills?: {
-      custom?: boolean | null;
-      set?: string | null;
-      icon?: string | null;
-      svg?: string | null;
-      customSvg?: string | null;
-    };
-    technologies?: {
-      custom?: boolean | null;
-      set?: string | null;
-      icon?: string | null;
-      svg?: string | null;
-      customSvg?: string | null;
-    };
-    services?: {
-      custom?: boolean | null;
-      set?: string | null;
-      icon?: string | null;
-      svg?: string | null;
-      customSvg?: string | null;
-    };
     caretDown?: {
       custom?: boolean | null;
       set?: string | null;
@@ -4959,6 +5277,22 @@ export interface Website {
       svg?: string | null;
       customSvg?: string | null;
     };
+  };
+  social?: {
+    networks?:
+      | {
+          title?: string | null;
+          url?: string | null;
+          icon?: {
+            custom?: boolean | null;
+            set?: string | null;
+            icon?: string | null;
+            svg?: string | null;
+            customSvg?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
   };
   localization?: {
     locales?:
@@ -5071,37 +5405,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -5146,6 +5450,14 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -5161,6 +5473,37 @@ export interface WebsiteSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5180,9 +5523,11 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5202,37 +5547,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -5277,6 +5592,14 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -5292,6 +5615,37 @@ export interface WebsiteSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5311,9 +5665,11 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5333,37 +5689,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -5408,6 +5734,14 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -5423,6 +5757,37 @@ export interface WebsiteSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5442,9 +5807,11 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5462,37 +5829,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               component?:
                 | T
                 | {
-                    ItemCards?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Wall?:
-                      | T
-                      | {
-                          items?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Page?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    PageCards?:
-                      | T
-                      | {
-                          index?: T;
-                          pages?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    Slider?:
+                    Carousel?:
                       | T
                       | {
                           index?: T;
@@ -5537,6 +5874,14 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
+                    ItemCards?:
+                      | T
+                      | {
+                          token?: T;
+                          items?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
                     Mockup?:
                       | T
                       | {
@@ -5552,6 +5897,37 @@ export interface WebsiteSelect<T extends boolean = true> {
                                 illustration?: T;
                                 id?: T;
                               };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Page?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    PageCards?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Products?:
+                      | T
+                      | {
+                          block?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    Slider?:
+                      | T
+                      | {
+                          index?: T;
+                          pages?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5571,9 +5947,11 @@ export interface WebsiteSelect<T extends boolean = true> {
                           id?: T;
                           blockName?: T;
                         };
-                    Products?:
+                    Wall?:
                       | T
                       | {
+                          token?: T;
+                          items?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5581,74 +5959,28 @@ export interface WebsiteSelect<T extends boolean = true> {
               id?: T;
             };
       };
-  social?:
+  nav?:
     | T
     | {
-        networks?:
+        center?:
           | T
           | {
+              type?: T;
               title?: T;
-              url?: T;
-              icon?:
-                | T
-                | {
-                    custom?: T;
-                    set?: T;
-                    icon?: T;
-                    svg?: T;
-                    customSvg?: T;
-                  };
+              expanded?: T;
+              links?: T;
+              link?: T;
+              id?: T;
+            };
+        trail?:
+          | T
+          | {
               id?: T;
             };
       };
   ui?:
     | T
     | {
-        posts?:
-          | T
-          | {
-              custom?: T;
-              set?: T;
-              icon?: T;
-              svg?: T;
-              customSvg?: T;
-            };
-        projects?:
-          | T
-          | {
-              custom?: T;
-              set?: T;
-              icon?: T;
-              svg?: T;
-              customSvg?: T;
-            };
-        skills?:
-          | T
-          | {
-              custom?: T;
-              set?: T;
-              icon?: T;
-              svg?: T;
-              customSvg?: T;
-            };
-        technologies?:
-          | T
-          | {
-              custom?: T;
-              set?: T;
-              icon?: T;
-              svg?: T;
-              customSvg?: T;
-            };
-        services?:
-          | T
-          | {
-              custom?: T;
-              set?: T;
-              icon?: T;
-              svg?: T;
-              customSvg?: T;
-            };
         caretDown?:
           | T
           | {
@@ -5738,6 +6070,26 @@ export interface WebsiteSelect<T extends boolean = true> {
               icon?: T;
               svg?: T;
               customSvg?: T;
+            };
+      };
+  social?:
+    | T
+    | {
+        networks?:
+          | T
+          | {
+              title?: T;
+              url?: T;
+              icon?:
+                | T
+                | {
+                    custom?: T;
+                    set?: T;
+                    icon?: T;
+                    svg?: T;
+                    customSvg?: T;
+                  };
+              id?: T;
             };
       };
   localization?:

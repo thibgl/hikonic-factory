@@ -79,12 +79,13 @@ export const Factories = [
               name: 'article',
               type: 'checkbox',
             },
+            {
+              name: 'href',
+              type: 'checkbox',
+            },
           ],
         },
-        // {
-        //   name: 'href',
-        //   type: 'checkbox',
-        // },
+        { name: 'colors', type: 'select', options: ['1', '2', '3'] },
       ],
       tabs: [
         {
@@ -106,23 +107,26 @@ export const Factories = [
       ],
     },
     product: {
-      fields: ConditionalField({
-        path: 'factoryData.options.screens',
-        value: true,
-        sibling: false,
-        field: [
-          {
-            name: 'mobileScreens',
-            type: 'array',
-            fields: [{ type: 'upload', name: 'illustration', label: false, relationTo: 'media' }],
-          },
-          {
-            name: 'desktopScreens',
-            type: 'array',
-            fields: [{ type: 'upload', name: 'illustration', label: false, relationTo: 'media' }],
-          },
-        ],
-      }) as Field[],
+      fields: [
+        ...(ConditionalField({
+          path: 'factoryData.options.screens',
+          value: true,
+          sibling: false,
+          field: [
+            {
+              name: 'mobileScreens',
+              type: 'array',
+              fields: [{ type: 'upload', name: 'illustration', label: false, relationTo: 'media' }],
+            },
+            {
+              name: 'desktopScreens',
+              type: 'array',
+              fields: [{ type: 'upload', name: 'illustration', label: false, relationTo: 'media' }],
+            },
+          ],
+        }) as Field[]),
+        ColorsField(),
+      ],
       tabs: [
         {
           label: 'Layout',
