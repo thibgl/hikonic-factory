@@ -89,7 +89,7 @@ export const Factory = ({
             {
               name: 'neighbors',
               type: 'join',
-              collection: identity.products.plural as CollectionSlug,
+              collection: identity.factory.plural as CollectionSlug,
               on: 'meta.neighbors',
             },
             ...(shipsTo.map((port) => ({

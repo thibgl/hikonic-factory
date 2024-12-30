@@ -4,6 +4,7 @@ interface ConditionalFieldArgs {
   field: Field | Field[]
   path: string
   value: any
+  negate?: boolean
   fallback?: boolean
   nullify?: boolean
   sibling?: boolean
@@ -17,6 +18,7 @@ export const ConditionalField = ({
   field,
   path,
   value,
+  negate = false,
   fallback = false,
   sibling = true,
   nullify = true,
@@ -29,6 +31,7 @@ export const ConditionalField = ({
           field: singleField,
           path,
           value,
+          negate,
           fallback,
           sibling,
           nullify,
@@ -46,7 +49,7 @@ export const ConditionalField = ({
       ...field.admin,
       condition: (data, siblingData) => {
         const currentValue = getValue(sibling ? siblingData : data, path)
-        return currentValue === value || fallback
+        return negate ? currentValue !== value : currentValue === value
       },
     }
   }
@@ -59,7 +62,7 @@ export const ConditionalField = ({
         ...(field?.hooks?.beforeValidate || []),
         async ({ data, siblingData }) => {
           const currentValue = getValue(sibling ? siblingData : data, path)
-          if (currentValue !== value) return null
+          if (negate ? currentValue === value : currentValue !== value) return null
         },
       ],
     }

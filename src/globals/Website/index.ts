@@ -34,78 +34,94 @@ export const Website: GlobalConfig = {
                 mimeType: { contains: 'image' },
               },
             },
-            // { name: 'defaultFooter', type: 'relationship', relationTo: 'sections' },
           ],
         },
-        { label: 'Layout', fields: [WebsiteLayout] },
+        { name: 'layout', fields: WebsiteLayout },
         {
-          name: 'nav',
+          label: 'Navigation',
           fields: [
             {
-              name: 'center',
-              type: 'array',
+              name: 'navigation',
+              type: 'group',
+              label: false,
               fields: [
                 {
-                  name: 'type',
-                  type: 'radio',
-                  options: [
-                    { value: 'link', label: 'Link' },
-                    { value: 'subMenu', label: 'Sub Menu' },
+                  name: 'center',
+                  type: 'array',
+                  fields: [
+                    {
+                      name: 'type',
+                      type: 'radio',
+                      defaultValue: 'link',
+                      options: [
+                        { value: 'link', label: 'Link' },
+                        { value: 'subMenu', label: 'Sub Menu' },
+                      ],
+                    },
+                    ...(ConditionalField({
+                      path: 'type',
+                      value: 'subMenu',
+                      field: [
+                        { name: 'title', type: 'text', localized: true },
+                        { name: 'socials', type: 'checkbox' },
+                        {
+                          name: 'expanded',
+                          type: 'relationship',
+                          relationTo: 'indexes',
+                          hasMany: true,
+                          filterOptions: ({ siblingData }) => ({
+                            and: [
+                              {
+                                producing: {
+                                  equals: true,
+                                },
+                              },
+                              {
+                                id: {
+                                  not_in: siblingData?.links || [],
+                                },
+                              },
+                            ],
+                          }),
+                        },
+                        {
+                          name: 'links',
+                          type: 'relationship',
+                          relationTo: 'indexes',
+                          hasMany: true,
+                          filterOptions: ({ siblingData }) => ({
+                            id: {
+                              not_in: siblingData?.expanded || [],
+                            },
+                          }),
+                        },
+                      ],
+                    }) as Field[]),
+                    ConditionalField({
+                      path: 'type',
+                      value: 'link',
+                      field: {
+                        name: 'link',
+                        type: 'relationship',
+                        relationTo: 'indexes',
+                      },
+                    }) as Field,
                   ],
                 },
-                ...(ConditionalField({
-                  path: 'type',
-                  value: 'subMenu',
-                  field: [
-                    { name: 'title', type: 'text', localized: true },
-                    {
-                      name: 'expanded',
-                      type: 'relationship',
-                      relationTo: 'indexes',
-                      hasMany: true,
-                      filterOptions: ({ siblingData }) => ({
-                        and: [
-                          {
-                            producing: {
-                              equals: true,
-                            },
-                          },
-                          {
-                            id: {
-                              not_in: siblingData?.links || [],
-                            },
-                          },
-                        ],
-                      }),
-                    },
-                    {
-                      name: 'links',
-                      type: 'relationship',
-                      relationTo: 'indexes',
-                      hasMany: true,
-                      filterOptions: ({ siblingData }) => ({
-                        id: {
-                          not_in: siblingData?.expanded || [],
-                        },
-                      }),
-                    },
+                {
+                  name: 'trail',
+                  type: 'array',
+                  maxRows: 1,
+                  fields: [
+                    { name: 'header', type: 'text', localized: true },
+                    IconField(),
+                    { name: 'form', type: 'relationship', relationTo: 'forms' },
                   ],
-                }) as Field[]),
-                ConditionalField({
-                  path: 'type',
-                  value: 'link',
-                  field: {
-                    name: 'link',
-                    type: 'relationship',
-                    relationTo: 'indexes',
-                  },
-                }) as Field,
+                },
               ],
-            },
-            {
-              name: 'trail',
-              type: 'array',
-              fields: [],
+              admin: {
+                hideGutter: true,
+              },
             },
           ],
         },
@@ -139,17 +155,6 @@ export const Website: GlobalConfig = {
                 IconField(),
               ],
             },
-            // {
-            //   name: 'test',
-            //   type: 'text',
-            //   admin: {
-            //     condition: (siblingData, data) => {
-            //       console.log('siblingData', siblingData)
-            //       console.log('data', data)
-            //       return true
-            //     },
-            //   },
-            // },
           ],
         },
         {

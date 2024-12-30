@@ -1,13 +1,10 @@
-const itemsBlocks = ['ItemCards', 'Wall']
-const pageBlocks = ['Carousel', 'Page', 'PageCards', 'Slider']
-
 import { ItemsBlock, PagesBlock } from './root'
-import { ItemsChildrenBlock, PagesChildrenBlock } from './children'
+import { ItemsChildrenBlock, PagesChildrenBlock, WallBlock } from './children'
 import { CollapsibleBlock, FormBlock, HeroBlock, MockupBlock, WalkthroughBlock } from './content'
 
 export const RootBlocks = [
-  ...itemsBlocks.map((slug) => ItemsBlock(slug)),
-  ...pageBlocks.map((slug) => PagesBlock(slug)),
+  ...['ItemCards', 'Wall'].map((slug) => ItemsBlock(slug)),
+  ...['Carousel', 'Page', 'PageCards', 'Slider'].map((slug) => PagesBlock(slug)),
   ...[CollapsibleBlock, FormBlock, HeroBlock, MockupBlock, WalkthroughBlock],
   {
     slug: 'Products',
@@ -27,8 +24,9 @@ export const RootBlocks = [
 ].sort((a, b) => a.slug.localeCompare(b.slug))
 
 export const ChildrenBlocks = [
-  ...itemsBlocks.map((slug) => ItemsChildrenBlock(slug)),
-  ...pageBlocks.map((slug) => PagesChildrenBlock(slug)),
+  WallBlock,
+  ...['ItemCards'].map((slug) => ItemsChildrenBlock(slug)),
+  ...['Carousel', 'Page', 'PageCards', 'Slider'].map((slug) => PagesChildrenBlock(slug)),
   ...[CollapsibleBlock, FormBlock, HeroBlock, WalkthroughBlock],
   {
     slug: 'Mockup',

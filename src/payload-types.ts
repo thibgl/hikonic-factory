@@ -29,20 +29,20 @@ export interface Config {
   collectionsJoins: {
     indexes: {
       'related.products': 'pages';
-      'related.neighbors': 'pages';
+      'related.neighbors': 'indexes';
       'related.tokens': 'tokens';
     };
     pages: {
-      'related.neighbors': 'pages';
+      'related.neighbors': 'indexes';
       'related.items': 'items';
     };
     tokens: {
       'related.products': 'items';
-      'related.neighbors': 'items';
+      'related.neighbors': 'tokens';
       'related.indexes': 'indexes';
     };
     items: {
-      'related.neighbors': 'items';
+      'related.neighbors': 'tokens';
       'related.pages': 'pages';
     };
   };
@@ -1182,6 +1182,15 @@ export interface Index {
                   }
                 | {
                     token?: (string | null) | Token;
+                    by?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'tokens';
+                          value: string | Token;
+                        } | null);
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Wall';
@@ -1341,6 +1350,15 @@ export interface Index {
                   }
                 | {
                     token?: (string | null) | Token;
+                    by?:
+                      | ({
+                          relationTo: 'indexes';
+                          value: string | Index;
+                        } | null)
+                      | ({
+                          relationTo: 'tokens';
+                          value: string | Token;
+                        } | null);
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Wall';
@@ -1566,6 +1584,9 @@ export interface Index {
   seo?: {
     qa?: boolean | null;
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (string | null) | Media;
     description?: string | null;
     keywords?:
@@ -1591,7 +1612,7 @@ export interface Index {
       hasNextPage?: boolean | null;
     } | null;
     neighbors?: {
-      docs?: (string | Page)[] | null;
+      docs?: (string | Index)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     tokens?: {
@@ -2084,6 +2105,9 @@ export interface Page {
   seo?: {
     qa?: boolean | null;
     title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
     image?: (string | null) | Media;
     description?: string | null;
     keywords?:
@@ -2099,7 +2123,7 @@ export interface Page {
   };
   related?: {
     neighbors?: {
-      docs?: (string | Page)[] | null;
+      docs?: (string | Index)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     items?: {
@@ -2227,6 +2251,9 @@ export interface Form {
       )[]
     | null;
   submitButtonLabel?: string | null;
+  /**
+   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
+   */
   confirmationType?: ('message' | 'redirect') | null;
   confirmationMessage?: {
     root: {
@@ -2246,6 +2273,9 @@ export interface Form {
   redirect?: {
     url: string;
   };
+  /**
+   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
+   */
   emails?:
     | {
         emailTo?: string | null;
@@ -2254,6 +2284,9 @@ export interface Form {
         replyTo?: string | null;
         emailFrom?: string | null;
         subject: string;
+        /**
+         * Enter the message that should be sent in this email.
+         */
         message?: {
           root: {
             type: string;
@@ -2321,7 +2354,7 @@ export interface Token {
       hasNextPage?: boolean | null;
     } | null;
     neighbors?: {
-      docs?: (string | Item)[] | null;
+      docs?: (string | Token)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     indexes?: {
@@ -2381,7 +2414,7 @@ export interface Item {
   };
   related?: {
     neighbors?: {
-      docs?: (string | Item)[] | null;
+      docs?: (string | Token)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     pages?: {
@@ -3358,6 +3391,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           token?: T;
+                          by?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3490,6 +3524,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           token?: T;
+                          by?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -5189,11 +5224,12 @@ export interface Website {
         }[]
       | null;
   };
-  nav?: {
+  navigation?: {
     center?:
       | {
           type?: ('link' | 'subMenu') | null;
           title?: string | null;
+          socials?: boolean | null;
           expanded?: (string | Index)[] | null;
           links?: (string | Index)[] | null;
           link?: (string | null) | Index;
@@ -5202,6 +5238,15 @@ export interface Website {
       | null;
     trail?:
       | {
+          header?: string | null;
+          icon?: {
+            custom?: boolean | null;
+            set?: string | null;
+            icon?: string | null;
+            svg?: string | null;
+            customSvg?: string | null;
+          };
+          form?: (string | null) | Form;
           id?: string | null;
         }[]
       | null;
@@ -5295,6 +5340,9 @@ export interface Website {
       | null;
   };
   localization?: {
+    /**
+     * The locales that the website supports, first locale is the default.
+     */
     locales?:
       | {
           name: string;
@@ -5959,7 +6007,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               id?: T;
             };
       };
-  nav?:
+  navigation?:
     | T
     | {
         center?:
@@ -5967,6 +6015,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               type?: T;
               title?: T;
+              socials?: T;
               expanded?: T;
               links?: T;
               link?: T;
@@ -5975,6 +6024,17 @@ export interface WebsiteSelect<T extends boolean = true> {
         trail?:
           | T
           | {
+              header?: T;
+              icon?:
+                | T
+                | {
+                    custom?: T;
+                    set?: T;
+                    icon?: T;
+                    svg?: T;
+                    customSvg?: T;
+                  };
+              form?: T;
               id?: T;
             };
       };
