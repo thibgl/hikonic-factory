@@ -5,23 +5,27 @@ export const WallBlock: Block = {
   slug: 'Wall',
   labels: { singular: 'Wall', plural: 'Wall' },
   fields: [
-    {
-      name: 'token',
-      type: 'relationship',
-      relationTo: 'tokens',
-      defaultValue: null as unknown as DefaultValue,
-      filterOptions: ({ data }) => {
-        const tokens = data.meta?.tokens || []
-        if (tokens.length > 0) {
-          return {
-            id: {
-              in: tokens,
-            },
+    ConditionalField({
+      path: 'relatedToken',
+      value: null,
+      field: {
+        name: 'token',
+        type: 'relationship',
+        relationTo: 'tokens',
+        defaultValue: null as unknown as DefaultValue,
+        filterOptions: ({ data }) => {
+          const tokens = data.meta?.tokens || []
+          if (tokens.length > 0) {
+            return {
+              id: {
+                in: tokens,
+              },
+            }
           }
-        }
-        return false
+          return false
+        },
       },
-    },
+    }) as Field,
     ConditionalField({
       path: 'token',
       value: null,
@@ -46,6 +50,21 @@ export const WallBlock: Block = {
             }
           }
         },
+      },
+    }) as Field,
+    ConditionalField({
+      path: 'token',
+      value: null,
+      field: {
+        name: 'relatedToken',
+        type: 'relationship',
+        relationTo: 'tokens',
+        defaultValue: null as unknown as DefaultValue,
+        filterOptions: ({ id }) => ({
+          'meta.indexes': {
+            contains: id,
+          },
+        }),
       },
     }) as Field,
   ],

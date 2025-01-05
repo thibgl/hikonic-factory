@@ -52,6 +52,7 @@ export const Factories = [
             ],
           },
         },
+        { name: 'excerpt', type: 'richText', localized: true },
         ...ItemFields,
       ],
       admin: {
@@ -81,6 +82,14 @@ export const Factories = [
             },
             {
               name: 'href',
+              type: 'checkbox',
+            },
+            {
+              name: 'links',
+              type: 'checkbox',
+            },
+            {
+              name: 'date',
               type: 'checkbox',
             },
           ],
@@ -125,7 +134,27 @@ export const Factories = [
             },
           ],
         }) as Field[]),
-        ColorsField(),
+        ...(ConditionalField({
+          path: 'factoryData.options.links',
+          value: true,
+          sibling: false,
+          field: [
+            {
+              name: 'links',
+              type: 'array',
+              fields: [{ type: 'text', name: 'link' }, { type: 'text', name: 'href' }, IconField()],
+            },
+          ],
+        }) as Field[]),
+        ConditionalField({
+          path: 'factoryData.options.date',
+          value: true,
+          sibling: false,
+          field: {
+            name: 'date',
+            type: 'date',
+          },
+        }) as Field,
       ],
       tabs: [
         {

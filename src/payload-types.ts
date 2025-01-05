@@ -33,7 +33,7 @@ export interface Config {
       'related.tokens': 'tokens';
     };
     pages: {
-      'related.neighbors': 'indexes';
+      'related.neighbors': 'pages';
       'related.items': 'items';
     };
     tokens: {
@@ -42,7 +42,7 @@ export interface Config {
       'related.indexes': 'indexes';
     };
     items: {
-      'related.neighbors': 'tokens';
+      'related.neighbors': 'items';
       'related.pages': 'pages';
     };
   };
@@ -203,6 +203,7 @@ export interface Section {
                   } | null;
                   icon?: {
                     custom?: boolean | null;
+                    darkBackground?: boolean | null;
                     set?: string | null;
                     icon?: string | null;
                     svg?: string | null;
@@ -362,6 +363,21 @@ export interface Index {
   producing?: boolean | null;
   title: string;
   slug: string;
+  excerpt?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   description?: {
     root: {
       type: string;
@@ -380,6 +396,7 @@ export interface Index {
   illustration?: (string | null) | Media;
   icon?: {
     custom?: boolean | null;
+    darkBackground?: boolean | null;
     set?: string | null;
     icon?: string | null;
     svg?: string | null;
@@ -452,6 +469,7 @@ export interface Index {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -666,6 +684,7 @@ export interface Index {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -878,6 +897,7 @@ export interface Index {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1058,7 +1078,7 @@ export interface Index {
             | (
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Carousel';
@@ -1084,6 +1104,7 @@ export interface Index {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1121,6 +1142,7 @@ export interface Index {
                   }
                 | {
                     token?: (string | null) | Token;
+                    relatedToken?: (string | null) | Token;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'ItemCards';
@@ -1132,21 +1154,21 @@ export interface Index {
                   }
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Page';
                   }
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'PageCards';
                   }
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Slider';
@@ -1191,6 +1213,7 @@ export interface Index {
                           relationTo: 'tokens';
                           value: string | Token;
                         } | null);
+                    relatedToken?: (string | null) | Token;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Wall';
@@ -1226,7 +1249,7 @@ export interface Index {
             | (
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Carousel';
@@ -1252,6 +1275,7 @@ export interface Index {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1289,6 +1313,7 @@ export interface Index {
                   }
                 | {
                     token?: (string | null) | Token;
+                    relatedToken?: (string | null) | Token;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'ItemCards';
@@ -1300,21 +1325,21 @@ export interface Index {
                   }
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Page';
                   }
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'PageCards';
                   }
                 | {
                     index?: (string | null) | Index;
-                    related?: (string | null) | Index;
+                    relatedIndex?: (string | null) | Index;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Slider';
@@ -1359,6 +1384,7 @@ export interface Index {
                           relationTo: 'tokens';
                           value: string | Token;
                         } | null);
+                    relatedToken?: (string | null) | Token;
                     id?: string | null;
                     blockName?: string | null;
                     blockType: 'Wall';
@@ -1430,6 +1456,7 @@ export interface Index {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1600,6 +1627,8 @@ export interface Index {
     screens?: boolean | null;
     article?: boolean | null;
     href?: boolean | null;
+    links?: boolean | null;
+    date?: boolean | null;
     colors?: ('1' | '2' | '3') | null;
   };
   meta?: {
@@ -1643,6 +1672,21 @@ export interface Page {
   updated?: boolean | null;
   title: string;
   slug: string;
+  excerpt?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   description?: {
     root: {
       type: string;
@@ -1671,7 +1715,22 @@ export interface Page {
         id?: string | null;
       }[]
     | null;
-  colors?: string[] | null;
+  links?:
+    | {
+        link?: string | null;
+        href?: string | null;
+        icon?: {
+          custom?: boolean | null;
+          darkBackground?: boolean | null;
+          set?: string | null;
+          icon?: string | null;
+          svg?: string | null;
+          customSvg?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  date?: string | null;
   layout?: {
     beforeMain?:
       | {
@@ -1737,6 +1796,7 @@ export interface Page {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1951,6 +2011,7 @@ export interface Page {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -2123,7 +2184,7 @@ export interface Page {
   };
   related?: {
     neighbors?: {
-      docs?: (string | Index)[] | null;
+      docs?: (string | Page)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     items?: {
@@ -2335,6 +2396,7 @@ export interface Token {
   illustration?: (string | null) | Media;
   icon?: {
     custom?: boolean | null;
+    darkBackground?: boolean | null;
     set?: string | null;
     icon?: string | null;
     svg?: string | null;
@@ -2402,6 +2464,7 @@ export interface Item {
   illustration?: (string | null) | Media;
   icon?: {
     custom?: boolean | null;
+    darkBackground?: boolean | null;
     set?: string | null;
     icon?: string | null;
     svg?: string | null;
@@ -2414,7 +2477,7 @@ export interface Item {
   };
   related?: {
     neighbors?: {
-      docs?: (string | Token)[] | null;
+      docs?: (string | Item)[] | null;
       hasNextPage?: boolean | null;
     } | null;
     pages?: {
@@ -2701,6 +2764,7 @@ export interface SectionsSelect<T extends boolean = true> {
                       | T
                       | {
                           custom?: T;
+                          darkBackground?: T;
                           set?: T;
                           icon?: T;
                           svg?: T;
@@ -2819,12 +2883,14 @@ export interface IndexesSelect<T extends boolean = true> {
   producing?: T;
   title?: T;
   slug?: T;
+  excerpt?: T;
   description?: T;
   illustration?: T;
   icon?:
     | T
     | {
         custom?: T;
+        darkBackground?: T;
         set?: T;
         icon?: T;
         svg?: T;
@@ -2868,6 +2934,7 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3010,6 +3077,7 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3150,6 +3218,7 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3281,7 +3350,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3297,6 +3366,7 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3338,6 +3408,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           token?: T;
+                          relatedToken?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3351,7 +3422,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3359,7 +3430,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3367,7 +3438,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3392,6 +3463,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | {
                           token?: T;
                           by?: T;
+                          relatedToken?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3414,7 +3486,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3430,6 +3502,7 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3471,6 +3544,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           token?: T;
+                          relatedToken?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3484,7 +3558,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3492,7 +3566,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3500,7 +3574,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | T
                       | {
                           index?: T;
-                          related?: T;
+                          relatedIndex?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3525,6 +3599,7 @@ export interface IndexesSelect<T extends boolean = true> {
                       | {
                           token?: T;
                           by?: T;
+                          relatedToken?: T;
                           id?: T;
                           blockName?: T;
                         };
@@ -3562,6 +3637,7 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3692,6 +3768,8 @@ export interface IndexesSelect<T extends boolean = true> {
         screens?: T;
         article?: T;
         href?: T;
+        links?: T;
+        date?: T;
         colors?: T;
       };
   meta?:
@@ -3721,6 +3799,7 @@ export interface PagesSelect<T extends boolean = true> {
   updated?: T;
   title?: T;
   slug?: T;
+  excerpt?: T;
   description?: T;
   illustration?: T;
   mobileScreens?:
@@ -3735,7 +3814,24 @@ export interface PagesSelect<T extends boolean = true> {
         illustration?: T;
         id?: T;
       };
-  colors?: T;
+  links?:
+    | T
+    | {
+        link?: T;
+        href?: T;
+        icon?:
+          | T
+          | {
+              custom?: T;
+              darkBackground?: T;
+              set?: T;
+              icon?: T;
+              svg?: T;
+              customSvg?: T;
+            };
+        id?: T;
+      };
+  date?: T;
   layout?:
     | T
     | {
@@ -3772,6 +3868,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3914,6 +4011,7 @@ export interface PagesSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -4067,6 +4165,7 @@ export interface TokensSelect<T extends boolean = true> {
     | T
     | {
         custom?: T;
+        darkBackground?: T;
         set?: T;
         icon?: T;
         svg?: T;
@@ -4110,6 +4209,7 @@ export interface ItemsSelect<T extends boolean = true> {
     | T
     | {
         custom?: T;
+        darkBackground?: T;
         set?: T;
         icon?: T;
         svg?: T;
@@ -4433,6 +4533,7 @@ export interface Website {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -4647,6 +4748,7 @@ export interface Website {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -4861,6 +4963,7 @@ export interface Website {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -5073,6 +5176,7 @@ export interface Website {
                           } | null;
                           icon?: {
                             custom?: boolean | null;
+                            darkBackground?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -5241,6 +5345,7 @@ export interface Website {
           header?: string | null;
           icon?: {
             custom?: boolean | null;
+            darkBackground?: boolean | null;
             set?: string | null;
             icon?: string | null;
             svg?: string | null;
@@ -5254,6 +5359,7 @@ export interface Website {
   ui?: {
     caretDown?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5261,6 +5367,7 @@ export interface Website {
     };
     contact?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5268,6 +5375,7 @@ export interface Website {
     };
     hamburger?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5275,6 +5383,7 @@ export interface Website {
     };
     newTab?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5282,6 +5391,7 @@ export interface Website {
     };
     settings?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5289,6 +5399,7 @@ export interface Website {
     };
     search?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5296,6 +5407,7 @@ export interface Website {
     };
     previous?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5303,6 +5415,7 @@ export interface Website {
     };
     next?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5310,6 +5423,7 @@ export interface Website {
     };
     play?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5317,6 +5431,7 @@ export interface Website {
     };
     pause?: {
       custom?: boolean | null;
+      darkBackground?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5330,6 +5445,7 @@ export interface Website {
           url?: string | null;
           icon?: {
             custom?: boolean | null;
+            darkBackground?: boolean | null;
             set?: string | null;
             icon?: string | null;
             svg?: string | null;
@@ -5349,6 +5465,7 @@ export interface Website {
           code: string;
           icon?: {
             custom?: boolean | null;
+            darkBackground?: boolean | null;
             set?: string | null;
             icon?: string | null;
             svg?: string | null;
@@ -5473,6 +5590,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -5615,6 +5733,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -5757,6 +5876,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -5897,6 +6017,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | T
                                   | {
                                       custom?: T;
+                                      darkBackground?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -6029,6 +6150,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                 | T
                 | {
                     custom?: T;
+                    darkBackground?: T;
                     set?: T;
                     icon?: T;
                     svg?: T;
@@ -6045,6 +6167,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6054,6 +6177,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6063,6 +6187,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6072,6 +6197,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6081,6 +6207,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6090,6 +6217,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6099,6 +6227,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6108,6 +6237,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6117,6 +6247,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6126,6 +6257,7 @@ export interface WebsiteSelect<T extends boolean = true> {
           | T
           | {
               custom?: T;
+              darkBackground?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6144,6 +6276,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                 | T
                 | {
                     custom?: T;
+                    darkBackground?: T;
                     set?: T;
                     icon?: T;
                     svg?: T;
@@ -6164,6 +6297,7 @@ export interface WebsiteSelect<T extends boolean = true> {
                 | T
                 | {
                     custom?: T;
+                    darkBackground?: T;
                     set?: T;
                     icon?: T;
                     svg?: T;

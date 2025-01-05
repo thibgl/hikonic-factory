@@ -6,7 +6,7 @@ export const PagesChildrenBlock = (slug: string): Block => ({
   labels: { singular: slug, plural: slug },
   fields: [
     ConditionalField({
-      path: 'related',
+      path: 'relatedIndex',
       value: null,
       field: {
         name: 'index',
@@ -30,7 +30,7 @@ export const PagesChildrenBlock = (slug: string): Block => ({
       path: 'index',
       value: null,
       field: {
-        name: 'related',
+        name: 'relatedIndex',
         type: 'relationship',
         relationTo: 'indexes',
         defaultValue: null as unknown as DefaultValue,
