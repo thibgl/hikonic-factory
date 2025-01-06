@@ -14,10 +14,12 @@ const SelectColorComponent: SelectFieldClientComponent = (props) => {
   console.log('SELECT COLOR')
   const { path, field } = props
   // const n = props.field.admin?.clientProps?.n || 1
-  const n = useFormFields(([fields]) => {
-    console.log(fields)
-    return Number(fields.factoryData.value?.options?.colors)
-  })
+  const n =
+    props.n ||
+    useFormFields(([fields]) => {
+      console.log(fields)
+      return Number(fields.factoryData.value?.options?.colors)
+    })
   console.log(n)
   const [{ data, isLoading }] = usePayloadAPI('/api/globals/skeleton')
   const { value: colors = [], setValue: setColors, showError } = useField<string[]>({ path })

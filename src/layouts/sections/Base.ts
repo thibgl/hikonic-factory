@@ -1,5 +1,7 @@
 import type { Field } from 'payload'
 import { slugify } from '@/utils/slugify'
+import { ConditionalField } from '@/fields'
+import { ColorsField } from '@/plugins/skeleton/fields/Colors'
 
 export const BaseSection = (main = true): Field[] => [
   ...((main
@@ -47,4 +49,9 @@ export const BaseOptions: Field[] = [
       },
     ],
   },
+  ConditionalField({
+    path: 'carded',
+    value: true,
+    field: ColorsField({ n: 3 }),
+  }) as Field,
 ]

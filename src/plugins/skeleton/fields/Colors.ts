@@ -9,7 +9,7 @@ interface ColorsFieldArgs {
   name?: string
 }
 
-export const ColorsField = ({ n, name = 'colors' }: ColorsFieldArgs = {}): Field => ({
+export const ColorsField = ({ n = undefined, name = 'colors' }: ColorsFieldArgs = {}): Field => ({
   name,
   type: 'text',
   hasMany: true,
@@ -17,9 +17,9 @@ export const ColorsField = ({ n, name = 'colors' }: ColorsFieldArgs = {}): Field
     components: {
       Field: {
         path: 'src/plugins/skeleton/components/SelectColor#SelectColor',
-        // clientProps: {
-        //   n,
-        // },
+        clientProps: {
+          n,
+        },
       },
     },
   },

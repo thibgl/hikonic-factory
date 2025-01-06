@@ -142,7 +142,17 @@ export const Factories = [
             {
               name: 'links',
               type: 'array',
-              fields: [{ type: 'text', name: 'link' }, { type: 'text', name: 'href' }, IconField()],
+              fields: [
+                {
+                  name: 'type',
+                  type: 'select',
+                  options: [
+                    { value: 'github', label: 'Github' },
+                    { value: 'website', label: 'Website' },
+                  ],
+                },
+                { type: 'text', name: 'href' },
+              ],
             },
           ],
         }) as Field[]),

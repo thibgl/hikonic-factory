@@ -412,6 +412,7 @@ export interface Index {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           header?: string | null;
           body?: {
             root: {
@@ -625,6 +626,7 @@ export interface Index {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           title?: string | null;
           slug?: string | null;
           header?: string | null;
@@ -840,6 +842,7 @@ export interface Index {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           header?: string | null;
           body?: {
             root: {
@@ -1058,6 +1061,7 @@ export interface Index {
       | {
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           header?: string | null;
           body?: {
             root: {
@@ -1227,6 +1231,7 @@ export interface Index {
       | {
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           title?: string | null;
           slug?: string | null;
           header?: string | null;
@@ -1399,6 +1404,7 @@ export interface Index {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           header?: string | null;
           body?: {
             root: {
@@ -1717,16 +1723,8 @@ export interface Page {
     | null;
   links?:
     | {
-        link?: string | null;
+        type?: ('github' | 'website') | null;
         href?: string | null;
-        icon?: {
-          custom?: boolean | null;
-          darkBackground?: boolean | null;
-          set?: string | null;
-          icon?: string | null;
-          svg?: string | null;
-          customSvg?: string | null;
-        };
         id?: string | null;
       }[]
     | null;
@@ -1737,6 +1735,7 @@ export interface Page {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           title?: string | null;
           slug?: string | null;
           header?: string | null;
@@ -1952,6 +1951,7 @@ export interface Page {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           title?: string | null;
           slug?: string | null;
           header?: string | null;
@@ -2909,6 +2909,7 @@ export interface IndexesSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               header?: T;
               body?: T;
               component?:
@@ -3050,6 +3051,7 @@ export interface IndexesSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               title?: T;
               slug?: T;
               header?: T;
@@ -3193,6 +3195,7 @@ export interface IndexesSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               header?: T;
               body?: T;
               component?:
@@ -3341,6 +3344,7 @@ export interface IndexesSelect<T extends boolean = true> {
           | {
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               header?: T;
               body?: T;
               component?:
@@ -3475,6 +3479,7 @@ export interface IndexesSelect<T extends boolean = true> {
           | {
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               title?: T;
               slug?: T;
               header?: T;
@@ -3612,6 +3617,7 @@ export interface IndexesSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               header?: T;
               body?: T;
               component?:
@@ -3817,18 +3823,8 @@ export interface PagesSelect<T extends boolean = true> {
   links?:
     | T
     | {
-        link?: T;
+        type?: T;
         href?: T;
-        icon?:
-          | T
-          | {
-              custom?: T;
-              darkBackground?: T;
-              set?: T;
-              icon?: T;
-              svg?: T;
-              customSvg?: T;
-            };
         id?: T;
       };
   date?: T;
@@ -3841,6 +3837,7 @@ export interface PagesSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               title?: T;
               slug?: T;
               header?: T;
@@ -3984,6 +3981,7 @@ export interface PagesSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               title?: T;
               slug?: T;
               header?: T;
@@ -4476,6 +4474,7 @@ export interface Website {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           header?: string | null;
           body?: {
             root: {
@@ -4689,6 +4688,7 @@ export interface Website {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           title?: string | null;
           slug?: string | null;
           header?: string | null;
@@ -4904,6 +4904,7 @@ export interface Website {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           title?: string | null;
           slug?: string | null;
           header?: string | null;
@@ -5119,6 +5120,7 @@ export interface Website {
           preset?: (string | null) | Section;
           blackedOut?: boolean | null;
           carded?: boolean | null;
+          colors?: string[] | null;
           header?: string | null;
           body?: {
             root: {
@@ -5565,6 +5567,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               header?: T;
               body?: T;
               component?:
@@ -5706,6 +5709,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               title?: T;
               slug?: T;
               header?: T;
@@ -5849,6 +5853,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               title?: T;
               slug?: T;
               header?: T;
@@ -5992,6 +5997,7 @@ export interface WebsiteSelect<T extends boolean = true> {
               preset?: T;
               blackedOut?: T;
               carded?: T;
+              colors?: T;
               header?: T;
               body?: T;
               component?:
