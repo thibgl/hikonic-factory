@@ -31,6 +31,40 @@ export const IconField = (name: string = 'icon'): Field => ({
             ],
           },
         },
+        {
+          name: 'borderless',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            condition: (data, siblingData) => siblingData.custom,
+          },
+          hooks: {
+            beforeValidate: [
+              async ({ siblingData }) => {
+                if (!siblingData.custom) {
+                  return null
+                }
+              },
+            ],
+          },
+        },
+        {
+          name: 'center',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            condition: (data, siblingData) => siblingData.custom,
+          },
+          hooks: {
+            beforeValidate: [
+              async ({ siblingData }) => {
+                if (!siblingData.custom) {
+                  return null
+                }
+              },
+            ],
+          },
+        },
       ],
     },
     {

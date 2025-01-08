@@ -204,6 +204,8 @@ export interface Section {
                   icon?: {
                     custom?: boolean | null;
                     darkBackground?: boolean | null;
+                    borderless?: boolean | null;
+                    center?: boolean | null;
                     set?: string | null;
                     icon?: string | null;
                     svg?: string | null;
@@ -397,6 +399,8 @@ export interface Index {
   icon?: {
     custom?: boolean | null;
     darkBackground?: boolean | null;
+    borderless?: boolean | null;
+    center?: boolean | null;
     set?: string | null;
     icon?: string | null;
     svg?: string | null;
@@ -471,6 +475,8 @@ export interface Index {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -687,6 +693,8 @@ export interface Index {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -901,6 +909,8 @@ export interface Index {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1109,6 +1119,8 @@ export interface Index {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1281,6 +1293,8 @@ export interface Index {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1463,6 +1477,8 @@ export interface Index {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -1729,6 +1745,7 @@ export interface Page {
       }[]
     | null;
   date?: string | null;
+  colors?: string[] | null;
   layout?: {
     beforeMain?:
       | {
@@ -1796,6 +1813,8 @@ export interface Page {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -2012,6 +2031,8 @@ export interface Page {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -2397,6 +2418,8 @@ export interface Token {
   icon?: {
     custom?: boolean | null;
     darkBackground?: boolean | null;
+    borderless?: boolean | null;
+    center?: boolean | null;
     set?: string | null;
     icon?: string | null;
     svg?: string | null;
@@ -2465,6 +2488,8 @@ export interface Item {
   icon?: {
     custom?: boolean | null;
     darkBackground?: boolean | null;
+    borderless?: boolean | null;
+    center?: boolean | null;
     set?: string | null;
     icon?: string | null;
     svg?: string | null;
@@ -2765,6 +2790,8 @@ export interface SectionsSelect<T extends boolean = true> {
                       | {
                           custom?: T;
                           darkBackground?: T;
+                          borderless?: T;
+                          center?: T;
                           set?: T;
                           icon?: T;
                           svg?: T;
@@ -2891,6 +2918,8 @@ export interface IndexesSelect<T extends boolean = true> {
     | {
         custom?: T;
         darkBackground?: T;
+        borderless?: T;
+        center?: T;
         set?: T;
         icon?: T;
         svg?: T;
@@ -2936,6 +2965,8 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3080,6 +3111,8 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3222,6 +3255,8 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3371,6 +3406,8 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3508,6 +3545,8 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3644,6 +3683,8 @@ export interface IndexesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -3828,6 +3869,7 @@ export interface PagesSelect<T extends boolean = true> {
         id?: T;
       };
   date?: T;
+  colors?: T;
   layout?:
     | T
     | {
@@ -3866,6 +3908,8 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -4010,6 +4054,8 @@ export interface PagesSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -4164,6 +4210,8 @@ export interface TokensSelect<T extends boolean = true> {
     | {
         custom?: T;
         darkBackground?: T;
+        borderless?: T;
+        center?: T;
         set?: T;
         icon?: T;
         svg?: T;
@@ -4208,6 +4256,8 @@ export interface ItemsSelect<T extends boolean = true> {
     | {
         custom?: T;
         darkBackground?: T;
+        borderless?: T;
+        center?: T;
         set?: T;
         icon?: T;
         svg?: T;
@@ -4533,6 +4583,8 @@ export interface Website {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -4749,6 +4801,8 @@ export interface Website {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -4965,6 +5019,8 @@ export interface Website {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -5179,6 +5235,8 @@ export interface Website {
                           icon?: {
                             custom?: boolean | null;
                             darkBackground?: boolean | null;
+                            borderless?: boolean | null;
+                            center?: boolean | null;
                             set?: string | null;
                             icon?: string | null;
                             svg?: string | null;
@@ -5348,6 +5406,8 @@ export interface Website {
           icon?: {
             custom?: boolean | null;
             darkBackground?: boolean | null;
+            borderless?: boolean | null;
+            center?: boolean | null;
             set?: string | null;
             icon?: string | null;
             svg?: string | null;
@@ -5362,6 +5422,8 @@ export interface Website {
     caretDown?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5370,6 +5432,8 @@ export interface Website {
     contact?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5378,6 +5442,8 @@ export interface Website {
     hamburger?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5386,6 +5452,8 @@ export interface Website {
     newTab?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5394,6 +5462,8 @@ export interface Website {
     settings?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5402,6 +5472,8 @@ export interface Website {
     search?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5410,6 +5482,8 @@ export interface Website {
     previous?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5418,6 +5492,8 @@ export interface Website {
     next?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5426,6 +5502,8 @@ export interface Website {
     play?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5434,6 +5512,8 @@ export interface Website {
     pause?: {
       custom?: boolean | null;
       darkBackground?: boolean | null;
+      borderless?: boolean | null;
+      center?: boolean | null;
       set?: string | null;
       icon?: string | null;
       svg?: string | null;
@@ -5448,6 +5528,8 @@ export interface Website {
           icon?: {
             custom?: boolean | null;
             darkBackground?: boolean | null;
+            borderless?: boolean | null;
+            center?: boolean | null;
             set?: string | null;
             icon?: string | null;
             svg?: string | null;
@@ -5468,6 +5550,8 @@ export interface Website {
           icon?: {
             custom?: boolean | null;
             darkBackground?: boolean | null;
+            borderless?: boolean | null;
+            center?: boolean | null;
             set?: string | null;
             icon?: string | null;
             svg?: string | null;
@@ -5594,6 +5678,8 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -5738,6 +5824,8 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -5882,6 +5970,8 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -6024,6 +6114,8 @@ export interface WebsiteSelect<T extends boolean = true> {
                                   | {
                                       custom?: T;
                                       darkBackground?: T;
+                                      borderless?: T;
+                                      center?: T;
                                       set?: T;
                                       icon?: T;
                                       svg?: T;
@@ -6157,6 +6249,8 @@ export interface WebsiteSelect<T extends boolean = true> {
                 | {
                     custom?: T;
                     darkBackground?: T;
+                    borderless?: T;
+                    center?: T;
                     set?: T;
                     icon?: T;
                     svg?: T;
@@ -6174,6 +6268,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6184,6 +6280,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6194,6 +6292,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6204,6 +6304,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6214,6 +6316,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6224,6 +6328,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6234,6 +6340,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6244,6 +6352,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6254,6 +6364,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6264,6 +6376,8 @@ export interface WebsiteSelect<T extends boolean = true> {
           | {
               custom?: T;
               darkBackground?: T;
+              borderless?: T;
+              center?: T;
               set?: T;
               icon?: T;
               svg?: T;
@@ -6283,6 +6397,8 @@ export interface WebsiteSelect<T extends boolean = true> {
                 | {
                     custom?: T;
                     darkBackground?: T;
+                    borderless?: T;
+                    center?: T;
                     set?: T;
                     icon?: T;
                     svg?: T;
@@ -6304,6 +6420,8 @@ export interface WebsiteSelect<T extends boolean = true> {
                 | {
                     custom?: T;
                     darkBackground?: T;
+                    borderless?: T;
+                    center?: T;
                     set?: T;
                     icon?: T;
                     svg?: T;

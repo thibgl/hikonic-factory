@@ -165,6 +165,7 @@ export const Factories = [
             type: 'date',
           },
         }) as Field,
+        ColorsField(),
       ],
       tabs: [
         {
